@@ -1,0 +1,148 @@
+\ProvidesPackage{mypack}
+
+\usepackage{color}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{graphicx}
+\usepackage{datetime}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{amssymb}
+\usepackage[pdfborder={0 0 0},colorlinks=true,linkcolor=blue,bookmarksnumbered=true]{hyperref}
+\usepackage{cite}
+\usepackage{mathrsfs}
+\usepackage{wrapfig}
+%\usepackage{subfig}     % this package has been deprecated. use caption & subcaption packages
+\usepackage{acronym}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{verbatim}
+\usepackage{moreverb}
+\usepackage{pdfpages}
+
+%\usepackage{algorithm2e}
+%\usepackage{program}
+\def\verbatimtabsize{2\relax} 
+
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\newcommand{\tb}[1]{\textbf{#1}}
+\newcommand{\ul}[1]{\underline{#1}}
+
+% colors
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\cyanb}[1]{\textcolor{cyan}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\redb}[1]{\tb{\textcolor{red}{#1}}}
+
+% simple figure, half page
+\newcommand{\fig}[3]{\begin{figure}[!h]\centering\includegraphics[width=0.5\textwidth]{#1/#2.png}\caption{#3}
+	\label{fig:#2}\end{figure}}
+\newcommand{\figw}[4]{\begin{figure}[!h]\centering\includegraphics[width=#4\textwidth]{#1/#2.png}\caption{#3}
+	\label{fig:#2}\end{figure}}
+\newcommand{\figwpdf}[4]{\begin{figure}[!h]\centering\includegraphics[width=#4\textwidth]{#1/#2.pdf}\caption{#3}
+	\label{fig:#2}\end{figure}}
+
+% wrap figure: 
+%    1) folder     
+%    2) image name (w/o png)    
+%    3) caption     
+%    4) alignment     
+%    5) width of figure (0.5)
+%    6) width of image in figure (.45)
+\newcommand{\wrapfig}[6]{\begin{wrapfigure}{#4}{#5\textwidth}\begin{center}\includegraphics[width=#6\textwidth]{#1/#2.png}
+	\end{center}\caption{#3}\label{fig:#2}\end{wrapfigure}}
+\newcommand{\wrapfigpdf}[6]{\begin{wrapfigure}{#4}{#5\textwidth}\begin{center}\includegraphics[width=#6\textwidth]{#1/#2.pdf}
+	\end{center}\caption{#3}\label{fig:#2}\end{wrapfigure}}
+
+% sections
+\newcommand{\sn}[1]{\section{#1}}
+\newcommand{\ssn}[1]{\subsection{#1}}
+\newcommand{\sssn}[1]{\subsubsection{#1}}
+
+% itemize
+\newcommand{\bitem}[0]{\begin{itemize}}
+\newcommand{\eitem}[0]{\end{itemize}}
+\newcommand{\sitem}[1]{\bitem \item{#1} \eitem}
+\newcommand{\bolditem}[2]{\item \textbf{#1} #2}
+\newcommand{\emitem}[2]{\item \emph{#1} #2}
+\newcommand{\citem}[2]{\item\code{#1} #2}
+\newcommand{\citemm}[1]{\item\code{#1}}
+\newcommand{\scitem}[2]{\bitem \citem{#1}{#2} \eitem}
+
+% description
+\newcommand{\bdesc}[0]{\begin{description}}
+\newcommand{\edesc}[0]{\end{description}}
+\newcommand{\ditem}[2]{\item[#1] #2}
+\newcommand{\deitem}[3]{\item[#1] \emph{#2} #3}
+
+% enumerate
+\newcommand{\benum}[0]{\begin{enumerate}}
+\newcommand{\eenum}[0]{\end{enumerate}}
+\newcommand{\bfi}[2]{\item \textbf{#1} #2}
+
+% coding
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\codei}[1]{\emph{#1}}
+\newcommand{\codeb}[1]{\textbf{#1}}
+\newcommand{\cindent}[0]{\indent\hspace{5pt}}
+\newcommand{\nocindent}[0]{\hspace{-5pt}}
+\newcommand{\NULL}[0]{\code{NULL}}
+
+% right arrow
+\newcommand{\ra}[0]{$\Rightarrow$}
+
+% greater/less than
+\newcommand{\gt}[0]{$>$}
+\newcommand{\lt}[0]{$<$}
+
+% because/therefore
+\newcommand{\bc}[0]{$\because{}$}
+\newcommand{\tf}[0]{$\therefore$}
+
+% math parentheses
+\newcommand{\p}[1]{\partial{}#1}
+\newcommand{\lp}[0]{\left(}
+\newcommand{\rp}[0]{\right)}
+
+% brackets
+\newcommand{\inner}[2]{\left\langle #1,#2 \right\rangle{}}
+
+% math brackets and curlies
+\newcommand{\lb}[0]{\left[}
+\newcommand{\rb}[0]{\right]}
+\newcommand{\lc}[0]{\left\{}
+\newcommand{\rc}[0]{\right\}}
+
+% math commands
+\newcommand{\oh}[0]{\frac{1}{2}}
+
+% boxing
+\newcommand{\boxit}[1]{\fbox{#1}}
+\newcommand{\example}[1]{\fbox{\parbox{\linewidth}{#1}}}
+
+% math theorem and contradiction symbol
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+
+\newcommand{\contra}{%
+\begin{tikzpicture}[rotate=45,x=0.5ex,y=0.5ex]
+\draw[line width=.1ex] (0,2) -- (3,2) (0,1) -- (3,1) (1,3) -- (1,0) (2,3) -- (2,0);
+\end{tikzpicture}
+}
+
+% reals sciprt
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\suchthat}{\mathrel{\ooalign{$\ni$\cr\kern-1pt$-$\kern-6.5pt$-$}}}
+\newcommand{\bigO}[1]{$\mathcal{O}{(#1)}$}
+\newcommand{\opt}[0]{$\mathcal{O}$}
+\newcommand{\xor}[0]{\oplus}
+
+\newcommand{\para}[1]{\paragraph{#1}}
+
+\newcommand{\hzline}[0]{\noindent\makebox[\linewidth]{\rule{\textwidth}{0.8pt}}}
+
+\newcommand{\method}[1]{\\\hzline\\\code{#1}\\\hzline\\}
+
