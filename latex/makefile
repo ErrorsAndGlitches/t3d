@@ -1,4 +1,4 @@
-.PHONY : all clean
+.PHONY : all clean realclean
 
 VPATH = 
 SHELL = /bin/bash
@@ -20,5 +20,7 @@ three: $(TEXS)
 	# if you do not include the @ symbol, make prints the statment
 
 clean: 
-	rm -f $(ROOT).{pdf,aux,log,out,toc}
+	rm -f $(ROOT).{aux,log,out,toc}
 
+realclean:
+	rm -f $(ROOT).{pdf,aux,log,out,toc}

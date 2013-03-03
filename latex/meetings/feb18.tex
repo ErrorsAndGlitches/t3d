@@ -1,0 +1,79 @@
+\ssn{8 February 2013}
+
+\para{Game Introduction}
+
+During this meeting, Benjamyn introduced to Zach his game idea, T3D, a 3D
+tetris implementation that extends the gameplay of tetris that we all know and
+love.  The game focuses on a battling ideology in which each player is trying
+to push the platform away from their ceiling, causing the platform to get
+closer to the opponent's ceiling. As in the original teris, if one of the
+player's blocks falls above their ceiling, they loose. Figure \ref{fig:screen}
+shows the main view that a player will see when playing the game. The
+following are notes on the discussion in which Benjamyn and Zach fleshed out
+their game. 
+
+\figwpdf{meetings/pics}{screen}{A sketch of the screen that a player will see
+on the main view of T3D.}{0.6}
+
+\para{Bonuses}
+
+The game also incorporates bonuses to extend the game play. A player will have
+a limited number of slots to fill bonuses. The player can also choose which
+subarena that they want to use the bonus on. Below is a list of bonuses and a
+short description that we brainstormed during the meeting:
+\benum
+	\bolditem{bomb}{destroys a group of blocks in a radius of where the bomb
+		detonates.}
+	\bolditem{slow down/speed up}{changes the rate at which the blocks fall.}
+	\bolditem{chain}{a chain across a subarena is produced which serves as an
+		irritation for the player whose subarena the chain is applied to. This bonus
+		expires after a certain elapsed time.}
+	\bolditem{block}{a block is put into one of the subarenas. The block expires
+		after a certain elapsed time.}
+	\bolditem{change subarena height}{this bonus changes the height of the chosen
+		subarena by a single layer. The bonus can be used in two ways: increasing or
+		decreasing the height of the chosen subarena. This bonus expires after a
+		certain elapsed time.}
+	\bolditem{layer duplication/destruction}{duplicates or destroys a layer in
+		the chosen subarena.}
+\eenum
+
+Bonuses were originally going to generated at random in holes of the subarena
+or on the surface of the blocks in a subarena. A distribution on how powerful
+each of the bonuses are to find a gameplay balance would need to be explored.
+However, Zach came up with a better idea of generated the bonuses when a player
+completes a layer (26 Feb 2013).
+
+\para{Tokens}
+
+After discussing some of the properties and gameplay of the game, we made a
+list of tokens and subtokens that would be included in the game:
+\bitem
+	\item super block
+		\sitem{block}{would contain state information: solid, bonus, gone}
+	\item arena
+	\bitem
+		\item subarenas
+			\sitem{layers}
+		\item platform
+		\item wall
+	\eitem
+	\item player
+		\sitem{bonus set}
+	\item game network and game network packets
+\eitem
+
+\para{Architecture}
+
+Figure \ref{fig:arch} shows a diagram of the architecture that was producing
+during our discussion.
+
+\figwpdf{meetings/pics}{arch}{A diagram of the soft architecture of the T3D
+game.}{0.6}
+
+\para{Code properties}
+
+We decided on using \href{https://bitbucket.org/}{bitbucket} for our code
+repository because bitbucket allows for private repositories. We also decided
+to use \href{http://www.stack.nl/~dimitri/doxygen/}{Doxygen} to automatically
+produce documentation for our project.
