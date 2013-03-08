@@ -92,12 +92,26 @@ Superblock token. Figure \ref{fig:superBlocks} shows a series of superblocks
 that we brainstormed up during the meeting and want to include in our game. The
 figures show the axis of rotation for each of the superblocks.
 
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[width=1.0\textwidth]{meetings/pics/coords.pdf}
+		\caption{Coordinates of the subarena.}
+		\label{fig:coords}
+	\end{subfigure}%
+	\begin{subfigure}[b]{0.4\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{meetings/pics/userInter.pdf}
+		\caption{T3D user interface.}
+		\label{fig:userInter}
+	\end{subfigure}
+\end{figure}
+
 Each superblock is composed of basic blocks. Each block is a cube with sides of
 length 1. The block is drawn so that the entire block is located in the
 positive quadrant as show in figure \ref{fig:block}. In addition, one of the
 block's corners is located at the origin. 
-
-\wrapfigpdf{meetings/pics}{coords}{Coordinates of the subarena.}{r}{0.4}{0.38}
 
 Individual blocks will possess no information about their orientation in space.
 The superblocks will, however. The information contained in a superblock is the
@@ -125,10 +139,13 @@ to be applied.
 The previous discussion led to how we want to represent the space of the
 subarena. Since the blocks are defined by existing in the positive quadrant
 with one of the corners to be the origin, we extended this definition to be
-included for the subarena and layers as in figure \ref{fig:coords}.
+included for the subarena and layers as in figure \ref{fig:coords}. The
+structure of the user interface and the substruct viewports is shown in figure
+\ref{fig:userInter}.
 
 \para{Calendar and Milestones}
-We split the project up into three primary milestones, which are shown in table \ref{tab:milestones}.
+We split the project up into three primary milestones, which are shown in table
+\ref{tab:milestones}.
 
 \begin{table}[!h]
 	\centering
@@ -156,6 +173,8 @@ We split the project up into three primary milestones, which are shown in table 
 \end{table}
 
 \figw{meetings/pics}{calendar}{Calendar for game completion.}{1.0}
+
+
 
 \figwpdf{meetings/pics}{arch3Mar}{An updated diagram of the soft architecture of the T3D
 game.}{0.8}
