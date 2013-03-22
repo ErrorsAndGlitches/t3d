@@ -1,6 +1,7 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 /**
+ * @file
  * @brief Contains the GameObject abstract class declaration.
  * @author Benjamyn
  */
@@ -18,6 +19,20 @@
 class GameObject: public Drawable {
 	protected:
 		Vector pos; // from origin
+
+		/**
+		 * @brief Draw a colored game object
+		 *
+		 * The color to use must already be set up
+		 */
+		virtual void drawColoredGameObject() const = 0;
+
+		/**
+		 * @brief Draw the game object given the texture handle
+		 *
+		 * The texture to use must already be bound
+		 */
+		virtual void drawTexturedGameObject() const = 0;
 
 	public:
 		/**
@@ -56,6 +71,34 @@ class GameObject: public Drawable {
 		 * @return The current position of the game object
 		 */
 		Vector getPos() const;
+
+		/**
+		 * @brief Draws the game object in the default color. See Drawable for the
+		 * default color
+		 */
+		virtual void draw() const;
+
+		/**
+		 * @brief Draws the game object with the given colors
+		 *
+		 * @param color A three element color array
+		 *
+		 * This function wraps the drawGameObject(const float *const color) const
+		 * function so that subclasses only need to worry about the actual drawing
+		 * and not setting up the colors
+		 */
+		void draw(const float *const color) const;
+
+		/**
+		 * @brief Draws the game object with the given textures
+		 *
+		 * @param texId An OpenGL texture handle
+		 *
+		 * This function wraps the drawGameObject(const GLuint texId) const
+		 * function so that subclasses only need to worry about the actual drawing
+		 * and not setting up the textures 
+		 */
+		void draw(const GLuint texId) const;
 };
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 /**
+ * @file
  * @brief Contains the Vector structure declaration.
  * @author Benjamyn
  *
