@@ -1,1 +1,45 @@
+________________________________________________________________________________
+
 Tetrix 3D Game for CMSC425
+--------------------------------------------------
+
+This repository contains the group project for the Game Programming course
+(CMSC425) for the Spring 2013 semester at the University of Marland.  The
+following is a discussion of the project.
+
+________________________________________________________________________________
+
+Requirements:
+--------------------------------------------------
+
+We use premake4 to set-up a configuration based on the environment the user is
+using. See premake4 documentation to generate the appropriate build files. The
+following are libraries that are required to build the game:
+	1) premake4
+	2) freeglut
+	3) OpenGL >= 2.0
+	4) SDL and SDL_image
+
+________________________________________________________________________________
+
+Building:
+--------------------------------------------------
+
+Use premake4 to create the appropriate build files and use whatever the
+appropriate tool is to build the project.
+
+________________________________________________________________________________
+
+Game Data:
+--------------------------------------------------
+
+All game data included was either created by us or is licensed under the
+Creative Commons or public license. Attributions can be found at the end of
+this file.
+
+________________________________________________________________________________
+
+Attributions:
+--------------------------------------------------
+
+SDL Texture example: http://sdl.beuc.net/sdl.wiki/OpenGL_Texture_Example
