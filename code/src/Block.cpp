@@ -1,6 +1,6 @@
 #include "Block.h"
 
-void Block::drawColoredGameObject()
+void Block::drawColoredGameObject() const
 {
 	// all the quads begin in the lower left corner and are drawn in an
 	// anti-clockwise fashion
@@ -38,7 +38,7 @@ void Block::drawColoredGameObject()
 	glEnd();
 }
 
-void Block::drawTexturedGameObject()
+void Block::drawTexturedGameObject() const
 {
 	glBegin(GL_QUADS);
 		// y = 0 plane

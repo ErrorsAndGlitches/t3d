@@ -19,14 +19,14 @@ class Block: public GameObject {
 		 *
 		 * The color to use must already be set up and is used for all six faces
 		 */
-		virtual void drawColoredGameObject();
+		virtual void drawColoredGameObject() const;
 
 		/**
 		 * @brief Draw a textured block
 		 *
 		 * The texture to use must already be set up and is used for all six faces
 		 */
-		virtual void drawTexturedGameObject();
+		virtual void drawTexturedGameObject() const;
 
 	public:
 		/**
