@@ -36,7 +36,7 @@ SuperBlock::SuperBlock(const SuperBlockType blockType)
 
 void SuperBlock::createLineSuperBlock()
 {
-	comToOrigin.setPos(-0.5, -0.5, -2);
+	rotPtToOrigin.setPos(-0.5, -0.5, -1.5);
 
 	blockLocs.push_back(Vector(0, 0, 0));
 	blockLocs.push_back(Vector(0, 0, 1));
@@ -46,7 +46,7 @@ void SuperBlock::createLineSuperBlock()
 
 void SuperBlock::createCubeSuperBlock()
 {
-	comToOrigin.setPos(-0.5, -0.5, -1);
+	rotPtToOrigin.setPos(-1, -1, -1);
 
 	blockLocs.push_back(Vector(0, 0, 0));
 	blockLocs.push_back(Vector(0, 1, 0));
@@ -61,7 +61,7 @@ void SuperBlock::createCubeSuperBlock()
 
 void SuperBlock::createEllSuperBlock()
 {
-	comToOrigin.setPos(-1.5, -0.5, -1);
+	rotPtToOrigin.setPos(-0.5, -0.5, -0.5);
 
 	blockLocs.push_back(Vector(0, 0, 0));
 	blockLocs.push_back(Vector(0, 0, 1));
@@ -71,7 +71,7 @@ void SuperBlock::createEllSuperBlock()
 
 void SuperBlock::createEssSuperBlock()
 {
-	comToOrigin.setPos(-1.5, -0.5, -1);
+	rotPtToOrigin.setPos(-1.5, -0.5, -0.5);
 
 	blockLocs.push_back(Vector(0, 0, 0));
 	blockLocs.push_back(Vector(1, 0, 0));
@@ -81,7 +81,7 @@ void SuperBlock::createEssSuperBlock()
 
 void SuperBlock::createPyramidSuperBlock()
 {
-	comToOrigin.setPos(-1.5, -1.5, -1);
+	rotPtToOrigin.setPos(-1.5, -1.5, -0.5);
 
 	blockLocs.push_back(Vector(1, 0, 0));
 	blockLocs.push_back(Vector(1, 1, 0));
@@ -110,8 +110,8 @@ void SuperBlock::drawTexturedGameObject() const
 void SuperBlock::drawBlockList(std::function<void ()> blockDrawFunc) const
 {
 	// translate to origin
-	glTranslatef(-comToOrigin.x, -comToOrigin.y, -comToOrigin.z);	
-		// perform rotations about COM
+	glTranslatef(-rotPtToOrigin.x, -rotPtToOrigin.y, -rotPtToOrigin.z);	
+		// perform rotations about rotation point
 		//    need to do rotations in reverse!
 		for (auto it = rotations.rbegin(); it != rotations.rend(); ++it) {
 			switch (*it) {
@@ -127,7 +127,7 @@ void SuperBlock::drawBlockList(std::function<void ()> blockDrawFunc) const
 			}
 		}
 	// return back to original position	
-	glTranslatef(comToOrigin.x, comToOrigin.y, comToOrigin.z);	
+	glTranslatef(rotPtToOrigin.x, rotPtToOrigin.y, rotPtToOrigin.z);	
 
 	// draw each of the blocks
 	for (Vector blockLoc : blockLocs) {
