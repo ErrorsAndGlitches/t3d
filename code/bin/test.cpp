@@ -57,15 +57,17 @@ void drawCallback()
 	sb.draw();
 
 	// draw some axis
-	glColor4f(0, 0, 0, 1);
 	glBegin(GL_LINES);
 		// x axis
+		glColor4f(1, 0, 0, 1);
 		glVertex3f(-100, 0, 0);
 		glVertex3f(100, 0, 0);
 		// y axis
+		glColor4f(0, 1, 0, 1);
 		glVertex3f(0, -100, 0);
 		glVertex3f(0, 100, 0);
 		// z axis
+		glColor4f(0, 0, 1, 1);
 		glVertex3f(0, 0, -100);
 		glVertex3f(0, 0, 100);
 	glEnd();
