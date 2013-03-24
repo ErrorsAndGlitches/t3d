@@ -7,12 +7,17 @@
  */
 
 #include "GameObject.h"
+#include "SuperBlock.h"
+
+class SuperBlock;
 
 /**
  * @brief A Block is a simple three dimensional block that is drawn such that
  * it is found entirely in the positive quandrant
  */
 class Block: public GameObject {
+	friend class SuperBlock;
+
 	protected:
 		/**
 		 * @brief Draw a colored block

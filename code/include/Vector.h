@@ -71,6 +71,15 @@ typedef struct Vector {
 		 * @param zz Delta z
 		 */
 		void updateRelaPos(float xx, float yy, float zz) { x += xx; y += yy; z += zz; }
+
+		/**
+		 * @brief Set the position of the head of the vector
+		 *
+		 * @param xx New x
+		 * @param yy New y
+		 * @param zz New z
+		 */
+		void setPos(float xx, float yy, float zz) { x = xx; y = yy; z = zz; }
 } Vector;
 
 #endif
