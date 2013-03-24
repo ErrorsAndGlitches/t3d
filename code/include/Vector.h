@@ -36,7 +36,7 @@ typedef struct Vector {
 		 *
 		 * @param v Vector to add to the current vector
 		 */
-		void operator+=(const Vector& v) { x += v.x; y += v.y; }
+		void operator+=(const Vector& v) { x += v.x; y += v.y; z += v.z; }
 
 		/**
 		 * @brief The parameter vector is subtracted from the current vector. The
@@ -44,14 +44,14 @@ typedef struct Vector {
 		 *
 		 * @param v Vector to subtract from the current vector
 		 */
-		void operator-=(const Vector& v) { x -= v.x; y -= v.y; }
+		void operator-=(const Vector& v) { x -= v.x; y -= v.y; z -= v.z; }
 
 		/**
 		 * @brief Assignment operator.
 		 *
 		 * @param v Vector to assign to the current vector
 		 */
-		void operator=(const Vector& v) { x = v.x; y = v.y; }
+		void operator=(const Vector& v) { x = v.x; y = v.y; z = v.z; }
 
 		/**
 		 * @brief Adds the current and parameter vector, returning the new vector,
