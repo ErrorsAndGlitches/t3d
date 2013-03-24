@@ -106,6 +106,7 @@ int main(int argc, char **argv)
 		" - x rotate about x-axis\n"
 		" - y rotate about y-axis\n"
 		" - z rotate about z-axis\n"
+		" - SPACE switch to the next tetris block\n"
 		"-----------------------------------------------------------------------" << endl;
 	glutInit(&argc, argv); // initialize glut state
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
