@@ -10,7 +10,9 @@ const int WINDOW_HEIGHT = 400;
 
 float rotation = 0.0f;
 
-SuperBlock sb(SuperBlock::SuperBlockType::PYRAMID);
+const int numSuperBlockTypes = 5;
+int blockType = 0;
+SuperBlock sb((SuperBlock::SuperBlockType) blockType);
 
 /* A general OpenGL initialization function.  Sets all of the initial parameters. */
 void initGL(int Width, int Height)
@@ -29,7 +31,6 @@ void initGL(int Width, int Height)
   gluPerspective(45.0f,(GLfloat)Width/(GLfloat)Height,0.1f,100.0f);	
 
   glMatrixMode(GL_MODELVIEW);
-
 }
 
 /**
@@ -88,6 +89,10 @@ void processNormalKeysCallback(unsigned char key, int xx, int yy)
 		sb.rotateY();
 	if ('z' == key)
 		sb.rotateZ();
+	if (' ' == key) {
+		blockType = (1 + blockType) % numSuperBlockTypes;
+		sb = SuperBlock((SuperBlock::SuperBlockType) blockType);
+	}
 }
 
 int main(int argc, char **argv) 
