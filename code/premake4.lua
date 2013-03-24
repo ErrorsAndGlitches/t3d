@@ -27,11 +27,28 @@ solution "T3D"
 	targetname "t3d"
 	buildoptions { "-std=c++11", "-pipe" }
 
+	configuration "Benjamyn"
+		buildoptions { "-O2", "-march=corei7" }
+
+	configuration "Debug"
+		flags { "ExtraWarnings" , "Symbols" }
+
+
 project "T3D"
 	kind "WindowedApp"
 	language "C++"
 	includedirs { "include" }
 	files { "**.cpp", "**.h" } -- ** means recurse into directories
+	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
+	location (buildDir)
+	objdir (buildDir)
+		
+project "Test"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "test"
+	files { "src/*.cpp", "include/*.h", "bin/test.cpp" } -- ** means recurse into directories
 	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
 	location (buildDir)
 	objdir (buildDir)
