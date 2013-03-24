@@ -16,9 +16,12 @@ class Block;
 /**
  * @brief A SuperBlock is composed of a set of Block objects. 
  *
- * A super block supports rotation the block about its center of mass. All
- * rotations are 90 degree rotations about the axis in the function name e.g.
- * SuperBlock::rotateX() rotates the object 90 degrees about the x-axis
+ * A super block supports rotation the block about rotation point, which is
+ * usually close to its center of mass, however, this is not always possible
+ * since after rotations are applied, the block must still have its edges at
+ * unit distances. All rotations are 90 degree rotations about the axis in the
+ * function name e.g.  SuperBlock::rotateX() rotates the object 90 degrees
+ * about the x-axis
  */
 class SuperBlock: public GameObject {
 	private:
@@ -28,7 +31,7 @@ class SuperBlock: public GameObject {
 		// location of blocks where the figure is drawn entirely in the positive
 		// quadrant
 		std::vector<Vector> blockLocs;
-		Vector comToOrigin; // translation of block so COM is at the origin
+		Vector rotPtToOrigin; // translation of block so rotation point is at the origin
 
 		std::vector<Rotation> rotations; // rotations that have been applied
 		// TODO: more efficient way to remember rotations instead of building a
