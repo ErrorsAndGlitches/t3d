@@ -65,8 +65,8 @@ void SuperBlock::createEllSuperBlock()
 
 	blockLocs.push_back(Vector(0, 0, 0));
 	blockLocs.push_back(Vector(0, 0, 1));
-	blockLocs.push_back(Vector(0, 1, 0));
-	blockLocs.push_back(Vector(0, 2, 0));
+	blockLocs.push_back(Vector(1, 0, 0));
+	blockLocs.push_back(Vector(2, 0, 0));
 }
 
 void SuperBlock::createEssSuperBlock()
