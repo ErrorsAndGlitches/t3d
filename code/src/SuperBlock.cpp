@@ -5,7 +5,7 @@
 
 Block* SuperBlock::block = new Block(); 
 
-SuperBlock::SuperBlock(const SuperBlockType blockType)
+SuperBlock::SuperBlock(const SuperBlockType blockType): GameObject()
 {
 	switch(blockType)
 	{
@@ -91,20 +91,34 @@ void SuperBlock::createPyramidSuperBlock()
 	blockLocs.push_back(Vector(1, 1, 1));
 }
 
-void SuperBlock::drawColoredGameObject() const
+void SuperBlock::draw(const float *const color) const 
 {
-	// create a lambda function and forward to drawBlockList
-	drawBlockList(
-			[this] () -> void {	this->block->drawColoredGameObject(); }
-			);
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+		glColor3fv(color);
+			// create a lambda function and forward to drawBlockList
+			drawBlockList(
+					[color,this] () -> void {	this->block->draw(color); }
+					);
+		glColor3fv(WHITE); // so we don't have a tint for future texture draws
+	glPopMatrix();
 }
 
-void SuperBlock::drawTexturedGameObject() const
+void SuperBlock::draw(const GLuint texId) const 
 {
-	// create a lambda function and forward to drawBlockList
-	drawBlockList(
-			[this] () -> void {	this->block->drawTexturedGameObject(); }
-			);
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+
+		// tell opengl which texture we want to use
+		glBindTexture(GL_TEXTURE_2D, texId);
+		glEnable(GL_TEXTURE_2D);
+			// create a lambda function and forward to drawBlockList
+			drawBlockList(
+					[texId,this] () -> void {	this->block->draw(texId); }
+					);
+		glDisable(GL_TEXTURE_2D);
+
+	glPopMatrix();
 }
 
 void SuperBlock::drawBlockList(std::function<void ()> blockDrawFunc) const

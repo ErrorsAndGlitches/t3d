@@ -35,29 +35,24 @@ class Drawable {
 		static const float *const DEFAULT_COLOR;
 
 		/**
-		 * @brief Default draw method
+		 * @brief Default draw method, which draws the object using the
+		 * DEFAULT_COLOR color
 		 */
-		virtual void draw() const = 0;
+		void draw() const; 
 
 		/**
 		 * @brief Draw the object given the array of color
 		 *
 		 * @param color A three element color array
-		 *
-		 * If this draw method is not overriden, then the default argumentless draw
-		 * method is used
 		 */
-		virtual void draw(const float *const color) const;
+		virtual void draw(const float *const color) const = 0;
 
 		/**
 		 * @brief Draw the object given the texture handle
 		 *
 		 * @param texId An OpenGL texture handle
-		 *
-		 * If this draw method is not overriden, then the default argumentless draw
-		 * method is used
 		 */
-		virtual void draw(const GLuint texId) const;
+		virtual void draw(const GLuint texId) const = 0;
 };
 
 #endif
