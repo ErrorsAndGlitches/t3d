@@ -11,8 +11,6 @@
 #include <vector>
 #include <functional>
 
-class Block;
-
 /**
  * @brief A SuperBlock is composed of a set of Block objects. 
  *
@@ -72,21 +70,6 @@ class SuperBlock: public GameObject {
 		 */
 		void drawBlockList(std::function<void ()> blockDrawFunc) const;
 
-	protected:
-		/**
-		 * @brief Draw a colored super block
-		 *
-		 * All the Block objects of the SuperBlock are colored the same
-		 */
-		virtual void drawColoredGameObject() const;
-
-		/**
-		 * @brief Draw a textured super block
-		 *
-		 * All the Block objects of the SuperBlock are textured the same
-		 */
-		virtual void drawTexturedGameObject() const;
-
 	public:
 		/**
 		 * @brief Different types of super blocks
@@ -97,6 +80,12 @@ class SuperBlock: public GameObject {
 		 * @brief Default constructor, sets the position to the origin
 		 */
 		SuperBlock(const SuperBlockType blockType);
+
+		/**
+		 * @brief Constructor, sets the position in addition to setting the block
+		 * type
+		 */
+		SuperBlock(const SuperBlockType blockType, const Vector &v);
 
 		/**
 		 * @brief Rotate about x-axis
@@ -112,6 +101,26 @@ class SuperBlock: public GameObject {
 		 * @brief Rotate about z-axis
 		 */
 		void rotateZ();
+
+		/**
+		 * @brief Draws the super block with the given color
+		 *
+		 * @param color A three element color array
+		 *
+		 * All the Blocks comprising the super block are colored the parameter
+		 * color
+		 */
+		virtual void draw(const float *const color) const;
+
+		/**
+		 * @brief Draws the super block with the given texture
+		 *
+		 * @param texId An OpenGL texture handle
+		 *
+		 * All the Blocks comprising the super block are textured the parameter
+		 * texture
+		 */
+		virtual void draw(const GLuint texId) const;
 };
 
 #endif

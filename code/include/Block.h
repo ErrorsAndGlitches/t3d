@@ -7,37 +7,46 @@
  */
 
 #include "GameObject.h"
-#include "SuperBlock.h"
-
-class SuperBlock;
 
 /**
  * @brief A Block is a simple three dimensional block that is drawn such that
  * it is found entirely in the positive quandrant
  */
 class Block: public GameObject {
-	friend class SuperBlock;
-
-	protected:
+	private:
 		/**
 		 * @brief Draw a colored block
 		 *
 		 * The color to use must already be set up and is used for all six faces
 		 */
-		virtual void drawColoredGameObject() const;
+		void drawColoredBlock() const;
 
 		/**
 		 * @brief Draw a textured block
 		 *
 		 * The texture to use must already be set up and is used for all six faces
 		 */
-		virtual void drawTexturedGameObject() const;
+		void drawTexturedBlock() const;
 
 	public:
 		/**
 		 * @brief Default constructor, sets the position to the origin
 		 */
 		Block(): GameObject() {}
+
+		/**
+		 * @brief Draws the block with the given color
+		 *
+		 * @param color A three element color array
+		 */
+		virtual void draw(const float *const color) const;
+
+		/**
+		 * @brief Draws the block with the given texture
+		 *
+		 * @param texId An OpenGL texture handle
+		 */
+		virtual void draw(const GLuint texId) const;
 };
 
 #endif

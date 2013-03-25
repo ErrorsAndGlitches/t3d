@@ -1,6 +1,30 @@
 #include "Block.h"
 
-void Block::drawColoredGameObject() const
+void Block::draw(const float *const color) const 
+{
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+		glColor3fv(color);
+		drawColoredBlock();
+		glColor3fv(WHITE); // so we don't have a tint for future texture draws
+	glPopMatrix();
+}
+
+void Block::draw(const GLuint texId) const 
+{
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+
+		// tell opengl which texture we want to use
+		glBindTexture(GL_TEXTURE_2D, texId);
+		glEnable(GL_TEXTURE_2D);
+			drawTexturedBlock();
+		glDisable(GL_TEXTURE_2D);
+
+	glPopMatrix();
+}
+
+void Block::drawColoredBlock() const
 {
 	// all the quads begin in the lower left corner and are drawn in an
 	// anti-clockwise fashion
@@ -38,7 +62,7 @@ void Block::drawColoredGameObject() const
 	glEnd();
 }
 
-void Block::drawTexturedGameObject() const
+void Block::drawTexturedBlock() const
 {
 	glBegin(GL_QUADS);
 		// y = 0 plane
