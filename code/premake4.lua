@@ -57,9 +57,19 @@ project "Test-Layer"
 	language "C++"
 	targetname "t3d-test-layer"
 	includedirs { "include" }
+	files { "bin/test-layer.cpp" }
 	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
-	files { "bin/test-layer.cpp" } -- ** means recurse into directories
 	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
 	location (buildDir)
 	objdir (buildDir)
 		
+project "Test-SuperBlock"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-test-superblock"
+	files { "bin/test.cpp" }
+	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
+	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
+	location (buildDir)
+	objdir (buildDir)
