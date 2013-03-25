@@ -2,6 +2,8 @@
 -- Premake4 script to generate the 3D Tetris Game, T3D
 --
 
+buildDir = "build"
+
 -- build doxygen
 newaction {
 	trigger = "dox",
@@ -20,25 +22,44 @@ newaction {
 	end
 }
 
-buildDir = "build"
+-- remove build directory
+newaction {
+	trigger = "rmbuild",
+	description = "Remove build directory",
+	execute = function ()
+		os.execute("rm -rf "..buildDir)
+	end
+}
 
 solution "T3D"
 	configurations { "Release", "Debug", "Benjamyn" }
-	targetname "t3d"
 	buildoptions { "-std=c++11", "-pipe" }
+
+	configuration "Release"
+		buildoptions { "-O2" }
+	configuration "Benjamyn"
+		buildoptions { "-O2", "-march=corei7" }
+	configuration "Debug"
+		flags { "ExtraWarnings" , "Symbols" }
 
 project "T3D"
 	kind "WindowedApp"
 	language "C++"
+	targetname "t3d"
 	includedirs { "include" }
-	files { "**.cpp", "**.h" } -- ** means recurse into directories
+	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
 	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
 	location (buildDir)
 	objdir (buildDir)
-
-	configuration "Benjamyn"
-		buildoptions { "-O2", "-march=corei7" }
-
-	configuration "Debug"
-		flags { "ExtraWarnings" , "Symbols" }
+		
+project "Test-Layer"
+	kind "WindowedApp"
+	language "C++"
+	targetname "t3d-test-layer"
+	includedirs { "include" }
+	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
+	files { "bin/test-layer.cpp" } -- ** means recurse into directories
+	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
+	location (buildDir)
+	objdir (buildDir)
 		
