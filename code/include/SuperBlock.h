@@ -82,6 +82,12 @@ class SuperBlock: public GameObject {
 		SuperBlock(const SuperBlockType blockType);
 
 		/**
+		 * @brief Constructor, sets the position in addition to setting the block
+		 * type
+		 */
+		SuperBlock(const SuperBlockType blockType, const Vector &v);
+
+		/**
 		 * @brief Rotate about x-axis
 		 */
 		void rotateX();

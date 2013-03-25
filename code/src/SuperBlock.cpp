@@ -95,12 +95,10 @@ void SuperBlock::draw(const float *const color) const
 {
 	glPushMatrix();
 		glTranslatef(pos.x, pos.y, pos.z);
-		glColor3fv(color);
-			// create a lambda function and forward to drawBlockList
-			drawBlockList(
-					[color,this] () -> void {	this->block->draw(color); }
-					);
-		glColor3fv(WHITE); // so we don't have a tint for future texture draws
+		// create a lambda function and forward to drawBlockList
+		drawBlockList(
+				[color,this] () -> void {	this->block->draw(color); }
+				);
 	glPopMatrix();
 }
 
@@ -108,16 +106,10 @@ void SuperBlock::draw(const GLuint texId) const
 {
 	glPushMatrix();
 		glTranslatef(pos.x, pos.y, pos.z);
-
-		// tell opengl which texture we want to use
-		glBindTexture(GL_TEXTURE_2D, texId);
-		glEnable(GL_TEXTURE_2D);
-			// create a lambda function and forward to drawBlockList
-			drawBlockList(
-					[texId,this] () -> void {	this->block->draw(texId); }
-					);
-		glDisable(GL_TEXTURE_2D);
-
+		// create a lambda function and forward to drawBlockList
+		drawBlockList(
+				[texId,this] () -> void {	this->block->draw(texId); }
+				);
 	glPopMatrix();
 }
 

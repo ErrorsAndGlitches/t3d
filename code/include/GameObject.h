@@ -27,6 +27,12 @@ class GameObject: public Drawable {
 		GameObject(): Drawable(), pos() {}
 
 		/**
+		 * @brief Constructor that takes a position of the game object as a
+		 * parameter
+		 */
+		GameObject(const Vector &v): Drawable(), pos(v) {}
+
+		/**
 		 * @brief Update the position by providing a relative value
 		 * to the current position
 		 *
