@@ -1,0 +1,24 @@
+\sn{Overview: 10 April 2013}
+
+The members of team are Zach Palchick and Benjamyn Ward, whom are implementing
+a three dimensional tetris game called \tb{T3D}. 
+
+The game consists of two players whom are trying to cause their opponent's
+block height to reach the maximum block height, thereby loosing. See figure
+\ref{fig:screen}. Players can use the mouse to rotate the main view. Tetris
+blocks can be moved and rotated using the keyboard.
+
+Zach is using a Windows environment to develop the game while Benjamyn is using
+a Linux environment. We are using
+\href{http://industriousone.com/premake}{Premake 4} to build configuration
+files from the source code. Thus a single configuration file can be used to
+build the Visual Studio project file in the Windows environment and the GNU
+Makefile for the Linux environment. We are hosting the code in a private git
+repository on \href{http://bitbucket.org}{Bitbucket}.
+
+We will be using SDL to import textures and audio. The graphics back-end will
+be OpenGL.
+
+We've already had a few meetings and created some documentation that can be
+found in the next sections of this document. Instead of retyping everything,
+you can just skim through to see our discussion and conclusions.
