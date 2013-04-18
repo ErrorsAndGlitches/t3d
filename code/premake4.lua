@@ -48,7 +48,7 @@ project "T3D"
 	targetname "t3d"
 	includedirs { "include" }
 	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
-	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
 		
@@ -59,7 +59,7 @@ project "Test-Layer"
 	includedirs { "include" }
 	files { "bin/test-layer.cpp" }
 	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
-	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
 		
@@ -70,6 +70,6 @@ project "Test-SuperBlock"
 	targetname "t3d-test-superblock"
 	files { "bin/test-superblock.cpp" }
 	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
-	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
