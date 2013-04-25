@@ -73,3 +73,14 @@ project "Test-SuperBlock"
 	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
+		
+project "Test-SuperBlockFactory"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-test-superblockfactory"
+	files { "bin/test-superblockfactory.cpp" }
+	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)

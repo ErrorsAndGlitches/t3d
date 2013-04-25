@@ -74,7 +74,7 @@ class SuperBlock: public GameObject {
 		/**
 		 * @brief Different types of super blocks
 		 */
-		enum SuperBlockType { LINE, CUBE, ELL, ESS, PYRAMID };
+		enum SuperBlockType { LINE, CUBE, ELL, ESS, PYRAMID, NUM_SUPER_BLOCK_TYPES };
 
 		/**
 		 * @brief Default constructor, sets the position to the origin
