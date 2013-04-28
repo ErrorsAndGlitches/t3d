@@ -1,6 +1,6 @@
 #include <GL/glut.h>
 #include <iostream>
-#include "SuperBlock.h"
+#include "Subarena.h"
 
 using std::cout;
 using std::endl;
@@ -10,9 +10,7 @@ const int WINDOW_HEIGHT = 400;
 
 float rotation = 0.0f;
 
-const int numSuperBlockTypes = 5;
-int blockType = 0;
-SuperBlock sb((SuperBlock::SuperBlockType) blockType);
+Subarena<4, 8> *subarena = new Subarena<4, 8>();
 
 /* A general OpenGL initialization function.  Sets all of the initial parameters. */
 void initGL(int Width, int Height)
@@ -48,13 +46,11 @@ void drawCallback()
 //	rotation += 1;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
   glLoadIdentity();				// Reset The View
-	gluLookAt(4, -10, 4, 
-					  0, 0, 0,
-						0, 0, 1);
+	gluLookAt(8, -20, 12,  // eye loc
+					  0, 0, 6,    // look at
+						0, 0, 1);   // up
 
-//	glRotatef(90, 1, 0, 0); // rotate entire world
-
-	sb.Drawable::draw();
+	subarena->Drawable::draw();
 
 	// draw some axis
 	glBegin(GL_LINES);
@@ -80,21 +76,33 @@ void drawCallback()
  */
 void idleCallback()
 {
-	glutPostRedisplay(); // redraw everything
+	glutPostRedisplay(); // redraw everything (since bullets move)
 }
 
 void processNormalKeysCallback(unsigned char key, int xx, int yy)
 {
-	if ('x' == key)
-		sb.rotate(SimpleRotation::RotationType::XCW);
-	if ('y' == key)
-		sb.rotate(SimpleRotation::RotationType::YCW);
-	if ('z' == key)
-		sb.rotate(SimpleRotation::RotationType::ZCW);
-	if (' ' == key) {
-		blockType = (1 + blockType) % numSuperBlockTypes;
-		sb = SuperBlock((SuperBlock::SuperBlockType) blockType);
-	}
+	if ('a' == key)
+		subarena->rotateSuperBlock(SimpleRotation::RotationType::XCW);
+	if ('d' == key)
+		subarena->rotateSuperBlock(SimpleRotation::RotationType::YCW);
+	if ('w' == key)
+		subarena->rotateSuperBlock(SimpleRotation::RotationType::ZCW);
+	if ('s' == key)
+		subarena->moveSuperBlockRelative(Vector(0, 0, -1));
+	if (' ' == key)
+		subarena->newSuperBlock();
+}
+
+void processSpecialKeysCallback(int key, int x, int y)
+{
+	if (GLUT_KEY_UP == key)
+		subarena->moveSuperBlockRelative(Vector(0, 1, 0));
+	if (GLUT_KEY_DOWN == key)
+		subarena->moveSuperBlockRelative(Vector(0, -1, 0));
+	if (GLUT_KEY_LEFT == key)
+		subarena->moveSuperBlockRelative(Vector(-1, 0, 0));
+	if (GLUT_KEY_RIGHT == key)
+		subarena->moveSuperBlockRelative(Vector(1, 0, 0));
 }
 
 int main(int argc, char **argv) 
@@ -103,10 +111,10 @@ int main(int argc, char **argv)
 		"\n"
 		"-----------------------------------------------------------------------\n"
   	"Tetris 3D Testing Program:\n"
-		" - x rotate about x-axis\n"
-		" - y rotate about y-axis\n"
-		" - z rotate about z-axis\n"
-		" - SPACE switch to the next tetris block\n"
+		" - a/d/w:  rotate about x/y/z-axis\n"
+		" - arrow keys: move the superblock in the x-y plane\n"
+		" - s: move the superblock down\n"
+		" - SPACE: insert superblock and switch to the next random tetris block\n"
 		"-----------------------------------------------------------------------" << endl;
 	glutInit(&argc, argv); // initialize glut state
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
@@ -121,6 +129,7 @@ int main(int argc, char **argv)
 
 	glutIgnoreKeyRepeat(1); // ignore key repeat when holding key down
 	glutKeyboardFunc(processNormalKeysCallback); // process standard key clicks
+	glutSpecialFunc(processSpecialKeysCallback);
 
 	initGL(WINDOW_WIDTH, WINDOW_HEIGHT);
 

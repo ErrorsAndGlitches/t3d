@@ -84,7 +84,14 @@ class Layer: public GameObject {
 		 *
 		 * @return True if layer is full, false otherwise
 		 */
-		bool isLayerFull() const;
+		bool isFull() const;
+
+		/**
+		 * @brief Query whether the layer is completely empty
+		 *
+		 * @return True if layer is empty, false otherwise
+		 */
+		bool isEmpty() const;
 
 		/**
 		 * @brief Query if the specific location in the layer is unoccupied
@@ -190,9 +197,15 @@ void Layer<xLength, yLength>::drawLayerBlocks(
 }
 
 template <int xLength, int yLength>
-bool Layer<xLength, yLength>::isLayerFull() const
+bool Layer<xLength, yLength>::isFull() const
 {
 	return unoccupiedLocs.none();
+}
+
+template <int xLength, int yLength>
+bool Layer<xLength, yLength>::isEmpty() const
+{
+	return unoccupiedLocs.count() == unoccupiedLocs.size();
 }
 
 template <int xLength, int yLength>

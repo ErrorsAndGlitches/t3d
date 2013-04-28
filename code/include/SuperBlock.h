@@ -6,10 +6,11 @@
  * @author Benjamyn
  */
 
-#include "Vector.h"
-#include "Block.h"
 #include <vector>
 #include <functional>
+#include "Vector.h"
+#include "Block.h"
+#include "SimpleRotation.h"
 
 /**
  * @brief A SuperBlock is composed of a set of Block objects. 
@@ -23,18 +24,11 @@
  */
 class SuperBlock: public GameObject {
 	private:
-		enum Rotation { ROT_X, ROT_Y, ROT_Z };
-
 		static Block *block; // shared block for drawing
 		// location of blocks where the figure is drawn entirely in the positive
 		// quadrant
-		std::vector<Vector> blockLocs;
-		Vector rotPtToOrigin; // translation of block so rotation point is at the origin
+		std::vector<Vector*> blockLocs;
 
-		std::vector<Rotation> rotations; // rotations that have been applied
-		// TODO: more efficient way to remember rotations instead of building a
-		// stack
-		
 		/**
 		 * @brief Initializes the super block to be a line super block
 		 */
@@ -74,12 +68,19 @@ class SuperBlock: public GameObject {
 		/**
 		 * @brief Different types of super blocks
 		 */
-		enum SuperBlockType { LINE, CUBE, ELL, ESS, PYRAMID };
+		enum SuperBlockType { LINE, CUBE, ELL, ESS, PYRAMID, NUM_SUPER_BLOCK_TYPES };
 
 		/**
 		 * @brief Default constructor, sets the position to the origin
 		 */
 		SuperBlock(const SuperBlockType blockType);
+
+		/**
+		 * @brief Copy constructor
+		 *
+		 * @param other Object to copy from
+		 */
+		SuperBlock(const SuperBlock& other);
 
 		/**
 		 * @brief Constructor, sets the position in addition to setting the block
@@ -88,19 +89,25 @@ class SuperBlock: public GameObject {
 		SuperBlock(const SuperBlockType blockType, const Vector &v);
 
 		/**
-		 * @brief Rotate about x-axis
+		 * @brief Copy constructor for superblock
+		 *
+		 * @param rhs Right hand side superblock
+		 *
+		 * @return *this
 		 */
-		void rotateX();
+		const SuperBlock& operator=(const SuperBlock& rhs);
 
 		/**
-		 * @brief Rotate about y-axis
+		 * @brief Cleans up the blocks that compose the SuperBlock
 		 */
-		void rotateY();
+		~SuperBlock();
 
 		/**
-		 * @brief Rotate about z-axis
+		 * @brief Perform the given rotation on the superblock
+		 *
+		 * @param rotType
 		 */
-		void rotateZ();
+		void rotate(const SimpleRotation::RotationType& rotType);
 
 		/**
 		 * @brief Draws the super block with the given color
@@ -121,6 +128,29 @@ class SuperBlock: public GameObject {
 		 * texture
 		 */
 		virtual void draw(const GLuint texId) const;
+
+		/**
+		 * @brief Get a list of the current block locations in the SuperBlock
+		 *
+		 * @return A vector of block locations
+		 */
+		std::vector<Vector> getBlockLocations() const;
+
+		/**
+		 * @brief Get a list of the SuperBlock block locations after undergoing the
+		 * given translation
+		 *
+		 * @return A vector of translated block locations
+		 */
+		std::vector<Vector> getBlockLocations(const Vector& delta) const;
+
+		/**
+		 * @brief Get a list of the SuperBlock block locations after undergoing the
+		 * given rotation 
+		 *
+		 * @return A vector of rotated block locations
+		 */
+		std::vector<Vector> getBlockLocations(const SimpleRotation::RotationType& rotType) const;
 };
 
 #endif
