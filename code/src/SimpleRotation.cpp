@@ -1,6 +1,6 @@
 #include "SimpleRotation.h"
 
-Vector SimpleRotation::rotate(const Vector& vec, RotationType rotType)
+Vector SimpleRotation::rotate(const Vector& vec, const RotationType& rotType)
 {
 	switch (rotType) {
 		case RotationType::XCW:
@@ -18,20 +18,26 @@ Vector SimpleRotation::rotate(const Vector& vec, RotationType rotType)
 	}
 }
 
-void SimpleRotation::rotate(Vector& vec, RotationType rotType)
+void SimpleRotation::rotate(Vector& vec, const RotationType& rotType)
 {
 	switch (rotType) {
 		case RotationType::XCW:
 			vec.setPos(vec.x, -vec.z, vec.y);
+			break;
 		case RotationType::XCCW:
 			vec.setPos(vec.x, vec.z, -vec.y);
+			break;
 		case RotationType::YCW:
 			vec.setPos(vec.z, vec.y, -vec.x);
+			break;
 		case RotationType::YCCW:
 			vec.setPos(-vec.z, vec.y, vec.x);
+			break;
 		case RotationType::ZCW:
 			vec.setPos(-vec.y, vec.x, vec.z);
+			break;
 		case RotationType::ZCCW:
 			vec.setPos(vec.y, -vec.x, vec.z);
+			break;
 	}
 }

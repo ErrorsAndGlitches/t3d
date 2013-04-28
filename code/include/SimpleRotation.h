@@ -38,7 +38,7 @@ class SimpleRotation {
 		 *
 		 * @return The rotated vector
 		 */
-		static Vector rotate(const Vector& vec, RotationType rotType);
+		static Vector rotate(const Vector& vec, const RotationType& rotType);
 
 		/**
 		 * @brief This method performs the same operations as the other rotate method
@@ -48,7 +48,7 @@ class SimpleRotation {
 		 * @param vec Input vector to rotate
 		 * @param rotType Rotation type
 		 */
-		static void rotate(Vector& vec, RotationType rotType);
+		static void rotate(Vector& vec, const RotationType& rotType);
 };
 
 #endif
