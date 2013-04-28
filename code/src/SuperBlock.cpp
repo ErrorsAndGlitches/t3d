@@ -5,6 +5,15 @@
 
 Block* SuperBlock::block = new Block(); 
 
+SuperBlock::~SuperBlock()
+{
+	for (Vector *blockLoc : blockLocs) {
+		delete(blockLoc);
+	}
+
+	blockLocs.clear();
+}
+
 SuperBlock::SuperBlock(const SuperBlockType blockType): GameObject()
 {
 	switch(blockType)
@@ -34,61 +43,73 @@ SuperBlock::SuperBlock(const SuperBlockType blockType): GameObject()
 	}
 }
 
+SuperBlock::SuperBlock(const SuperBlock& other): GameObject()
+{
+	for (Vector *blockLoc : other.blockLocs) {
+		blockLocs.push_back(new Vector(*blockLoc));
+	}
+}
+
+const SuperBlock& SuperBlock::operator=(const SuperBlock& rhs)
+{
+	for (Vector *blockLoc : blockLocs) {
+		delete(blockLoc);
+	}
+
+	blockLocs.clear();
+
+	for (const Vector& vec : rhs.getBlockLocations()) {
+		blockLocs.push_back(new Vector(vec));
+	}
+
+	return *this;
+}
+
 void SuperBlock::createLineSuperBlock()
 {
-	rotPtToOrigin.setPos(-0.5, -0.5, -1.5);
-
-	blockLocs.push_back(Vector(0, 0, 0));
-	blockLocs.push_back(Vector(0, 0, 1));
-	blockLocs.push_back(Vector(0, 0, 2));
-	blockLocs.push_back(Vector(0, 0, 3));
+	blockLocs.push_back(new Vector(0, 0, -2));
+	blockLocs.push_back(new Vector(0, 0, -1));
+	blockLocs.push_back(new Vector(0, 0, 0));
+	blockLocs.push_back(new Vector(0, 0, 1));
 }
 
 void SuperBlock::createCubeSuperBlock()
 {
-	rotPtToOrigin.setPos(-1, -1, -1);
+	blockLocs.push_back(new Vector(0, 0, 0));
+	blockLocs.push_back(new Vector(0, 1, 0));
+	blockLocs.push_back(new Vector(1, 1, 0));
+	blockLocs.push_back(new Vector(1, 0, 0));
 
-	blockLocs.push_back(Vector(0, 0, 0));
-	blockLocs.push_back(Vector(0, 1, 0));
-	blockLocs.push_back(Vector(1, 1, 0));
-	blockLocs.push_back(Vector(1, 0, 0));
-
-	blockLocs.push_back(Vector(0, 0, 1));
-	blockLocs.push_back(Vector(0, 1, 1));
-	blockLocs.push_back(Vector(1, 1, 1));
-	blockLocs.push_back(Vector(1, 0, 1));
+	blockLocs.push_back(new Vector(0, 0, 1));
+	blockLocs.push_back(new Vector(0, 1, 1));
+	blockLocs.push_back(new Vector(1, 1, 1));
+	blockLocs.push_back(new Vector(1, 0, 1));
 }
 
 void SuperBlock::createEllSuperBlock()
 {
-	rotPtToOrigin.setPos(-0.5, -0.5, -0.5);
-
-	blockLocs.push_back(Vector(0, 0, 0));
-	blockLocs.push_back(Vector(0, 0, 1));
-	blockLocs.push_back(Vector(1, 0, 0));
-	blockLocs.push_back(Vector(2, 0, 0));
+	blockLocs.push_back(new Vector(0, 0, 0));
+	blockLocs.push_back(new Vector(0, 0, 1));
+	blockLocs.push_back(new Vector(1, 0, 0));
+	blockLocs.push_back(new Vector(2, 0, 0));
 }
 
 void SuperBlock::createEssSuperBlock()
 {
-	rotPtToOrigin.setPos(-1.5, -0.5, -0.5);
-
-	blockLocs.push_back(Vector(0, 0, 0));
-	blockLocs.push_back(Vector(1, 0, 0));
-	blockLocs.push_back(Vector(1, 0, 1));
-	blockLocs.push_back(Vector(2, 0, 1));
+	blockLocs.push_back(new Vector(-1, 0, 0));
+	blockLocs.push_back(new Vector(0, 0, 0));
+	blockLocs.push_back(new Vector(0, 0, 1));
+	blockLocs.push_back(new Vector(1, 0, 1));
 }
 
 void SuperBlock::createPyramidSuperBlock()
 {
-	rotPtToOrigin.setPos(-1.5, -1.5, -0.5);
-
-	blockLocs.push_back(Vector(1, 0, 0));
-	blockLocs.push_back(Vector(1, 1, 0));
-	blockLocs.push_back(Vector(1, 2, 0));
-	blockLocs.push_back(Vector(2, 1, 0));
-	blockLocs.push_back(Vector(0, 1, 0));
-	blockLocs.push_back(Vector(1, 1, 1));
+	blockLocs.push_back(new Vector(0, 0, 0));
+	blockLocs.push_back(new Vector(1, 0, 0));
+	blockLocs.push_back(new Vector(-1, 0, 0));
+	blockLocs.push_back(new Vector(0, 1, 0));
+	blockLocs.push_back(new Vector(0, -1, 0));
+	blockLocs.push_back(new Vector(0, 0, 1));
 }
 
 void SuperBlock::draw(const float *const color) const 
@@ -115,46 +136,51 @@ void SuperBlock::draw(const GLuint texId) const
 
 void SuperBlock::drawBlockList(std::function<void ()> blockDrawFunc) const
 {
-	// translate to origin
-	glTranslatef(-rotPtToOrigin.x, -rotPtToOrigin.y, -rotPtToOrigin.z);	
-		// perform rotations about rotation point
-		//    need to do rotations in reverse!
-		for (auto it = rotations.rbegin(); it != rotations.rend(); ++it) {
-			switch (*it) {
-				case ROT_X:
-					glRotatef(90, 1, 0, 0);
-					break;
-				case ROT_Y:
-					glRotatef(90, 0, 1, 0);
-					break;
-				case ROT_Z:
-					glRotatef(90, 0, 0, 1);
-					break;
-			}
-		}
-	// return back to original position	
-	glTranslatef(rotPtToOrigin.x, rotPtToOrigin.y, rotPtToOrigin.z);	
-
 	// draw each of the blocks
-	for (Vector blockLoc : blockLocs) {
+	for (const Vector *blockLoc : blockLocs) {
 		glPushMatrix();
-			glTranslatef(blockLoc.x, blockLoc.y, blockLoc.z);
+			glTranslatef(blockLoc->x, blockLoc->y, blockLoc->z);
 			blockDrawFunc();
 		glPopMatrix();
 	}
 }	
 
-void SuperBlock::rotateX()
+void SuperBlock::rotate(const SimpleRotation::RotationType& rotType)
 {
-	rotations.push_back(ROT_X);
+	for (Vector* blockLoc : blockLocs) {
+		SimpleRotation::rotate(*blockLoc, rotType);
+	}
 }
 
-void SuperBlock::rotateY()
+std::vector<Vector> SuperBlock::getBlockLocations() const
 {
-	rotations.push_back(ROT_Y);
+	std::vector<Vector> blPosits;
+
+	for (Vector *vec : blockLocs) {
+		blPosits.push_back(*vec);
+	}
+
+	return blPosits;
 }
 
-void SuperBlock::rotateZ()
+std::vector<Vector> SuperBlock::getBlockLocations(const Vector& delta) const
 {
-	rotations.push_back(ROT_Z);
+	std::vector<Vector> blPosits;
+
+	for (Vector *vec : blockLocs) {
+		blPosits.push_back(*vec + delta);
+	}
+
+	return blPosits;
+}
+
+std::vector<Vector> SuperBlock::getBlockLocations(const SimpleRotation::RotationType& rotType) const
+{
+	std::vector<Vector> blPosits;
+
+	for (const Vector *vec : blockLocs) {
+		blPosits.push_back(SimpleRotation::rotate(*vec, rotType));
+	}
+
+	return blPosits;
 }

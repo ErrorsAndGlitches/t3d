@@ -85,11 +85,11 @@ void idleCallback()
 void processNormalKeysCallback(unsigned char key, int xx, int yy)
 {
 	if ('x' == key)
-		sb->rotateX();
+		sb->rotate(SimpleRotation::RotationType::XCW);
 	if ('y' == key)
-		sb->rotateY();
+		sb->rotate(SimpleRotation::RotationType::YCW);
 	if ('z' == key)
-		sb->rotateZ();
+		sb->rotate(SimpleRotation::RotationType::ZCW);
 	if (' ' == key) {
 		delete(sb);
 		sb = sbFactory->getRandomSuperBlock();

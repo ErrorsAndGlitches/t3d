@@ -80,17 +80,17 @@ void drawCallback()
  */
 void idleCallback()
 {
-	glutPostRedisplay(); // redraw everything (since bullets move)
+	glutPostRedisplay(); // redraw everything
 }
 
 void processNormalKeysCallback(unsigned char key, int xx, int yy)
 {
 	if ('x' == key)
-		sb.rotateX();
+		sb.rotate(SimpleRotation::RotationType::XCW);
 	if ('y' == key)
-		sb.rotateY();
+		sb.rotate(SimpleRotation::RotationType::YCW);
 	if ('z' == key)
-		sb.rotateZ();
+		sb.rotate(SimpleRotation::RotationType::ZCW);
 	if (' ' == key) {
 		blockType = (1 + blockType) % numSuperBlockTypes;
 		sb = SuperBlock((SuperBlock::SuperBlockType) blockType);
