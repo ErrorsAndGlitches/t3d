@@ -41,6 +41,9 @@ solution "T3D"
 		buildoptions { "-O2", "-march=corei7" }
 	configuration "Debug"
 		flags { "ExtraWarnings" , "Symbols" }
+	configuration "DebugLinux"
+		buildoptions { "-pg", "-fno-omit-frame-pointer", "-fno-omit-frame-pointer", "-fno-inline-functions-called-once", "-fno-optimize-sibling-calls" } -- gnu prof options
+		flags { "ExtraWarnings" , "Symbols" }
 
 project "T3D"
 	kind "WindowedApp"
@@ -80,6 +83,17 @@ project "Test-SuperBlockFactory"
 	includedirs { "include" }
 	targetname "t3d-test-superblockfactory"
 	files { "bin/test-superblockfactory.cpp" }
+	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)
+		
+project "Test-Subarena"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-test-subarena"
+	files { "bin/test-subarena.cpp" }
 	files { "src/*.cpp", "include/*.h" } -- ** means recurse into directories
 	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
