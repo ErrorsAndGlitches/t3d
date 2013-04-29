@@ -2,6 +2,7 @@
 
 Vector SimpleRotation::rotate(const Vector& vec, const RotationType& rotType)
 {
+	
 	switch (rotType) {
 		case RotationType::XCW:
 			return Vector(vec.x, -vec.z, vec.y);
@@ -15,6 +16,8 @@ Vector SimpleRotation::rotate(const Vector& vec, const RotationType& rotType)
 			return Vector(-vec.y, vec.x, vec.z);
 		case RotationType::ZCCW:
 			return Vector(vec.y, -vec.x, vec.z);
+		default:
+			return Vector(vec);					//Needs default. Returns copy of original vector
 	}
 }
 
@@ -38,6 +41,8 @@ void SimpleRotation::rotate(Vector& vec, const RotationType& rotType)
 			break;
 		case RotationType::ZCCW:
 			vec.setPos(vec.y, -vec.x, vec.z);
+			break;
+		default:
 			break;
 	}
 }

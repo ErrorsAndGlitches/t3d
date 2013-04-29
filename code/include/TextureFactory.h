@@ -4,10 +4,17 @@
  * @file
  * @brief This file provides the TextureFactory factory class
  */
+#ifdef _WIN32
+	#include <windows.h>
+	#include <GL/glut.h>
+	#include "SDL.h"
+	#include "SDL_image.h"
+#else
+	#include <GL/freeglut.h>
+	#include "SDL/SDL.h"
+	#include "SDL/SDL_image.h"
+#endif
 
-#include <GL/freeglut.h>
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
 
 /**
  * @brief TextureFactory class provides an interface to generate OpenGL texture

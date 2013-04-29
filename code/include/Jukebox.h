@@ -6,8 +6,16 @@
  * @author Benjamyn
  */
 #include <cstddef>
-#include "SDL/SDL.h"
-#include "SDL/SDL_mixer.h"
+
+#ifdef _WIN32
+	#include "SDL.h"
+	#include "SDL_mixer.h"
+#else
+	#include "SDL/SDL.h"
+	#include "SDL/SDL_mixer.h"
+#endif
+
+
 
 /**
  * @brief A Jukebox encapsulates the musical audio that can be played by the user

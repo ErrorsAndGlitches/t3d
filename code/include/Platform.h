@@ -8,6 +8,10 @@
 
 #include <iostream> 
 
+#ifdef _WIN32
+	#include <windows.h>
+#endif
+
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL

@@ -1,5 +1,8 @@
 #include <iostream>  
 
+#ifdef _WIN32
+	#include <windows.h>
+#endif
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
@@ -68,7 +71,6 @@ void World::mouseMove(int xx, int yy)
 	float dragSpeed = .5;
 	
 	float rotSum = ((int)abs(floorf(xRotation + xRotationDelta)) % 360 );
-	std::cout << "z RotationDelta: " << zRotationDelta << std::endl;
 
 	//If  upside down, reset the drag start position, the orientation, and 
 	//solidify the rotation about the z axis. Only exexutes upon orientaiton
@@ -77,7 +79,6 @@ void World::mouseMove(int xx, int yy)
 		orientaion = -1;
 		xDragStart = xx;
 		zRotation = zRotation + zRotationDelta;
-		std::cout << "!!!!!!!!!!!!!" << std::endl;
 
 	} 
 	//If rightside up, reset the drag start position, the orientation, and 

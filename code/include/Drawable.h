@@ -8,7 +8,9 @@
  * If the subclass does not override the draw method that takes a texture
  * handle as a parameter, then the no argument draw method is used.
  */
-
+#ifdef _WIN32
+	#include <windows.h>
+#endif
 #include "GL/gl.h"
 
 /**

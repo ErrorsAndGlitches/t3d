@@ -12,7 +12,8 @@
 /**
  * @brief All objects in the main screen are considered game objects
  *
- * All game objects in the gaming window derive from this class.
+ * All game objects in the gaming 
+ derive from this class.
  * The class provides some basic operations that all the tokens
  * of the game should support
  */
