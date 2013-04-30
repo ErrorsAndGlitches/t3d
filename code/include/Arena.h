@@ -22,6 +22,8 @@ public:
 	* @param subarena The subarena being assigned to the specified player.
 	*/
 	void assignToArena(Player &player, SubArena subarena);
+
+	
 private:
 
 	
