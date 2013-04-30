@@ -27,6 +27,12 @@ public:
 		ACTION_COUNT			//Enum hack to give us access to enum cardinality. Must be last and no gaps allowed.
 	};
 
+	/**
+	* @brief Sets the arena assoicated with this player.
+	*
+	* @param &arena The arena to assign to this player
+	*/
+	void setArena(Arena &arena);
 
 	/**
 	* @brief Perform the specified action.
