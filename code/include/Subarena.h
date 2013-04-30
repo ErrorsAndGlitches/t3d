@@ -30,7 +30,7 @@ template <int length = DEFAULT_SUBARENA_LENGTH, int height = DEFAULT_SUBARENA_HE
 class Subarena: public GameObject {
 	private:
 		/**
-		 * @brief A vector of all 
+		 * @brief A vector of all layers
 		 */
 		std::vector< Layer<length, length>* > *layers;
 
