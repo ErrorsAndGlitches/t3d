@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <iostream>
+#include "Arena.h"
 
 class Player
 {
@@ -33,6 +34,9 @@ public:
 	* @param action The action to perform
 	*/
 	void performAction(Action action);
+
+private:
+	Arena arena;
 };
 
 #endif
