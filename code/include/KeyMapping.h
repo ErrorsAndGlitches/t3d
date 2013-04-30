@@ -16,9 +16,6 @@
 class KeyMapping
 {
 public:
-	KeyMapping(){}
-	~KeyMapping(void){}
-
 	/**
 	* @brief Enum of default keyboard mappings. 
 	*/
@@ -28,6 +25,20 @@ public:
 		MULTI_PLAYER_A,
 		MULTI_PLAYER_B
 	};
+
+	/**
+	* @brief Initializes the keyboard mapping.
+	*/
+	KeyMapping(){}
+
+	/**
+	* @brief Initializes the keyboard mapping with the given default mapping.
+	* @param DefaultMapping The default mapping.
+	*/
+	KeyMapping(DefaultMapping mapping);
+	~KeyMapping(void){}
+
+
 
 	
 	/**

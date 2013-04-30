@@ -1,4 +1,10 @@
 #include "KeyMapping.h"
+#include "gl/glut.h"
+
+KeyMapping::KeyMapping(DefaultMapping mapping)
+{
+	setDefaultMapping(mapping);
+}
 
 void KeyMapping::setActionKeyMapping(Player::Action action, int keyMapping)
 {
@@ -15,13 +21,13 @@ void KeyMapping::setDefaultMapping(DefaultMapping mapping)
 	switch (mapping)
 	{
 	case KeyMapping::SINGLE_PLAYER:
-		mappings[Player::ROTATE_X] = KeyWrapper((unsigned char)'z'); 
-		mappings[Player::ROTATE_Y] = KeyWrapper((unsigned char)'x');
-		mappings[Player::ROTATE_Z] = KeyWrapper((unsigned char) 'c');
-		mappings[Player::MOVE_X_POS] = KeyWrapper((unsigned char) 'd'); 
-		mappings[Player::MOVE_X_NEG] = KeyWrapper((unsigned char) 'a'); 
-		mappings[Player::MOVE_Y_POS] = KeyWrapper((unsigned char) 'w'); 
-		mappings[Player::MOVE_Y_NEG] = KeyWrapper((unsigned char) 's');
+		mappings[Player::ROTATE_X] = KeyWrapper((unsigned char)'a'); 
+		mappings[Player::ROTATE_Y] = KeyWrapper((unsigned char)'d');
+		mappings[Player::ROTATE_Z] = KeyWrapper((unsigned char) 'w');
+		mappings[Player::MOVE_X_POS] = KeyWrapper(GLUT_KEY_LEFT); 
+		mappings[Player::MOVE_X_NEG] = KeyWrapper(GLUT_KEY_RIGHT); 
+		mappings[Player::MOVE_Y_POS] = KeyWrapper(GLUT_KEY_UP); 
+		mappings[Player::MOVE_Y_NEG] = KeyWrapper(GLUT_KEY_DOWN);
 		mappings[Player::DROP_BLOCK] = KeyWrapper((unsigned char)' '); 
 		break;
 	case KeyMapping::MULTI_PLAYER_A:
