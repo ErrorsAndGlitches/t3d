@@ -1,5 +1,10 @@
 #include "KeyMapping.h"
-#include "gl/glut.h"
+
+#ifdef _WIN32
+# 	include "gl/glut.h"
+#else
+# 	include "GL/freeglut.h"
+#endif
 
 KeyMapping::KeyMapping(DefaultMapping mapping)
 {

@@ -84,7 +84,7 @@ project "Test-Plateform"
 	targetname "t3d-test-plateform"
 	files { "bin/test-plateform.cpp" }
 	files { "src/*.cpp", "include/*.h" }
-	links { "glut", "GLU", "GL", "SDL", "SDL_image" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
 		

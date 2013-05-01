@@ -1,7 +1,9 @@
 #include <iostream>  
 
 #ifdef _WIN32
-	#include <windows.h>
+# 	include <windows.h>
+#else
+# 	include <cmath>
 #endif
 #include <GL/glut.h>                    // GLUT
 #include <GL/glu.h>                     // GLU

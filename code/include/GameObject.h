@@ -12,10 +12,8 @@
 /**
  * @brief All objects in the main screen are considered game objects
  *
- * All game objects in the gaming 
- derive from this class.
- * The class provides some basic operations that all the tokens
- * of the game should support
+ * All game objects in the gaming derive from this class.  The class provides
+ * some basic operations that all the tokens of the game should support.
  */
 class GameObject: public Drawable {
 	protected:

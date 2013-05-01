@@ -3,9 +3,11 @@
 
 #include <iostream>
 #ifdef _WIN32
-	#include <windows.h>
+# 	include <windows.h>
+# 	include <gl/glut.h>
+#else
+# 	include <GL/freeglut.h>
 #endif
-#include <gl/glut.h>
 
 
 #include "Player.h"
