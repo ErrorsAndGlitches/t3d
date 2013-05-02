@@ -54,6 +54,11 @@ public:
 	void submitCommand(Player **player, PlayerCommand &command);
 	
 
+	//TODO: inherit game object
+	/**
+	* @brief Draw the arena and everything in it
+	*/
+	void draw();
 private:
 
 	
