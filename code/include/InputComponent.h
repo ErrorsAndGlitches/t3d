@@ -9,6 +9,7 @@
 
 
 #include "Player.h"
+#include "PlayerCommand.h"
 #include "KeyMapping.h"
 
 

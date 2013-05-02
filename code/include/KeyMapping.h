@@ -2,7 +2,7 @@
 #define KEYMAPPING_H
 
 #include "KeyWrapper.h"
-#include "Player.h"
+#include "PlayerCommand.h"
 /**
  * @file
  * @brief Contains the Key Mapping class declaration.
@@ -54,7 +54,7 @@ public:
 	* @param action The player action to be mapped
 	* @param keyMapping The keyboard value being mapped to the action
 	*/
-	void setActionKeyMapping(Player::Action action, int keyMapping);
+	void setActionKeyMapping(PlayerCommand::Action action, int keyMapping);
 
 	
 	/**
@@ -63,19 +63,19 @@ public:
 	* @param action The player action to be mapped
 	* @param keyMapping The keyboard value being mapped to the action
 	*/
-	void setActionKeyMapping(Player::Action action, unsigned char keyMapping);
+	void setActionKeyMapping(PlayerCommand::Action action, unsigned char keyMapping);
 
 	/**
 	* @brief Get the key tied to this action
 	* @return the key tied to this action
 	*
 	*/
-	KeyWrapper getActionKeyMapping(Player::Action action);
+	KeyWrapper getActionKeyMapping(PlayerCommand::Action action);
 
 private:
 
 	//List of key/action mappings
-	KeyWrapper mappings[Player::ACTION_COUNT];
+	KeyWrapper mappings[PlayerCommand::ACTION_COUNT];
 
 };
 
