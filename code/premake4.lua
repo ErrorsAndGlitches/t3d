@@ -109,3 +109,14 @@ project "Test-Subarena"
 	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
+		
+project "Test-Arena"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-test-arena"
+	files { "bin/test-arena.cpp" }
+	files { "src/*.cpp", "include/*.h" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)
