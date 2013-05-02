@@ -49,7 +49,7 @@ public:
 	* @brief Execute this action on the specified subarena
 	* @param SubArena a pointer to the subarena this command will be executed on
 	*/
-	void execute(Subarena<> subarena);
+	void execute(Subarena<> *subarena);
 
 private:
 

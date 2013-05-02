@@ -6,7 +6,12 @@
 class Player
 {
 public:
-	Player(void){}
+
+	/**
+	* @brief Default Player constructor. Players are assigned 
+	*		a unique ID upon creation.
+	*/
+	Player(void){playerID = playerIDGenerator++;}
 	~Player(void){}
 	
 
@@ -24,8 +29,22 @@ public:
 	*/
 	void performAction(PlayerCommand::Action action);
 
+	/**
+	* @brief Gets the player's ID.
+	*
+	* @return The player ID
+	*/
+	int getID();
+
 private:
+
+	//The arena that this player submits commands to
 	Arena arena;
+
+	//We generate a unique ID for each player
+	static int playerIDGenerator;
+	int playerID;
+
 };
 
 #endif

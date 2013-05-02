@@ -1,5 +1,6 @@
-#include <GL/glut.h>
+
 #include <iostream>
+#include <GL/glut.h>
 #include "Subarena.h"
 #include "Arena.h"
 #include "InputComponent.h"
@@ -99,6 +100,7 @@ void processNormalKeysCallback(unsigned char key, int xx, int yy)
 		subarena->newSuperBlock();
 		*/
 	ic1.processKeyboardInput(key);
+	glutPostRedisplay();
 }
 
 void processSpecialKeysCallback(int key, int x, int y)
@@ -114,6 +116,7 @@ void processSpecialKeysCallback(int key, int x, int y)
 		subarena->moveSuperBlockRelative(Vector(1, 0, 0));
 		*/
 	ic1.processKeyboardInput(key);
+	glutPostRedisplay();
 }
 
 int main(int argc, char **argv) 
@@ -147,9 +150,17 @@ int main(int argc, char **argv)
 	// set up player 1
 	Player player1; KeyMapping map1(KeyMapping::SINGLE_PLAYER);
 	ic1.bindPlayerToMapping(player1, map1);
-	Player* playerPtr = &player1;
-	a.assignToArena(&playerPtr, Arena::TOP_ARENA);
-
+	a.assignToArena(player1, Arena::TOP_ARENA);
+	player1.performAction(PlayerCommand::MOVE_X_POS);
+	//a.submitCommand(player1,PlayerCommand(PlayerCommand::MOVE_X_POS));
+	/**
+	a.submitCommand(&playerPtr,PlayerCommand(PlayerCommand::MOVE_X_POS));
+	a.submitCommand(&playerPtr,PlayerCommand(PlayerCommand::MOVE_X_POS));
+	a.submitCommand(&playerPtr,PlayerCommand(PlayerCommand::MOVE_X_POS));
+	a.submitCommand(&playerPtr,PlayerCommand(PlayerCommand::MOVE_Y_POS));
+	a.submitCommand(&playerPtr,PlayerCommand(PlayerCommand::MOVE_Y_POS));
+	a.submitCommand(&playerPtr,PlayerCommand(PlayerCommand::MOVE_Y_POS));
+	a.submitCommand(&playerPtr,PlayerCommand(PlayerCommand::MOVE_Y_POS));*/
 	// enter GLUT event processing cycle
 	glutMainLoop();
 
