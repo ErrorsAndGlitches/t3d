@@ -1,11 +1,11 @@
 #include "Player.h"
 
 
-Player::Player(void)
+
+void Player::setArena(Arena &arena)
 {
+	this->arena = arena;
 }
-
-
 
 
 void Player::performAction(Action action)
