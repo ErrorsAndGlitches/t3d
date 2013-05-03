@@ -10,35 +10,21 @@ Arena::Arena(void)
 }
 
 
-void Arena::assignToArena(Player &player, SubArena subarena)
+void Arena::assignToArena(Player *player, SubArena subarena)
 {
-	playerArenaMap.insert ( std::pair<SubArena,int>(subarena, player.getID()));
-	player.setArena(*this);
+	playerArenaMap.insert ( std::pair<SubArena,int>(subarena, player->getID()));
+	player->setArena(this);
 }
 
-void Arena::submitCommand(Player &player, PlayerCommand command)
+void Arena::submitCommand(Player *player, PlayerCommand command)
 {
 	std::map<SubArena, int>::iterator it;
 	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
-		std::cout << player.getID() << "==?" << (*it).second << std::endl;
-
-		if ((*it).second == player.getID()) {
+		if ((*it).second == player->getID()) {
 		   SubArena subarena = (*it).first;
 		   command.execute(&subArenas[subarena]);
 	   }
 	}
-
-	//std::cout << "here" << std::endl;
-	////Identify the sub arena to execute the command on, and execute it
-	//for (int subarena = 0; subarena < ARENA_COUNT; subarena++) {
-	//	std::cout << player.getID() << "==?" << players[subarena] << std::endl;
-	//	if (players[subarena] == player.getID()) {
-
-	//		command.execute(&subArenas[subarena]);
-	//	}
-	//}
-
-
 }
 
 

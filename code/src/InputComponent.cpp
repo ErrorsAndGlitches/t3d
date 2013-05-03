@@ -1,7 +1,8 @@
+
 #include "InputComponent.h"
 
 
-void InputComponent::bindPlayerToMapping(Player player, KeyMapping mapping)
+void InputComponent::bindPlayerToMapping(Player *player, KeyMapping mapping)
 {
 	this->player = player;
 	this->keyMapping = mapping;
@@ -15,7 +16,7 @@ void InputComponent::processKeyboardInput(unsigned char key)
 	{
 		if (keyMapping.getActionKeyMapping(static_cast<PlayerCommand::Action>(action)).equals(key))
 		{
-			player.performAction( static_cast<PlayerCommand::Action>(action) );
+			player->performAction( static_cast<PlayerCommand::Action>(action) );
 		}
 	}
 	
@@ -29,7 +30,7 @@ void InputComponent::processKeyboardInput(int key)
 
 		if (keyMapping.getActionKeyMapping(static_cast<PlayerCommand::Action>(action)).equals(key))
 		{
-			player.performAction( static_cast<PlayerCommand::Action>(action) );
+			player->performAction( static_cast<PlayerCommand::Action>(action) );
 		}
 	}
 	

@@ -3,7 +3,7 @@
 
 int Player::playerIDGenerator = 1;
 
-void Player::setArena(Arena &arena)
+void Player::setArena(Arena *arena)
 {
 	this->arena = arena;
 }
@@ -15,6 +15,5 @@ int Player::getID()
 
 void Player::performAction(PlayerCommand::Action action)
 {
-	//std::cout << action << std::endl;
-	arena.submitCommand(*this, PlayerCommand(action)); 
+	arena->submitCommand(this, PlayerCommand(action)); 
 }

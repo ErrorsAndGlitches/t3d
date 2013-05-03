@@ -41,18 +41,18 @@ public:
 
 	/**
 	* @brief Assigns the specified player to either the top or bottom subarena
-	* @param &player a reference to the player beging assigned a sub arena
+	* @param *player a pointer to the player beging assigned a sub arena
 	* @param subarena The subarena being assigned to the specified player.
 	*/
-	void assignToArena(Player &player, SubArena subarena);
+	void assignToArena(Player *player, SubArena subarena);
 
 	/**
 	* @brief Submit a command to the arena. The command will be executed on the subarena(s)
 	*			assigned to the player.
-	* @param &player a reference to the player issueing the command
+	* @param *player a pointer to the player issueing the command
 	* @param command The command to execute.
 	*/
-	void submitCommand(Player &player, PlayerCommand command);
+	void submitCommand(Player *player, PlayerCommand command);
 	
 
 	//TODO: inherit game object
@@ -65,7 +65,7 @@ private:
 	//subarenas and the players assigned to it
 	Subarena<> subArenas[ARENA_COUNT];
 	std::map<SubArena, int> playerArenaMap;
-	//int players[ARENA_COUNT];
+
 
 };
 
