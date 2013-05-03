@@ -3,7 +3,7 @@
 #include "Player.h"
 
 
-Arena::Arena(void)
+Arena::Arena(void): GameObject()
 {
 	subArenas[TOP_ARENA] = Subarena<>(); 
 	subArenas[BOTTOM_ARENA] = Subarena<>(); 
@@ -28,9 +28,24 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 }
 
 
-void Arena::draw()
+void Arena::draw(const float *const color) const 
 {
-	for (int subarena = 0; subarena < ARENA_COUNT; subarena++) {
-		subArenas[subarena].Drawable::draw();
-	}
+
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+		for (int subarena = 0; subarena < ARENA_COUNT; subarena++) {
+			subArenas[subarena].draw(color);
+		}
+	glPopMatrix();
+}
+
+void Arena::draw(const GLuint texId) const 
+{
+
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+		for (int subarena = 0; subarena < ARENA_COUNT; subarena++) {
+			subArenas[subarena].draw(texId);
+		}
+	glPopMatrix();
 }

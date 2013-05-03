@@ -59,7 +59,7 @@ void drawCallback()
 					  0, 0, 6,    // look at
 						0, 0, 1);   // up
 
-	a.draw();
+	a.Drawable::draw();
 
 	// draw some axis
 	glBegin(GL_LINES);

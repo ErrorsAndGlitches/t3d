@@ -20,7 +20,7 @@ class Player;
  *		is the gatekeeper for all player commands and controls which subarena
  *      a player can interact with.
  */
-class Arena
+class Arena: public GameObject
 {
 public:
 
@@ -54,12 +54,26 @@ public:
 	*/
 	void submitCommand(Player *player, PlayerCommand command);
 	
-
-	//TODO: inherit game object
 	/**
-	* @brief Draw the arena and everything in it
+	* @brief Draws the subarean's layer with the given color
+	*
+	* @param color A three element color array
+	*
+	* All the Blocks comprising the layer are colored the parameter
+	* color
 	*/
-	void draw();
+	virtual void draw(const float *const color) const;
+
+	/**
+	* @brief Draws the subarean's layer with the given texture
+	*
+	* @param texId An OpenGL texture handle
+	*
+	* All the Blocks comprising the layer are textured the parameter
+	* texture
+	*/
+	virtual void draw(const GLuint texId) const;
+
 private:
 
 	//subarenas and the players assigned to it
