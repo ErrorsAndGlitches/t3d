@@ -11,6 +11,7 @@
 
 
 #include "Player.h"
+#include "PlayerCommand.h"
 #include "KeyMapping.h"
 
 
@@ -39,10 +40,10 @@ public:
 	/**
 	* @brief Binds a player to the designated mapping within this input controller
 	*
-	* @param player The player to be bound to the given mapping within this controller
+	* @param *player The player to be bound to the given mapping within this controller
 	* @param mapping The mapping to be bound the given player within this controller
 	*/
-	void bindPlayerToMapping(Player player, KeyMapping mapping);
+	void bindPlayerToMapping(Player *player, KeyMapping mapping);
 
 	/**
 	* @brief Perform the action (if any) associated with the given keyboard input.
@@ -61,7 +62,7 @@ public:
 private:
 	
 	//The player this input component is attached to
-	Player player;
+	Player *player;
 
 	//The keyboard mappings for this input controller
 	KeyMapping keyMapping;
