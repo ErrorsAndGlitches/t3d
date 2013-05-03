@@ -15,7 +15,7 @@ SuperBlockFactory* SuperBlockFactory::getSuperBlockFactoryInstance() {
 	return factorySingleton;
 }
 
-SuperBlock* SuperBlockFactory::getRandomSuperBlock() {
-	return new SuperBlock((SuperBlock::SuperBlockType) 
-				randEng->getRandomInt(0, SuperBlock::NUM_SUPER_BLOCK_TYPES - 1));
+SuperBlock* SuperBlockFactory::getSuperBlock(SuperBlock::SuperBlockType blockType)
+{
+	return new SuperBlock(blockType);
 }
