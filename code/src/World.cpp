@@ -1,3 +1,4 @@
+/*http://www.opengl.org/archives/resources/faq/technical/viewing.htm*/
 #include <iostream>  
 
 #ifdef _WIN32
@@ -12,9 +13,9 @@
 #include "World.h"
 
 
-const float FOV = 35.0;
-const float NEAR_FIELD = 0.1;
-const float FAR_FIELD= 200.0; 
+const float FOV = 45.0;
+const float NEAR_FIELD = 1;
+const float FAR_FIELD= 100; 
 const float CLEARING = 1.25;
 
 World::World(int dimension)
@@ -57,15 +58,35 @@ void World::setUpCamera()
 {
 	float clearing = 1.25;
 
+	GLdouble left =  -10;
+	GLdouble right =  10;
+	GLdouble bottom = -10;
+	GLdouble top = 10;
+	if ( aspectRatio < 1.0 ) { // window taller than wide
+		bottom /= aspectRatio;
+		top /= aspectRatio;
+	} else {
+		left *= aspectRatio;
+		right *= aspectRatio;
+	}
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(left, right, bottom, top, NEAR_FIELD, FAR_FIELD);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt (0., -28, 0,
+                0, 0, 0,
+                0.0, 0, 1.0);
+	/*
 	gluLookAt(
 		0,		-(dimension * clearing),	(dimension * clearing),
 		0,		0.0,						0,
-		0.0,	0.0,						1.0);
+		0.0,	0.0,*1.0);*/
 
-	glMatrixMode(GL_PROJECTION); // projection matrix is active
-	glLoadIdentity(); // reset the projection
-	gluPerspective(FOV, aspectRatio, NEAR_FIELD, FAR_FIELD); // perspective transformation
-	glMatrixMode(GL_MODELVIEW); // return to modelview mode
+//	glMatrixMode(GL_PROJECTION); // projection matrix is active
+//	glLoadIdentity(); // reset the projection
+//	gluPerspective(FOV, aspectRatio, NEAR_FIELD, FAR_FIELD); // perspective transformation
+//	glMatrixMode(GL_MODELVIEW); // return to modelview mode
 }
 
 void World::mouseMove(int xx, int yy) 

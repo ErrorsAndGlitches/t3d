@@ -52,6 +52,12 @@ public:
 	* @param yy Vertical location of the mouse click
 	*/
 	void mouseButton(int button, int state, int xx, int yy); // mouse button
+
+	/**
+	* @brief Positions the camera.
+	*/
+	void setUpCamera();
+
 private:
 	Platform plateform;
 	int dimension;		//The dimension of the arean
@@ -70,10 +76,6 @@ private:
 	
 	int orientaion;	//Whether the world is upsidedown;
 
-	/**
-	* @brief Positions the camera.
-	*/
-	void setUpCamera();
 
 };
 
