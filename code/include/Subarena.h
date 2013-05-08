@@ -81,10 +81,18 @@ class Subarena: public GameObject {
 		virtual void draw(const GLuint texId) const;
 
 		/**
-		 * @brief Creates a new SuperBlock for this subarena whose initial location
-		 * is at the center, maximum height of the subarena
+		 * @brief Creates a new, random SuperBlock for this subarena whose initial
+		 * location is at the center, maximum height of the subarena
 		 */
 		void newSuperBlock();
+
+		/**
+		 * @brief Creates a new SuperBlock of type blockType for this subarena
+		 * whose initial location is at the center, maximum height of the subarena
+		 *
+		 * @param blockType SuperBlock type to create
+		 */
+		void newSuperBlock(SuperBlock::SuperBlockType blockType);
 
 		/**
 		 * @brief Sets whether the SuperBlock should be drawn when the subarena is drawn
@@ -166,6 +174,20 @@ class Subarena: public GameObject {
 		bool isLayerEmpty(int layerNum) const;
 
 		/**
+		 * @brief Add an empty layer to the subarena
+		 * 
+		 * @param layerNum The index of the layer to add
+		 */
+		void addLayer(int layerNum);
+
+		/**
+		 * @brief Remove the given layer from the subarena
+		 *
+		 * @param layerNum The number of the layer to remove
+		 */
+		void removeLayer(int layerNum);
+
+		/**
 		 * @brief Query whether it is possible to rotate the subarena's superblock
 		 *
 		 * @param rotType The rotation to apply to the superblock
@@ -201,7 +223,7 @@ template <int length, int height>
 Subarena<length, height>::Subarena(): GameObject(), 
 	layers(new std::vector< Layer<length, length>* >()),
 	sbFactory(SuperBlockFactory::getSuperBlockFactoryInstance()), 
-	superBlock(sbFactory->getRandomSuperBlock()), drawSuperBlock(true)
+	superBlock(sbFactory->getSuperBlock()), drawSuperBlock(true)
 {
 	// add layers
 	for (int i = 0; i < height; ++i) {
@@ -241,7 +263,15 @@ template <int length, int height>
 void Subarena<length, height>::newSuperBlock()
 {
 	delete(superBlock);
-	superBlock = sbFactory->getRandomSuperBlock();
+	superBlock = sbFactory->getSuperBlock();
+	superBlock->setPos(Vector(length / 2, length / 2, height));
+}
+
+template <int length, int height>
+void Subarena<length, height>::newSuperBlock(SuperBlock::SuperBlockType blockType)
+{
+	delete(superBlock);
+	superBlock = sbFactory->getSuperBlock(blockType);
 	superBlock->setPos(Vector(length / 2, length / 2, height));
 }
 
@@ -324,6 +354,19 @@ template <int length, int height>
 void Subarena<length, height>::rotateSuperBlock(const SimpleRotation::RotationType& rotType)
 {
 	superBlock->rotate(rotType);
+}
+
+template <int length, int height>
+void Subarena<length, height>::addLayer(int layerNum)
+{
+	layers->insert(layers->begin() + layerNum, new Layer<length, length>());
+}
+
+template <int length, int height>
+void Subarena<length, height>::removeLayer(int layerNum)
+{
+	delete((*layers)[layerNum]);
+	layers->erase(layers->begin() + layerNum);
 }
 
 #endif
