@@ -55,6 +55,21 @@ private:
 
 	//The action of this command
 	Action action;
+
+	/**
+	* @brief Execute a move command on the sub arena
+	* @param v The movement vector
+	* @param *subarena The subarena to execute the move on.
+	*/
+	void executeMove(Vector v, Subarena<> *subarena);
+
+	/**
+	* @brief Execute a rotation command on the sub arena
+	* @param rot The rotation type
+	* @param *subarena The subarena to execute the rotation on.
+	*/
+	void executeRotation(SimpleRotation::RotationType rot, Subarena<> *subarena);
+
 };
 
 #endif

@@ -13,63 +13,55 @@ void PlayerCommand::execute(Subarena<> *subarena)
 	switch (action)
 	{
 	case PlayerCommand::ROTATE_X:
-		subarena->rotateSuperBlock(SimpleRotation::RotationType::XCW);
+		executeRotation(SimpleRotation::RotationType::XCW, subarena);
 		std::cout << i++ << ": Map 0" << std::endl;
 		break;
 	case PlayerCommand::ROTATE_Y:
-		subarena->rotateSuperBlock(SimpleRotation::RotationType::YCW);
+		executeRotation(SimpleRotation::RotationType::YCW, subarena);
 		std::cout << i++ << ": Map 1" << std::endl;
 		break;
 	case PlayerCommand::ROTATE_Z:
-		subarena->rotateSuperBlock(SimpleRotation::RotationType::ZCW);
+		executeRotation(SimpleRotation::RotationType::ZCW, subarena);
 		std::cout << i++ << ": Map 2" << std::endl;
 		break;
 	case PlayerCommand::MOVE_X_POS:
-		subarena->moveSuperBlockRelative(Vector(1, 0, 0));
+		executeMove(Vector(1, 0, 0), subarena);
 		std::cout << i++ << ": Map 3" << std::endl;
 		break;
 	case PlayerCommand::MOVE_X_NEG:
-		subarena->moveSuperBlockRelative(Vector(-1, 0, 0));
+		executeMove(Vector(-1, 0, 0), subarena);	
 		std::cout << i++ << ": Map 4" << std::endl;
 		break;
 	case PlayerCommand::MOVE_Y_POS:
-		subarena->moveSuperBlockRelative(Vector(0, 1, 0));
+		executeMove(Vector(0, 1, 0), subarena);
 		std::cout << i++ << ": Map 5" << std::endl;
 		break;
 	case PlayerCommand::MOVE_Y_NEG:
-		subarena->moveSuperBlockRelative(Vector(0, -1, 0));
+		executeMove(Vector(0, -1, 0), subarena);;
 		std::cout << i++ << ": Map 6" << std::endl;
 		break;
 	case PlayerCommand::DROP_BLOCK:
 		//TODO: switch back to drop block
 		subarena->moveSuperBlockRelative(Vector(0, 0, -1));
-		subarena->
 		std::cout << i++ << ": Map 7" << std::endl;
 		break;
 	default:
 		break;
 	}
 }
-	/*
-	switch
-	if ('a' == key)
-		
-	if ('d' == key)
-		subarena->rotateSuperBlock(SimpleRotation::RotationType::YCW);
-	if ('w' == key)
-		subarena->rotateSuperBlock(SimpleRotation::RotationType::ZCW);
-	if ('s' == key)
-		subarena->moveSuperBlockRelative(Vector(0, 0, -1));
-	if (' ' == key)
-		subarena->newSuperBlock();
 
-	if (GLUT_KEY_UP == key)
-		subarena->moveSuperBlockRelative(Vector(0, 1, 0));
-	if (GLUT_KEY_DOWN == key)
-		subarena->moveSuperBlockRelative(Vector(0, -1, 0));
-	if (GLUT_KEY_LEFT == key)
-		subarena->moveSuperBlockRelative(Vector(-1, 0, 0));
-	if (GLUT_KEY_RIGHT == key)
-		subarena->moveSuperBlockRelative(Vector(1, 0, 0));
-		
-}*/
+void PlayerCommand::executeMove(Vector v, Subarena<> *subarena)
+{
+	if (subarena->canMoveSuperBlockRelative(v)) {
+		std::cout << "true" << std::endl;
+		subarena->moveSuperBlockRelative(v);
+	}
+}
+
+void PlayerCommand::executeRotation(SimpleRotation::RotationType rot, Subarena<> *subarena)
+{
+	if (subarena->canRotateSuperBlock(rot)) {
+		std::cout << "true" << std::endl;
+		subarena->rotateSuperBlock(rot);
+	}
+}
