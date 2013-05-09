@@ -7,23 +7,22 @@
  */
 
 #include "Platform.h"
+#include "Arena.h"
 
 /**
- * @brief The world encompases the entire scene of the game
-			any global modifactions to the game are processed
-			through and eventually reflected in the world class.
+ * @brief The world encompases the entire scene of the game.
+ *			It controls what the player is looking at.
  */
 class World
 {
 public:
 
 	/**
-	* @brief Constructs the world with the given dimension
+	* @brief Constructs the world focuses on the given arena
 	*
-	* @param dimension The dimension of the world affect the size of the arena (in blocks)
-					and camera placement. 
+	* @param *arena The arena the world world is focused 
 	*/
-	World(int dimension = 4);
+	World(Arena* arena);
 	~World(void) {}
 
 	/**
@@ -60,7 +59,9 @@ public:
 
 private:
 	Platform plateform;
+	Arena* arena;		//The arena this world is fouced on
 	int dimension;		//The dimension of the arean
+	int height;			//Theheight of the arena
 
 	float aspectRatio;	// aspect ratio of graphics window
 	

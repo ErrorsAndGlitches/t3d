@@ -17,8 +17,9 @@ const int WINDOW_HEIGHT = 400;
 
 float rotation = 0.0f;
 
-World world(DEFAULT_SUBARENA_LENGTH);
+
 Arena a;
+World world(&a);
 InputComponent ic1;
 InputComponent ic2;
 Player player1; KeyMapping map1(KeyMapping::MULTI_PLAYER_A);
@@ -59,10 +60,7 @@ void drawCallback()
 	glLoadIdentity();
 	world.draw();
 
-	glPushMatrix();
-		glTranslatef((-7 / 2.0) , (-7 / 2.0), 0);
-		a.Drawable::draw();
-	glPopMatrix();
+
 		// draw some axis
 	glBegin(GL_LINES);
 		// x axis

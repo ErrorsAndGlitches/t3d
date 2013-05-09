@@ -11,6 +11,7 @@
 #include <GL/gl.h>                      // OpenGL
 
 #include "World.h"
+#include "Defs.h"
 
 
 const float FOV = 45.0;
@@ -18,9 +19,11 @@ const float NEAR_FIELD = 1;
 const float FAR_FIELD= 100; 
 const float CLEARING = 1.25;
 
-World::World(int dimension)
+World::World(Arena* arena)
 {
-	this->dimension = dimension;
+	dimension = DEFAULT_SUBARENA_LENGTH;
+	height = DEFAULT_SUBARENA_HEIGHT;
+	this->arena = arena;
 
 	aspectRatio = 1; // default aspect ratio (will be changed)
 	xDragStart = 0;
@@ -45,6 +48,10 @@ void World::draw(void)
 	//Rotate the arena
 	glRotatef(xRotation + xRotationDelta, 1, 0, 0);
 	glRotatef(zRotation + zRotationDelta, 0, 0, 1);
+	glPushMatrix();
+		glTranslatef((-7 / 2.0) , (-7 / 2.0), 0);
+		arena->Drawable::draw();
+	glPopMatrix();
 	plateform.draw();
   
 }
@@ -56,12 +63,13 @@ void World::setAspectRatio(float ratio)
 
 void World::setUpCamera()
 {
+	//From the openGl tutorial on camera motion at www.opengl.org/archives/resources/faq/technical/viewing.htm
 	float clearing = 1.25;
 
-	GLdouble left =  -10;
-	GLdouble right =  10;
-	GLdouble bottom = -10;
-	GLdouble top = 10;
+	GLdouble left =  -(dimension * clearing);
+	GLdouble right = (dimension * clearing);
+	GLdouble bottom = -(height * clearing);
+	GLdouble top = (height * clearing);
 	if ( aspectRatio < 1.0 ) { // window taller than wide
 		bottom /= aspectRatio;
 		top /= aspectRatio;
@@ -74,19 +82,10 @@ void World::setUpCamera()
 	glOrtho(left, right, bottom, top, NEAR_FIELD, FAR_FIELD);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt (0., -28, 0,
+	int cameraY = bottom * 2;
+	gluLookAt (0., cameraY, 0,
                 0, 0, 0,
                 0.0, 0, 1.0);
-	/*
-	gluLookAt(
-		0,		-(dimension * clearing),	(dimension * clearing),
-		0,		0.0,						0,
-		0.0,	0.0,*1.0);*/
-
-//	glMatrixMode(GL_PROJECTION); // projection matrix is active
-//	glLoadIdentity(); // reset the projection
-//	gluPerspective(FOV, aspectRatio, NEAR_FIELD, FAR_FIELD); // perspective transformation
-//	glMatrixMode(GL_MODELVIEW); // return to modelview mode
 }
 
 void World::mouseMove(int xx, int yy) 
