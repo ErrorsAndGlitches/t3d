@@ -3,6 +3,7 @@
 
 #include "Subarena.h"
 #include "PlayerCommand.h"
+#include "Platform.h"
 #include <map>
 
 /**
@@ -74,13 +75,19 @@ public:
 	*/
 	virtual void draw(const GLuint texId) const;
 
+
 private:
 
 	//subarenas and the players assigned to it
 	Subarena<> subArenas[ARENA_COUNT];
 	std::map<SubArena, int> playerArenaMap;
 
+	Platform platform;
 
+	/**
+	* @brief Draws a plateform in the arena between the two subarenas
+	*/
+	void drawPlateform() const;
 };
 
 #endif

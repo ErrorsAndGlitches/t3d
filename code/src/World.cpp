@@ -14,14 +14,14 @@
 #include "Defs.h"
 
 
-const float FOV = 45.0;
+
 const float NEAR_FIELD = 1;
 const float FAR_FIELD= 100; 
 const float CLEARING = 1.25;
 
 World::World(Arena* arena)
 {
-	dimension = DEFAULT_SUBARENA_LENGTH;
+	length = DEFAULT_SUBARENA_LENGTH;
 	height = DEFAULT_SUBARENA_HEIGHT;
 	this->arena = arena;
 
@@ -36,7 +36,7 @@ World::World(Arena* arena)
 	zRotationDelta = 0;
 	orientaion = 1;
 
-	plateform = Platform(dimension);
+	plateform = Platform();
 
 }
 
@@ -49,10 +49,11 @@ void World::draw(void)
 	glRotatef(xRotation + xRotationDelta, 1, 0, 0);
 	glRotatef(zRotation + zRotationDelta, 0, 0, 1);
 	glPushMatrix();
-		glTranslatef((-7 / 2.0) , (-7 / 2.0), 0);
+		//Move to center
+		glTranslatef((-length / 2.0) , (-length / 2.0), 0);
 		arena->Drawable::draw();
 	glPopMatrix();
-	plateform.draw();
+	//plateform.draw();
   
 }
 
@@ -66,8 +67,8 @@ void World::setUpCamera()
 	//From the openGl tutorial on camera motion at www.opengl.org/archives/resources/faq/technical/viewing.htm
 	float clearing = 1.25;
 
-	GLdouble left =  -(dimension * clearing);
-	GLdouble right = (dimension * clearing);
+	GLdouble left =  -(length * clearing);
+	GLdouble right = (length * clearing);
 	GLdouble bottom = -(height * clearing);
 	GLdouble top = (height * clearing);
 	if ( aspectRatio < 1.0 ) { // window taller than wide

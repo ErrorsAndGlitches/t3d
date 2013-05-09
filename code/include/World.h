@@ -60,7 +60,7 @@ public:
 private:
 	Platform plateform;
 	Arena* arena;		//The arena this world is fouced on
-	int dimension;		//The dimension of the arean
+	int length;		//The dimension of the arean
 	int height;			//Theheight of the arena
 
 	float aspectRatio;	// aspect ratio of graphics window

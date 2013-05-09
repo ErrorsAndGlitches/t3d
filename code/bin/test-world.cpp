@@ -1,21 +1,17 @@
 
 #include <iostream>
 #include <GL/glut.h>
-#include "Subarena.h"
 #include "World.h"
 #include "Arena.h"
 #include "InputComponent.h"
 #include "Player.h"
-#include "PlayerCommand.h"
-#include "Defs.h"
+
 
 using std::cout;
 using std::endl;
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
-
-float rotation = 0.0f;
 
 
 Arena a;
@@ -118,9 +114,9 @@ int main(int argc, char **argv)
 		" - SPACE: insert superblock and switch to the next random tetris block\n"
 		"-----------------------------------------------------------------------" << endl;
 	glutInit(&argc, argv); // initialize glut state
-  glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
-  glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Super Block Test");
 
 	// register callbacks

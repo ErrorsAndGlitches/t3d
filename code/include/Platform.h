@@ -16,6 +16,8 @@
 #include <GL/glu.h>                     // GLU
 #include <GL/gl.h>                      // OpenGL
 
+#include "Defs.h"
+
 
 
 /**
@@ -30,7 +32,7 @@ public:
 	*
 	* @param dimension The dimension of the plateform.
 	*/
-	Platform(int dimension = 4) {this->dimension = dimension;}
+	Platform(int dimension = DEFAULT_SUBARENA_LENGTH) {this->dimension = dimension;}
 	
 	/**
 	* @brief Draw the platform

@@ -11,8 +11,6 @@ void Platform::draw()
 	glPushMatrix();
 		glScalef(1, 1, thinkness);
 
-		//move to center
-		glTranslatef((-dimension / 2.0) , (-dimension / 2.0), 0);
 
 		//Tile grid
 		for (int row = 0; row < dimension; row++) {
