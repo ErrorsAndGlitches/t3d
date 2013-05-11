@@ -28,6 +28,10 @@ public:
 		MOVE_Y_POS,
 		MOVE_Y_NEG,
 		DROP_BLOCK,
+		TEST_Z_POS, 
+		TEST_Z_NEG, 
+		TEST_NEW_BLOCK, 
+		TEST_COMMIT_BLOCK,
 		ACTION_COUNT			//Enum hack to give us access to enum cardinality. Must be last and no gaps allowed.
 	};
 
