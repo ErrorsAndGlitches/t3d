@@ -1,3 +1,4 @@
+/*http://www.opengl.org/archives/resources/faq/technical/viewing.htm*/
 #include <iostream>  
 
 #ifdef _WIN32
@@ -10,16 +11,19 @@
 #include <GL/gl.h>                      // OpenGL
 
 #include "World.h"
+#include "Defs.h"
 
 
-const float FOV = 35.0;
-const float NEAR_FIELD = 0.1;
-const float FAR_FIELD= 200.0; 
+
+const float NEAR_FIELD = 1;
+const float FAR_FIELD= 100; 
 const float CLEARING = 1.25;
 
-World::World(int dimension)
+World::World(Arena* arena)
 {
-	this->dimension = dimension;
+	length = DEFAULT_SUBARENA_LENGTH;
+	height = DEFAULT_SUBARENA_HEIGHT;
+	this->arena = arena;
 
 	aspectRatio = 1; // default aspect ratio (will be changed)
 	xDragStart = 0;
@@ -32,7 +36,7 @@ World::World(int dimension)
 	zRotationDelta = 0;
 	orientaion = 1;
 
-	plateform = Platform(dimension);
+	plateform = Platform();
 
 }
 
@@ -44,7 +48,12 @@ void World::draw(void)
 	//Rotate the arena
 	glRotatef(xRotation + xRotationDelta, 1, 0, 0);
 	glRotatef(zRotation + zRotationDelta, 0, 0, 1);
-	plateform.draw();
+	glPushMatrix();
+		//Move to center
+		glTranslatef((-length / 2.0) , (-length / 2.0), 0);
+		arena->Drawable::draw();
+	glPopMatrix();
+	//plateform.draw();
   
 }
 
@@ -55,17 +64,29 @@ void World::setAspectRatio(float ratio)
 
 void World::setUpCamera()
 {
+	//From the openGl tutorial on camera motion at www.opengl.org/archives/resources/faq/technical/viewing.htm
 	float clearing = 1.25;
 
-	gluLookAt(
-		0,		-(dimension * clearing),	(dimension * clearing),
-		0,		0.0,						0,
-		0.0,	0.0,						1.0);
-
-	glMatrixMode(GL_PROJECTION); // projection matrix is active
-	glLoadIdentity(); // reset the projection
-	gluPerspective(FOV, aspectRatio, NEAR_FIELD, FAR_FIELD); // perspective transformation
-	glMatrixMode(GL_MODELVIEW); // return to modelview mode
+	GLdouble left =  -(length * clearing);
+	GLdouble right = (length * clearing);
+	GLdouble bottom = -(height * clearing);
+	GLdouble top = (height * clearing);
+	if ( aspectRatio < 1.0 ) { // window taller than wide
+		bottom /= aspectRatio;
+		top /= aspectRatio;
+	} else {
+		left *= aspectRatio;
+		right *= aspectRatio;
+	}
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(left, right, bottom, top, NEAR_FIELD, FAR_FIELD);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	int cameraY = bottom * 2;
+	gluLookAt (0., cameraY, 0,
+                0, 0, 0,
+                0.0, 0, 1.0);
 }
 
 void World::mouseMove(int xx, int yy) 

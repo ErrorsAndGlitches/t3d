@@ -52,8 +52,8 @@ class RandomEngine {
 		 *
 		 * @return A random integer in the interval [min, max]
 		 */
-		int getRandomInt(int min = std::numeric_limits<int>::min(), 
-				int max = std::numeric_limits<int>::max());
+		int getRandomInt(int min = (std::numeric_limits<int>::min)(), 
+				int max = (std::numeric_limits<int>::max)());
 
 		/**
 		 * @brief Return a random float in [min, max]
@@ -65,8 +65,8 @@ class RandomEngine {
 		 *
 		 * @return A random float in the interval [min, max]
 		 */
-		float getRandomFloat(float min = std::numeric_limits<float>::min(), 
-				float max = std::numeric_limits<float>::max());
+		float getRandomFloat(float min = (std::numeric_limits<float>::min)(), 
+				float max = (std::numeric_limits<float>::max)());
 };
 
 #endif

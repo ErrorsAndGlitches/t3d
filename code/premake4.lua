@@ -121,6 +121,19 @@ project "Test-Arena"
 	location (buildDir)
 	objdir (buildDir)
 
+	
+project "Test-World"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-test-world"
+	files { "bin/test-world.cpp" }
+    files { "src/*.cpp", "include/*.h" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)
+
+
 project "Test-Jukebox"
 	kind "WindowedApp"
 	language "C++"
