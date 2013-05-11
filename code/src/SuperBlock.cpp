@@ -156,18 +156,23 @@ void SuperBlock::rotate(const SimpleRotation::RotationType& rotType)
 	}
 }
 
-std::vector<Vector> SuperBlock::getBlockLocations() const
+std::vector<Vector> SuperBlock::getBlockLocations(Vector delta) const
+{
+	return getBlockLocationsRelative(GameObject::pos + delta);
+}
+
+std::vector<Vector> SuperBlock::getBlockLocations(const SimpleRotation::RotationType& rotType) const
 {
 	std::vector<Vector> blPosits;
 
-	for (Vector *vec : blockLocs) {
-		blPosits.push_back(*vec);
+	for (const Vector *vec : blockLocs) {
+		blPosits.push_back(GameObject::pos + SimpleRotation::rotate(*vec, rotType));
 	}
 
 	return blPosits;
 }
 
-std::vector<Vector> SuperBlock::getBlockLocations(const Vector& delta) const
+std::vector<Vector> SuperBlock::getBlockLocationsRelative(Vector delta) const
 {
 	std::vector<Vector> blPosits;
 
@@ -178,7 +183,7 @@ std::vector<Vector> SuperBlock::getBlockLocations(const Vector& delta) const
 	return blPosits;
 }
 
-std::vector<Vector> SuperBlock::getBlockLocations(const SimpleRotation::RotationType& rotType) const
+std::vector<Vector> SuperBlock::getBlockLocationsRelative(const SimpleRotation::RotationType& rotType) const
 {
 	std::vector<Vector> blPosits;
 

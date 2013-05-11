@@ -130,27 +130,37 @@ class SuperBlock: public GameObject {
 		virtual void draw(const GLuint texId) const;
 
 		/**
-		 * @brief Get a list of the current block locations in the SuperBlock
-		 *
-		 * @return A vector of block locations
-		 */
-		std::vector<Vector> getBlockLocations() const;
-
-		/**
-		 * @brief Get a list of the SuperBlock block locations after undergoing the
-		 * given translation
+		 * @brief Get a list of the SuperBlock absolute block locations after undergoing the
+		 * given translation. The default parameter for the delta is (0, 0, 0).
 		 *
 		 * @return A vector of translated block locations
 		 */
-		std::vector<Vector> getBlockLocations(const Vector& delta) const;
+		std::vector<Vector> getBlockLocations(Vector delta = Vector(0, 0, 0)) const;
 
 		/**
-		 * @brief Get a list of the SuperBlock block locations after undergoing the
+		 * @brief Get a list of the SuperBlock absolute block locations after undergoing the
 		 * given rotation 
 		 *
 		 * @return A vector of rotated block locations
 		 */
 		std::vector<Vector> getBlockLocations(const SimpleRotation::RotationType& rotType) const;
+
+		/**
+		 * @brief Get a list of the SuperBlock relative block locations after undergoing the
+		 * given translation. The default parameter for the delta is (0, 0, 0).
+		 *
+		 * @return A vector of translated block locations
+		 */
+		std::vector<Vector> getBlockLocationsRelative(Vector delta = Vector(0, 0, 0)) const;
+
+		/**
+		 * @brief Get a list of the SuperBlock relative block locations after undergoing the
+		 * given rotation 
+		 *
+		 * @return A vector of rotated block locations
+		 */
+		std::vector<Vector> getBlockLocationsRelative(const SimpleRotation::RotationType& rotType) const;
+
 };
 
 #endif
