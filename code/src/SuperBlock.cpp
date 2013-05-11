@@ -193,3 +193,12 @@ std::vector<Vector> SuperBlock::getBlockLocationsRelative(const SimpleRotation::
 
 	return blPosits;
 }
+
+float SuperBlock::getRelativeBlockHeight() const
+{
+	float max = 0;
+	for (const Vector *vec : blockLocs) {
+		if (vec->z > max) {max = vec->z;}
+	}
+	return max + 1;
+}

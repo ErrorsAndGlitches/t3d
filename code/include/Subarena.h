@@ -50,6 +50,11 @@ class Subarena: public GameObject {
 		 */
 		bool testBlockPositionsEmpty(const std::vector<Vector>& locs) const;
 
+		/**
+		* @brief Moves the subarena's superblock to the correct start position
+		*/
+		void moveSuperBlockToStartPosition() const;
+
 	public:
 		/**
 		 * @brief Constructor that allows the length of the subarena to be
@@ -238,7 +243,7 @@ Subarena<length, height>::Subarena(): GameObject(),
 	}
 
 	// add superblock
-	superBlock->setPos(Vector(length / 2, length / 2, height));
+	moveSuperBlockToStartPosition();
 }
 
 template <int length, int height>
@@ -267,11 +272,19 @@ void Subarena<length, height>::draw(const GLuint texId) const
 }
 
 template <int length, int height>
+void Subarena<length, height>::moveSuperBlockToStartPosition() const
+{
+	//Vertical block offset is how far down from the top of the subarena we should place the block
+	int blockVertOffset = superBlock->getRelativeBlockHeight();
+	superBlock->setPos(Vector(length / 2, length / 2, height - blockVertOffset));
+}
+
+template <int length, int height>
 void Subarena<length, height>::newSuperBlock()
 {
 	delete(superBlock);
 	superBlock = sbFactory->getSuperBlock();
-	superBlock->setPos(Vector(length / 2, length / 2, height));
+	moveSuperBlockToStartPosition();
 }
 
 template <int length, int height>
@@ -279,7 +292,7 @@ void Subarena<length, height>::newSuperBlock(SuperBlock::SuperBlockType blockTyp
 {
 	delete(superBlock);
 	superBlock = sbFactory->getSuperBlock(blockType);
-	superBlock->setPos(Vector(length / 2, length / 2, height));
+	moveSuperBlockToStartPosition();
 }
 
 template <int length, int height>
@@ -291,11 +304,12 @@ void Subarena<length, height>::setDrawSuperBlock(bool drawSuperBlock)
 template <int length, int height>
 bool Subarena<length, height>::isLocationEmpty(const Vector& loc) const
 {
-	if (loc.z > layers->size() || loc.z < 0 
-			|| loc.x > length || loc.x < 0
-			|| loc.y > length || loc.y < 0) { return false; }
+	std::cout << "X: " << loc.x << ", Y: " << loc.y << ", Z: " << loc.z <<std::endl;
+	if (loc.z >= layers->size() || loc.z < 0 
+			|| loc.x >= length || loc.x < 0
+			|| loc.y >= length || loc.y < 0) { return false; }
 
-	if ((*layers)[loc.z - 1]->isPosUnoccupied(loc.x, loc.y)) { return true; }
+	if ((*layers)[loc.z]->isPosUnoccupied(loc.x, loc.y)) { return true; }
 	else { return false; }
 }
 

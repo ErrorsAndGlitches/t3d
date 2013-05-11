@@ -17,7 +17,6 @@
 
 const float NEAR_FIELD = 1;
 const float FAR_FIELD= 100; 
-const float CLEARING = 1.25;
 
 World::World(Arena* arena)
 {
@@ -65,7 +64,7 @@ void World::setAspectRatio(float ratio)
 void World::setUpCamera()
 {
 	//From the openGl tutorial on camera motion at www.opengl.org/archives/resources/faq/technical/viewing.htm
-	float clearing = 1.25;
+	float clearing = 1;
 
 	GLdouble left =  -(length * clearing);
 	GLdouble right = (length * clearing);

@@ -42,7 +42,7 @@ void PlayerCommand::execute(Subarena<> *subarena)
 		break;
 	case PlayerCommand::DROP_BLOCK:
 		//TODO: switch back to drop block
-		subarena->dropSuperBlock();
+		subarena->moveSuperBlockRelative(Vector(0, 0, -1));
 		std::cout << i++ << ": Map 7" << std::endl;
 		break;
 	default:

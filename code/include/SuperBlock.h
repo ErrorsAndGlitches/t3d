@@ -161,6 +161,13 @@ class SuperBlock: public GameObject {
 		 */
 		std::vector<Vector> getBlockLocationsRelative(const SimpleRotation::RotationType& rotType) const;
 
+
+		/**
+		 * @brief Get how many blocks tall the super block is realtive to the super block.
+		 *
+		 * @return The relative height of the superblock
+		 */
+		float getRelativeBlockHeight() const;
 };
 
 #endif
