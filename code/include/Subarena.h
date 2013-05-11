@@ -131,6 +131,13 @@ class Subarena: public GameObject {
 		void moveSuperBlockRelative(const Vector& delta);
 
 		/**
+		 * @brief Move subarena's SuperBlock as low as possible, stopping at
+		 * another block or the Subarena's floor. Note that this <b>does not</b>
+		 * insert the SuperBlock into the layers, it only moves the SuperBlock
+		 */
+		void dropSuperBlock();
+
+		/**
 		 * @brief Inserts the subarena's SuperBlock into the layers based on its blocks
 		 * current position
 		 *
@@ -305,6 +312,39 @@ template <int length, int height>
 void Subarena<length, height>::moveSuperBlockRelative(const Vector& delta)
 {
 	superBlock->updateRelaPos(delta);
+}
+
+template <int length, int height>
+void Subarena<length, height>::dropSuperBlock()
+{
+	// because holes may appear between blocks in the z-axis, we start the query
+	// from the maximum z-value i.e. at (layers->size() - 1)
+	int minHeight = 0;
+	int delta = layers->size() - 1;
+
+	// first find the minimum largest delta
+	for (const Vector& vec : superBlock->getBlockLocations()) {
+		if (delta > vec.z) { delta = vec.z; }
+	}
+
+	// TODO (BW): not all the blocks of the SuperBlock are needed for the querying,
+	// some could be filtered out e.g. the cube -> only 4 blocks are needed
+	
+	// no need to go to 0 every time, stop at the current min height
+	for (const Vector& vec : superBlock->getBlockLocations()) {
+		for (int layerNum = layers->size() - 1; layerNum >= minHeight; --layerNum) {
+			// we need the smallest delta since two blocks may be right on top of
+			// each other in the z-axis, this is why we minHeight cannot be (layerNum + 1)
+			if (!(*layers)[layerNum]->isPosUnoccupied(vec.x, vec.y) && minHeight - vec.z + 1 < delta) {
+				minHeight = layerNum;
+				delta = minHeight - vec.z + 1;
+				break;
+			}
+		}
+	}
+
+	// drop the SuperBlock
+	moveSuperBlockRelative(Vector(0, 0, delta));
 }
 
 template <int length, int height>
