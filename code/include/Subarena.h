@@ -295,7 +295,7 @@ bool Subarena<length, height>::isLocationEmpty(const Vector& loc) const
 			|| loc.x > length || loc.x < 0
 			|| loc.y > length || loc.y < 0) { return false; }
 
-	if ((*layers)[loc.z]->isPosUnoccupied(loc.x, loc.y)) { return true; }
+	if ((*layers)[loc.z - 1]->isPosUnoccupied(loc.x, loc.y)) { return true; }
 	else { return false; }
 }
 
