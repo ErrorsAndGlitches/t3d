@@ -239,7 +239,7 @@ Subarena<length, height>::Subarena(): GameObject(),
 {
 	// add layers
 	for (int i = 0; i < height; ++i) {
-		layers->push_back(new Layer<length, length>());
+		layers->push_back(new Layer<length, length>(Vector(0, 0, i)));
 	}
 
 	// add superblock
@@ -252,8 +252,9 @@ void Subarena<length, height>::draw(const float *const color) const
 	glPushMatrix();
 		glTranslatef(pos.x, pos.y, pos.z);
 		// draw each layer
-		for (Layer<length, length> *layer : *layers)
+		for (Layer<length, length> *layer : *layers) {
 			layer->draw(color);
+		}
 		// draw the SuperBlock
 		superBlock->draw(color);
 	glPopMatrix();
@@ -304,7 +305,6 @@ void Subarena<length, height>::setDrawSuperBlock(bool drawSuperBlock)
 template <int length, int height>
 bool Subarena<length, height>::isLocationEmpty(const Vector& loc) const
 {
-	std::cout << "X: " << loc.x << ", Y: " << loc.y << ", Z: " << loc.z <<std::endl;
 	if (loc.z >= layers->size() || loc.z < 0 
 			|| loc.x >= length || loc.x < 0
 			|| loc.y >= length || loc.y < 0) { return false; }
@@ -344,21 +344,25 @@ void Subarena<length, height>::dropSuperBlock()
 	// TODO (BW): not all the blocks of the SuperBlock are needed for the querying,
 	// some could be filtered out e.g. the cube -> only 4 blocks are needed
 	
+	int sbHeight = superBlock->getRelativeBlockHeight();
+
 	// no need to go to 0 every time, stop at the current min height
 	for (const Vector& vec : superBlock->getBlockLocations()) {
 		for (int layerNum = layers->size() - 1; layerNum >= minHeight; --layerNum) {
 			// we need the smallest delta since two blocks may be right on top of
 			// each other in the z-axis, this is why we minHeight cannot be (layerNum + 1)
-			if (!(*layers)[layerNum]->isPosUnoccupied(vec.x, vec.y) && minHeight - vec.z + 1 < delta) {
-				minHeight = layerNum;
-				delta = minHeight - vec.z + 1;
+			if (!(*layers)[layerNum]->isPosUnoccupied(vec.x, vec.y) && vec.z - layerNum - 1 < delta) {
+				if (layerNum >= sbHeight && minHeight > layerNum - sbHeight) {
+					minHeight = layerNum - sbHeight;
+				}
+				delta = vec.z - layerNum - 1;
 				break;
 			}
 		}
 	}
 
 	// drop the SuperBlock
-	moveSuperBlockRelative(Vector(0, 0, delta));
+	moveSuperBlockRelative(Vector(0, 0, -delta));
 }
 
 template <int length, int height>

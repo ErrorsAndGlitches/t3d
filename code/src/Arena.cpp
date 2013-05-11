@@ -5,12 +5,7 @@
 
 
 Arena::Arena(void): GameObject()
-{
-	subArenas[TOP_ARENA] = Subarena<>(); 
-	subArenas[BOTTOM_ARENA] = Subarena<>(); 
-	platform = Platform();
-
-}
+{ }
 
 
 void Arena::assignToArena(Player *player, SubArena subarena)
