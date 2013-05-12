@@ -17,12 +17,37 @@ void Arena::assignToArena(Player *player, SubArena subarena)
 void Arena::submitCommand(Player *player, PlayerCommand command)
 {
 	std::map<SubArena, int>::iterator it;
+
+	//Execute the command on the correct subarena
 	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
 		if ((*it).second == player->getID()) {
 		   SubArena subarena = (*it).first;
 		   command.execute(&subArenas[subarena]);
+
+		   //If the command was a drop block, check if we need to clear any layers
+		   if (command.getAction() == PlayerCommand::DROP_BLOCK) {
+				clearFullLayers(subarena);
+		   }
 	   }
 	}
+}
+
+void  Arena::clearFullLayers(SubArena subarena)
+{
+	//Get all the full layers
+	std::vector<int> filledLayers = subArenas[subarena].getFullLayers();
+	
+
+	if (filledLayers.size() != 0) {
+
+		//Remove the old layers
+		subArenas[subarena].removeLayers(filledLayers);
+
+		//Add in the new layers
+		subArenas[subarena].addLayersToTop(filledLayers.size());
+	}
+	//Make a new block
+	subArenas[subarena].newSuperBlock();
 }
 
 void Arena::draw(const float *const color) const 

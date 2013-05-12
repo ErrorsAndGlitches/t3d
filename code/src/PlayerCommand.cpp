@@ -6,6 +6,11 @@ PlayerCommand::PlayerCommand(Action action)
 	this->action = action;
 }
 
+PlayerCommand::Action PlayerCommand::getAction()
+{
+	return action;
+}
+
 void PlayerCommand::execute(Subarena<> *subarena)
 {
 
@@ -41,6 +46,7 @@ void PlayerCommand::execute(Subarena<> *subarena)
 		std::cout << i++ << ": MOVE_Y_NEG" << std::endl;
 		break;
 	case PlayerCommand::DROP_BLOCK:
+		dropAndCommitBlock(subarena);
 		subarena->dropSuperBlock();
 		std::cout << i++ << ": DROP_BLOCK" << std::endl;
 		break;
@@ -63,8 +69,6 @@ void PlayerCommand::execute(Subarena<> *subarena)
 	default:
 		break;
 	}
-
-
 }
 
 void PlayerCommand::executeMove(Vector v, Subarena<> *subarena)
@@ -79,4 +83,10 @@ void PlayerCommand::executeRotation(SimpleRotation::RotationType rot, Subarena<>
 	if (subarena->canRotateSuperBlock(rot)) {
 		subarena->rotateSuperBlock(rot);
 	}
+}
+
+void PlayerCommand::dropAndCommitBlock(Subarena<> *subarena)
+{
+	subarena->dropSuperBlock();
+	subarena->insertSuperBlockIntoLayers();
 }

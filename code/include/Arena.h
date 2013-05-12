@@ -82,7 +82,11 @@ private:
 	Subarena<> subArenas[ARENA_COUNT];
 	std::map<SubArena, int> playerArenaMap;
 
-	Platform platform;
+	/**
+	* @brief Clears all the full layers of a particular sub arena, and updates the layers.
+	* @param subarena The subarena that is to have its layers cleared.
+	*/
+	void  clearFullLayers(SubArena subarena);
 
 	/**
 	* @brief Draws a plateform in the arena between the two subarenas

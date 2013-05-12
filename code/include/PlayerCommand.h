@@ -55,6 +55,13 @@ public:
 	*/
 	void execute(Subarena<> *subarena);
 
+	
+	/**
+	* @brief Get the action of this player command
+	* @return The action of this player command.
+	*/
+	Action getAction();
+
 private:
 
 	//The action of this command
@@ -73,6 +80,12 @@ private:
 	* @param *subarena The subarena to execute the rotation on.
 	*/
 	void executeRotation(SimpleRotation::RotationType rot, Subarena<> *subarena);
+
+	/**
+	* @brief Execute a drop block action on the specified subarena, commit the block.
+	* @param SubArena a pointer to the subarena this command will be executed on
+	*/
+	void dropAndCommitBlock(Subarena<> *subarena);
 
 };
 

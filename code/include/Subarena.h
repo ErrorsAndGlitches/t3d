@@ -6,6 +6,7 @@
  */
 
 #include <vector>
+#include <algorithm>
 #include "Defs.h"
 #include "Vector.h"
 #include "SuperBlock.h"
@@ -193,11 +194,25 @@ class Subarena: public GameObject {
 		void addLayer(int layerNum);
 
 		/**
+		 * @brief Add the specified number of empty layers to the top subarena
+		 * 
+		 * @param numLayers The number of layers to add to the top of the subarena
+		 */
+		void addLayersToTop(int numLayers);
+
+		/**
 		 * @brief Remove the given layer from the subarena
 		 *
 		 * @param layerNum The number of the layer to remove
 		 */
 		void removeLayer(int layerNum);
+
+		/**
+		 * @brief Remove the given layers from the subarena
+		 *
+		 * @param layerNum The numbers of the layers to remove
+		 */
+		void removeLayers(std::vector<int> layerNums);
 
 		/**
 		 * @brief Query whether it is possible to rotate the subarena's superblock
@@ -331,38 +346,15 @@ void Subarena<length, height>::moveSuperBlockRelative(const Vector& delta)
 template <int length, int height>
 void Subarena<length, height>::dropSuperBlock()
 {
-	// because holes may appear between blocks in the z-axis, we start the query
-	// from the maximum z-value i.e. at (layers->size() - 1)
-	int minHeight = 0;
-	int delta = layers->size() - 1;
 
-	// first find the minimum largest delta
-	for (const Vector& vec : superBlock->getBlockLocations()) {
-		if (delta > vec.z) { delta = vec.z; }
+	//Test whether the superblock can drop by delta number of layers until it cannot
+	int delta = 0;
+	while (canMoveSuperBlockRelative(Vector(0, 0, delta))) {
+		delta--;
 	}
 
-	// TODO (BW): not all the blocks of the SuperBlock are needed for the querying,
-	// some could be filtered out e.g. the cube -> only 4 blocks are needed
-	
-	int sbHeight = superBlock->getRelativeBlockHeight();
-
-	// no need to go to 0 every time, stop at the current min height
-	for (const Vector& vec : superBlock->getBlockLocations()) {
-		for (int layerNum = layers->size() - 1; layerNum >= minHeight; --layerNum) {
-			// we need the smallest delta since two blocks may be right on top of
-			// each other in the z-axis, this is why we minHeight cannot be (layerNum + 1)
-			if (!(*layers)[layerNum]->isPosUnoccupied(vec.x, vec.y) && vec.z - layerNum - 1 < delta) {
-				if (layerNum >= sbHeight && minHeight > layerNum - sbHeight) {
-					minHeight = layerNum - sbHeight;
-				}
-				delta = vec.z - layerNum - 1;
-				break;
-			}
-		}
-	}
-
-	// drop the SuperBlock
-	moveSuperBlockRelative(Vector(0, 0, -delta));
+	//Then commit to the last layer where it could drop to 
+	moveSuperBlockRelative(Vector(0, 0, delta + 1));
 }
 
 template <int length, int height>
@@ -423,10 +415,49 @@ void Subarena<length, height>::addLayer(int layerNum)
 }
 
 template <int length, int height>
+void Subarena<length, height>::addLayersToTop(int numLayers)
+{
+	//Add numLayers layers to the vector of layers.
+	while(numLayers > 0) {
+		layers->push_back(new Layer<length, length>());
+		numLayers--;
+	}
+}
+
+template <int length, int height>
 void Subarena<length, height>::removeLayer(int layerNum)
 {
 	delete((*layers)[layerNum]);
 	layers->erase(layers->begin() + layerNum);
+}
+
+template <int length, int height>
+void Subarena<length, height>::removeLayers(std::vector<int> layerNums)
+{
+	//Maintain a layer offset so that we know how much to shift each layer after a deletion, 
+	//and so we reference the correct layer after a deletion
+	int offset = 0;
+
+	int arenaSize = layers->size();
+
+	//For each layer slot of the subarena
+	for (int layerNum = 0; layerNum < arenaSize; layerNum++){
+
+		//Calculate the adjusted layer we are looking at taking into account deleted layers that came before it.
+		int adjustedLayerNum = layerNum - offset;
+
+		//If the layer is to be deleted then delete it, erase it from the layer stack, and update the the current offset
+		if (std::find(layerNums.begin(), layerNums.end(), layerNum) != layerNums.end()) {
+			 delete((*layers)[adjustedLayerNum]);
+			 layers->erase(layers->begin() + adjustedLayerNum);
+			 offset++;											
+		}
+
+		//Otherwise the position of the current layer by the offset
+		else {
+			(*layers)[adjustedLayerNum]->updateRelaPos(Vector(0, 0, -offset));
+		}
+	}
 }
 
 #endif

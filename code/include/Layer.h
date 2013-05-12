@@ -139,6 +139,7 @@ class Layer: public GameObject {
 		 * @param y y-axis value of the position to flip the status
 		 */
 		void flipPosStatus(int x, int y);
+
 };
 
 template <int xLength, int yLength>
