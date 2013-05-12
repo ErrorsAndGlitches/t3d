@@ -7,6 +7,7 @@
 
 #define MUSIC_FILENAME "data/beginning.mp3"
 
+
 #define AUDIO_RATE 22050
 #define AUDIO_FORMAT AUDIO_S16
 #define AUDIO_CHANNELS 2
@@ -14,5 +15,8 @@
 
 #define DEFAULT_SUBARENA_LENGTH 5
 #define DEFAULT_SUBARENA_HEIGHT 10
+
+#define RED_SQUARE_FILENAME "data/redSquareFace.png"
+#define BLUE_SQUARE_FILENAME "data/blueSquareFace.png"
 
 #endif

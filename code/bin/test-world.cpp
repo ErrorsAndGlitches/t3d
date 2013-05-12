@@ -137,6 +137,7 @@ int main(int argc, char **argv)
 	ic2.bindPlayerToMapping(&player2, map2);
 	a.assignToArena(&player1, Arena::TOP_ARENA);
 	a.assignToArena(&player2, Arena::BOTTOM_ARENA);
+	a.init();
 
 	// enter GLUT event processing cycle
 	glutMainLoop();

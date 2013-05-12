@@ -75,6 +75,10 @@ public:
 	*/
 	virtual void draw(const GLuint texId) const;
 
+	void draw() const;
+
+	void init();
+
 
 private:
 
@@ -92,6 +96,8 @@ private:
 	* @brief Draws a plateform in the arena between the two subarenas
 	*/
 	void drawPlateform() const;
+
+	GLuint textID_RED, textID_BLUE; 
 };
 
 #endif
