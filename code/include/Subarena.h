@@ -369,7 +369,9 @@ template <int length, int height>
 void Subarena<length, height>::insertSuperBlockIntoLayers() 
 {
 	for (const Vector& vec : superBlock->getBlockLocations()) {
-		(*layers)[vec.z]->setPosStatus(vec.x, vec.y, Layer<length, length>::LayerPositionStatus::OCCUPIED);
+		if (vec.z < layers->size()) {
+			(*layers)[vec.z]->setPosStatus(vec.x, vec.y, Layer<length, length>::LayerPositionStatus::OCCUPIED);
+		}
 	}
 }
 
