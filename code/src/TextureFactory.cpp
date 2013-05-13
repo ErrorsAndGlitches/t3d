@@ -51,8 +51,7 @@ GLuint TextureFactory::getTextureHandle(const char *filename)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	// have the texture replace the color of the object being drawn
-	glActiveTexture(textureid);
+	// have the texture replace the color of the object being 
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	// clean up

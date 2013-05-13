@@ -12,6 +12,8 @@
 #include "SuperBlock.h"
 #include "SuperBlockFactory.h"
 #include "Layer.h"
+#include "TextureService.h"
+
 
 /**
  * @brief A Subarena encapsulates and controls all the objects in each 
@@ -288,7 +290,8 @@ void Subarena<length, height>::draw() const
 		glTranslatef(pos.x, pos.y, pos.z);
 		// draw each layer
 		for (Layer<length, length> *layer : *layers) {
-			layer->draw();
+			layer->draw(TextureService::getTextureServiceInstance()
+					->getTexture(TextureService::GREY_SQUARE_FACE));
 		}
 		// draw the SuperBlock
 		superBlock->draw();
