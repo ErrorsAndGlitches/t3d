@@ -14,12 +14,11 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
 
 
-Arena a;
-World world(&a);
+
+World world;
 InputComponent ic1;
 InputComponent ic2;
-Player player1; KeyMapping map1(KeyMapping::MULTI_PLAYER_A);
-Player player2; KeyMapping map2(KeyMapping::MULTI_PLAYER_B);
+
 
 /* A general OpenGL initialization function.  Sets all of the initial parameters. */
 void initGL(int Width, int Height)
@@ -131,13 +130,19 @@ int main(int argc, char **argv)
 
 	initGL(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	// set up player 1
+	//Assign arena to world
+	Arena a;
+	world.setArena(&a);
 
+	// set up player bindings
+	Player player1; KeyMapping map1(KeyMapping::MULTI_PLAYER_A);
+	Player player2; KeyMapping map2(KeyMapping::MULTI_PLAYER_B);
 	ic1.bindPlayerToMapping(&player1, map1);
 	ic2.bindPlayerToMapping(&player2, map2);
 	a.assignToArena(&player1, Arena::TOP_ARENA);
 	a.assignToArena(&player2, Arena::BOTTOM_ARENA);
-	a.init();
+
+
 
 	// enter GLUT event processing cycle
 	glutMainLoop();

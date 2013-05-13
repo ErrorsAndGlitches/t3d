@@ -6,15 +6,9 @@
 
 
 Arena::Arena(void): GameObject()
-{
-	
+{	
 }
 
-void Arena::init() 
-{
-
-	textID_BLUE = TextureFactory::getTextureHandle(BLUE_SQUARE_FILENAME);	
-}
 
 void Arena::assignToArena(Player *player, SubArena subarena)
 {

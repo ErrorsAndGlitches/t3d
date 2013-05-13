@@ -11,7 +11,7 @@
 
 Block* SuperBlock::block = new Block(); 
 GLuint SuperBlock::blockTextures[5];
-bool SuperBlock::initalized = false;
+bool SuperBlock::initialized = false;
 
 
 SuperBlock::~SuperBlock()
@@ -25,7 +25,7 @@ SuperBlock::~SuperBlock()
 
 SuperBlock::SuperBlock(const SuperBlockType blockType): GameObject()
 {
-	if (!initalized) { initTextures();}
+	if (!initialized) { initTextures();}
 	switch(blockType)
 	{
 		case LINE:
@@ -77,6 +77,7 @@ const SuperBlock& SuperBlock::operator=(const SuperBlock& rhs)
 
 void SuperBlock::initTextures()
 {
+	initialized = true;
 	int i = 0;
 	SuperBlock::blockTextures[i++] = TextureFactory::getTextureHandle(RED_SQUARE_FILENAME);
 	SuperBlock::blockTextures[i++] = TextureFactory::getTextureHandle(BLUE_SQUARE_FILENAME);

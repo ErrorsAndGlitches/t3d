@@ -18,11 +18,11 @@
 const float NEAR_FIELD = 1;
 const float FAR_FIELD= 100; 
 
-World::World(Arena* arena)
+World::World()
 {
 	length = DEFAULT_SUBARENA_LENGTH;
 	height = DEFAULT_SUBARENA_HEIGHT;
-	this->arena = arena;
+
 
 	aspectRatio = 1; // default aspect ratio (will be changed)
 	xDragStart = 0;
@@ -39,6 +39,10 @@ World::World(Arena* arena)
 
 }
 
+void World::setArena(Arena* arena)
+{
+	this->arena = arena;
+}
 
 void World::draw(void)
 {

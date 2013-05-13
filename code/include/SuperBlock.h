@@ -31,9 +31,9 @@ class SuperBlock: public GameObject {
 
 		//The default texture for this block
 		GLuint defaultTexture;
-
+		
 		void initTextures();
-		static bool initalized;
+		static bool initialized;
 
 		// location of blocks where the figure is drawn entirely in the positive
 		// quadrant

@@ -18,12 +18,18 @@ class World
 public:
 
 	/**
-	* @brief Constructs the world focuses on the given arena
+	* @brief Default constructor
 	*
-	* @param *arena The arena the world world is focused 
 	*/
-	World(Arena* arena);
+	World();
 	~World(void) {}
+
+	/**
+	* @brief Sets the world's focus to the given arena
+	*
+	* @param *arena The arena the world is focused 
+	*/
+	void setArena(Arena* arena);
 
 	/**
 	* @brief Draws everything in the game
