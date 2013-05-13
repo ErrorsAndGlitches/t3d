@@ -26,14 +26,10 @@ class SuperBlock: public GameObject {
 	private:
 		static Block *block; // shared block for drawing
 
-		//Array of block textures
-		static GLuint blockTextures[5];
 
 		//The default texture for this block
 		GLuint defaultTexture;
 		
-		void initTextures();
-		static bool initialized;
 
 		// location of blocks where the figure is drawn entirely in the positive
 		// quadrant

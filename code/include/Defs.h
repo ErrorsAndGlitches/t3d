@@ -16,9 +16,4 @@
 #define DEFAULT_SUBARENA_LENGTH 5
 #define DEFAULT_SUBARENA_HEIGHT 10
 
-#define RED_SQUARE_FILENAME "data/redSquareFace.png"
-#define BLUE_SQUARE_FILENAME "data/blueSquareFace.png"
-#define YELLOW_SQUARE_FILENAME "data/yellowSquareFace.png"
-#define GREEN_SQUARE_FILENAME "data/greenSquareFace.png"
-#define PURPLE_SQUARE_FILENAME "data/purpleSquareFace.png"
 #endif
