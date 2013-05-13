@@ -284,12 +284,11 @@ void Subarena<length, height>::draw(const float *const color) const
 template <int length, int height>
 void Subarena<length, height>::draw() const 
 {
-	float color[3] = {.75, 0, 0};
 	glPushMatrix();
 		glTranslatef(pos.x, pos.y, pos.z);
 		// draw each layer
 		for (Layer<length, length> *layer : *layers) {
-			layer->draw(color);
+			layer->draw();
 		}
 		// draw the SuperBlock
 		superBlock->draw();

@@ -7,9 +7,11 @@
  */
 
 #include <bitset>
+#include <vector>
 #include "Vector.h"
 #include "GameObject.h"
 #include "Block.h"
+#include "TextureService.h"
 #include <functional>
 
 /**
@@ -29,6 +31,12 @@ class Layer: public GameObject {
 		// because it is really quick to test if all the bits are zero i.e. 
 		// "0 == x"
 		std::bitset <xLength * yLength> unoccupiedLocs;
+		
+		//A vector to manage the complete set of desired textures for each space.
+		//This is a dirty vector in the sense that we don't clear texture from this 
+		//vector, we only ever override them.
+		std::vector<GLuint> locationTextureMap;
+
 
 		/**
 		 * @brief Wraps the blockDrawFunc in the translation operations so that the
@@ -38,6 +46,11 @@ class Layer: public GameObject {
 		 * be drawn
 		 */
 		void drawLayerBlocks(std::function<void ()> blockDrawFunc) const;
+
+		/**
+		 * @brief Resets all the layer block textures to some default color.
+		 */
+		void resetTextures();
 
 	public:
 		/**
@@ -78,6 +91,12 @@ class Layer: public GameObject {
 		 * texture
 		 */
 		virtual void draw(const GLuint texId) const;
+
+		/**
+		 * @brief Default layer draw method
+		 *
+		 */
+		virtual void draw() const;
 
 		/**
 		 * @brief Query whether the layer is completely occupied with blocks
@@ -149,12 +168,22 @@ template <int xLength, int yLength>
 Layer<xLength, yLength>::Layer(): GameObject()
 {
 	unoccupiedLocs.set(); // set all the bits to 1 == unoccupied
+	resetTextures();
 }
 
 template <int xLength, int yLength>
 Layer<xLength, yLength>::Layer(const Vector &v):	GameObject(v)
 {
 	unoccupiedLocs.set(); // set all the bits to 1 == unoccupied
+	resetTextures();
+}
+
+template <int xLength, int yLength>
+void Layer<xLength, yLength>::resetTextures()
+{
+	for (int pos = 0; pos < xLength* yLength; pos++) {
+		locationTextureMap.push_back(TextureService::getTextureServiceInstance()->getTexture(TextureService::GREY_SQUARE_FACE));
+	}
 }
 
 template <int xLength, int yLength>
@@ -178,6 +207,24 @@ void Layer<xLength, yLength>::draw(const GLuint texId) const
 		drawLayerBlocks(
 				[texId,this] () -> void {	this->block->draw(texId); }
 				);
+	glPopMatrix();
+}
+
+template <int xLength, int yLength>
+void Layer<xLength, yLength>::draw() const 
+{
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+		for (int j = 0; j < yLength; ++j) {
+			for (int i = 0; i < xLength; ++i) {
+				if (!unoccupiedLocs[j * xLength + i]) {
+					glPushMatrix();
+						glTranslatef(i, j, 0);
+						this->block->draw(locationTextureMap[j * xLength + i]);
+					glPopMatrix();
+				}
+			}
+		}
 	glPopMatrix();
 }
 
@@ -225,6 +272,7 @@ template <int xLength, int yLength>
 void Layer<xLength, yLength>::fillLayer()
 {
 	unoccupiedLocs.reset();
+	resetTextures();
 }
 
 template <int xLength, int yLength>
@@ -232,6 +280,7 @@ void Layer<xLength, yLength>::setPosStatus(int x, int y, LayerPositionStatus sta
 {
 	unoccupiedLocs.set(y * xLength + x, status);
 }
+
 
 template <int xLength, int yLength>
 void Layer<xLength, yLength>::flipPosStatus(int x, int y)
