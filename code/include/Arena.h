@@ -56,7 +56,7 @@ public:
 	void submitCommand(Player *player, PlayerCommand command);
 	
 	/**
-	* @brief Draws the subarean's layer with the given color
+	* @brief Draws the arena and subareans with the given color
 	*
 	* @param color A three element color array
 	*
@@ -66,7 +66,7 @@ public:
 	virtual void draw(const float *const color) const;
 
 	/**
-	* @brief Draws the subarean's layer with the given texture
+	* @brief Draws the arena and subareans with the given texture
 	*
 	* @param texId An OpenGL texture handle
 	*
@@ -75,7 +75,11 @@ public:
 	*/
 	virtual void draw(const GLuint texId) const;
 
-	void draw() const;
+	/**
+	* @brief Draws the subarean with the default drawing method
+	*
+	*/
+	virtual void draw() const;
 
 	void init();
 

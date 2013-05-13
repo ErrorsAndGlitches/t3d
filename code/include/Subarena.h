@@ -87,6 +87,12 @@ class Subarena: public GameObject {
 		virtual void draw(const GLuint texId) const;
 
 		/**
+		 * @brief Default subarena draw method
+		 *
+		 */
+		virtual void draw() const;
+
+		/**
 		 * @brief Creates a new, random SuperBlock for this subarena whose initial
 		 * location is at the center, maximum height of the subarena
 		 */
@@ -272,6 +278,21 @@ void Subarena<length, height>::draw(const float *const color) const
 		}
 		// draw the SuperBlock
 		superBlock->draw(color);
+	glPopMatrix();
+}
+
+template <int length, int height>
+void Subarena<length, height>::draw() const 
+{
+	float color[3] = {.75, 0, 0};
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+		// draw each layer
+		for (Layer<length, length> *layer : *layers) {
+			layer->draw(color);
+		}
+		// draw the SuperBlock
+		superBlock->draw();
 	glPopMatrix();
 }
 

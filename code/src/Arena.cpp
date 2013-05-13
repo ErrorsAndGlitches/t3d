@@ -12,7 +12,7 @@ Arena::Arena(void): GameObject()
 
 void Arena::init() 
 {
-	textID_RED = TextureFactory::getTextureHandle(RED_SQUARE_FILENAME);	
+
 	textID_BLUE = TextureFactory::getTextureHandle(BLUE_SQUARE_FILENAME);	
 }
 
@@ -75,10 +75,23 @@ void Arena::draw(const GLuint texId) const
 {
 	glPushMatrix();
 		glTranslatef(pos.x, pos.y, pos.z);
-		subArenas[0].draw(textID_BLUE);
+		subArenas[0].draw(texId);
 		glPushMatrix();
 			glScalef(1, 1, -1);
-			subArenas[1].draw(textID_BLUE);
+			subArenas[1].draw(texId);
+		glPopMatrix();
+		drawPlateform();
+	glPopMatrix();
+}
+
+void Arena::draw() const 
+{
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
+		subArenas[0].draw();
+		glPushMatrix();
+			glScalef(1, 1, -1);
+			subArenas[1].draw();
 		glPopMatrix();
 		drawPlateform();
 	glPopMatrix();
@@ -91,72 +104,22 @@ void Arena::drawPlateform() const
 	int dimension = DEFAULT_SUBARENA_LENGTH;
 	float step = 1.0 / (dimension * dimension * 3);	//colloring pattern offsets
 
-	glBindTexture(GL_TEXTURE_2D, textID_RED);
-	glEnable(GL_TEXTURE_2D);
-
-
 	glPushMatrix();
 		glScalef(1, 1, thinkness);
 
 		//Tile grid
 		for (int row = 0; row < dimension; row++) {
 			for (int col = 0; col < dimension; col++) {
-				//float colorR = color;  color+= step;
-				//float colorG = color;  color+= step;
-				//float colorB = color;  color+= step;
+				float colorR = 1 - color;	color+= step;
+				float colorG = color;		color+= step;
+				float colorB = 1 - color;	color+= step;
 
 				glPushMatrix();
-					//glColor3f(colorR, colorG, colorB);
-					glTranslatef(row , col, -.01);
-					glPushMatrix();
-
-						glBegin(GL_QUADS); //top
-							glTexCoord2f(0,0); glVertex3f(0, 0, 1);
-							glTexCoord2f(0,1); glVertex3f(0, 1, 1);
-							glTexCoord2f(1,1); glVertex3f(1, 1, 1);
-							glTexCoord2f(1,0); glVertex3f(1, 0, 1);
-						glEnd(); 
-		
-
-						glBegin(GL_QUADS); //North
-							glTexCoord2f(0,0); glVertex3f(1, 0, 1);
-							glTexCoord2f(0,1); glVertex3f(0, 0, 1);
-							glTexCoord2f(1,1); glVertex3f(0, 0, 0);
-							glTexCoord2f(1,0); glVertex3f(1, 0, 0);
-						glEnd();
-
-
-						glBegin(GL_QUADS); //South
-							glTexCoord2f(0,0); glVertex3f(1, 1, 1);
-							glTexCoord2f(0,1); glVertex3f(0, 1, 1);
-							glTexCoord2f(1,1); glVertex3f(0, 1, 0);
-							glTexCoord2f(1,0); glVertex3f(1, 1, 0);
-						glEnd();
-
-						glBegin(GL_QUADS); //East
-							glTexCoord2f(0,0); glVertex3f(1, 1, 1);
-							glTexCoord2f(0,1); glVertex3f(1, 0, 1);
-							glTexCoord2f(1,1); glVertex3f(1, 0, 0);
-							glTexCoord2f(1,0); glVertex3f(1, 1, 0);
-						glEnd();
-
-						glBegin(GL_QUADS); //West
-							glTexCoord2f(0,0); glVertex3f(0, 1, 1);
-							glTexCoord2f(0,1); glVertex3f(0, 0, 1);
-							glTexCoord2f(1,1); glVertex3f(0, 0, 0);
-							glTexCoord2f(1,0); glVertex3f(0, 1, 0);
-						glEnd();
-
-						glBegin(GL_QUADS); //bottom
-							glTexCoord2f(0,0); glVertex3f(0, 0, 0);
-							glTexCoord2f(0,1); glVertex3f(0, 1, 0);
-							glTexCoord2f(1,1); glVertex3f(1, 1, 0);
-							glTexCoord2f(1,0); glVertex3f(1, 0, 0);
-						glEnd();
-					glPopMatrix();
+					glColor3f(colorR, colorG, colorB);
+					glTranslatef(row + .5, col + .5, 0);
+					glutSolidCube(1);
 				glPopMatrix();
 			}
 		}
 	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);
 }

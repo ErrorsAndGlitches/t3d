@@ -25,6 +25,16 @@
 class SuperBlock: public GameObject {
 	private:
 		static Block *block; // shared block for drawing
+
+		//Array of block textures
+		static GLuint blockTextures[5];
+
+		//The default texture for this block
+		GLuint defaultTexture;
+
+		void initTextures();
+		static bool initalized;
+
 		// location of blocks where the figure is drawn entirely in the positive
 		// quadrant
 		std::vector<Vector*> blockLocs;
@@ -128,6 +138,13 @@ class SuperBlock: public GameObject {
 		 * texture
 		 */
 		virtual void draw(const GLuint texId) const;
+
+		/**
+		 * @brief Draws the super block with the default drawing method
+		 *
+		 * All the Blocks comprising the super block are drawn the same
+		 */
+		virtual void draw() const;
 
 		/**
 		 * @brief Get a list of the SuperBlock absolute block locations after undergoing the

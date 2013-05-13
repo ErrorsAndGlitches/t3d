@@ -50,7 +50,7 @@ void World::draw(void)
 	glPushMatrix();
 		//Move to center
 		glTranslatef((-length / 2.0) , (-length / 2.0), 0);
-		arena->Drawable::draw();
+		arena->draw();
 	glPopMatrix();
 	//plateform.draw();
   

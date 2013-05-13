@@ -1,4 +1,6 @@
 #include "SuperBlock.h"
+#include "TextureFactory.h"
+#include "Defs.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -8,6 +10,9 @@
 #include <GL/gl.h>
 
 Block* SuperBlock::block = new Block(); 
+GLuint SuperBlock::blockTextures[5];
+bool SuperBlock::initalized = false;
+
 
 SuperBlock::~SuperBlock()
 {
@@ -20,6 +25,7 @@ SuperBlock::~SuperBlock()
 
 SuperBlock::SuperBlock(const SuperBlockType blockType): GameObject()
 {
+	if (!initalized) { initTextures();}
 	switch(blockType)
 	{
 		case LINE:
@@ -69,12 +75,23 @@ const SuperBlock& SuperBlock::operator=(const SuperBlock& rhs)
 	return *this;
 }
 
+void SuperBlock::initTextures()
+{
+	int i = 0;
+	SuperBlock::blockTextures[i++] = TextureFactory::getTextureHandle(RED_SQUARE_FILENAME);
+	SuperBlock::blockTextures[i++] = TextureFactory::getTextureHandle(BLUE_SQUARE_FILENAME);
+	SuperBlock::blockTextures[i++] = TextureFactory::getTextureHandle(GREEN_SQUARE_FILENAME);
+	SuperBlock::blockTextures[i++] = TextureFactory::getTextureHandle(PURPLE_SQUARE_FILENAME);
+	SuperBlock::blockTextures[i++] = TextureFactory::getTextureHandle(YELLOW_SQUARE_FILENAME);	
+}
 void SuperBlock::createLineSuperBlock()
 {
 	blockLocs.push_back(new Vector(0, 0, -2));
 	blockLocs.push_back(new Vector(0, 0, -1));
 	blockLocs.push_back(new Vector(0, 0, 0));
 	blockLocs.push_back(new Vector(0, 0, 1));
+
+	defaultTexture = blockTextures[LINE];
 }
 
 void SuperBlock::createCubeSuperBlock()
@@ -88,6 +105,8 @@ void SuperBlock::createCubeSuperBlock()
 	blockLocs.push_back(new Vector(0, 1, 1));
 	blockLocs.push_back(new Vector(1, 1, 1));
 	blockLocs.push_back(new Vector(1, 0, 1));
+
+	defaultTexture = blockTextures[CUBE];
 }
 
 void SuperBlock::createEllSuperBlock()
@@ -96,6 +115,8 @@ void SuperBlock::createEllSuperBlock()
 	blockLocs.push_back(new Vector(0, 0, 1));
 	blockLocs.push_back(new Vector(1, 0, 0));
 	blockLocs.push_back(new Vector(2, 0, 0));
+
+	defaultTexture = blockTextures[ELL];
 }
 
 void SuperBlock::createEssSuperBlock()
@@ -104,6 +125,8 @@ void SuperBlock::createEssSuperBlock()
 	blockLocs.push_back(new Vector(0, 0, 0));
 	blockLocs.push_back(new Vector(0, 0, 1));
 	blockLocs.push_back(new Vector(1, 0, 1));
+
+	defaultTexture = blockTextures[ESS];
 }
 
 void SuperBlock::createPyramidSuperBlock()
@@ -114,6 +137,8 @@ void SuperBlock::createPyramidSuperBlock()
 	blockLocs.push_back(new Vector(0, 1, 0));
 	blockLocs.push_back(new Vector(0, -1, 0));
 	blockLocs.push_back(new Vector(0, 0, 1));
+
+	defaultTexture = blockTextures[PYRAMID];
 }
 
 void SuperBlock::draw(const float *const color) const 
@@ -136,6 +161,12 @@ void SuperBlock::draw(const GLuint texId) const
 				[texId,this] () -> void {	this->block->draw(texId); }
 				);
 	glPopMatrix();
+}
+
+
+void SuperBlock::draw() const 
+{
+	draw(defaultTexture);
 }
 
 void SuperBlock::drawBlockList(std::function<void ()> blockDrawFunc) const

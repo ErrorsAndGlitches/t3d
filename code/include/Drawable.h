@@ -40,7 +40,7 @@ class Drawable {
 		 * @brief Default draw method, which draws the object using the
 		 * DEFAULT_COLOR color
 		 */
-		void draw() const; 
+		virtual void draw() const; 
 
 		/**
 		 * @brief Draw the object given the array of color
