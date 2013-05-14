@@ -400,9 +400,10 @@ template <int length, int height>
 bool Subarena<length, height>::isLocationEmpty(const Vector& loc) const
 {
 	int adjustedZ = mapZToSubarena(loc.z);
-	if (adjustedZ >= layers->size() || adjustedZ < 0 
+	if (adjustedZ < 0 
 		|| loc.x >= length || loc.x < 0
 		|| loc.y >= length || loc.y < 0) { return false; }
+	if (adjustedZ >= layers->size()) { return true; }
 
 	if ((*layers)[adjustedZ]->isPosUnoccupied(loc.x, loc.y)) { return true; }
 	else { return false; }
