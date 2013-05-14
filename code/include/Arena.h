@@ -115,11 +115,16 @@ private:
 	void endByPlayerFault(int playerID);
 
 	/**
-	* @brief Expands the specified subarena by the specified number of layers at the cost of the other arean
-	* @param expanding Arena The arena being expanded
-	* @param layers The number of layers of the expansion
+	* @brief Checks to see if either of the players have lost
 	*/
-	void expandSubArena(SubArena expandingArena, int layers);
+	void checkEndCondition();
+
+	/**
+	* @brief Updates the layers of the subarena after a block drop. This involves potential platform moving, 
+	* layer clearing
+	* @param subarena The arena being that is having it's layers checked
+	*/
+	void updateLayers(SubArena subarena);
 };
 
 #endif

@@ -66,7 +66,7 @@ private:
 	*
 	* @return  The z position in subarena coordinates
 	*/
-	float mapZToSubarena(float z) const;
+	int mapZToSubarena(int z) const;
 
 public:
 	/**
@@ -226,11 +226,25 @@ public:
 	void addLayersToTop(int numLayers);
 
 	/**
+	* @brief Remove the specified number of layers from the top subarena
+	* 
+	* @param numLayers The number of layers to remove from the top of the subarena
+	*/
+	void removeLayersFromTop(int numLayers);
+
+	/**
 	* @brief Expand the given subarena by the specificed number of layers
 	* 
 	* @param layers The number of layers to expand the subarena by.
 	*/
 	void expandSubarena(int layers);
+
+	/**
+	* @brief Shrink the given subarena by the specificed number of layers
+	* 
+	* @param layers The number of layers to shrink the subarena by.
+	*/
+	void shrinkSubarena(int layers);
 
 
 	/**
@@ -384,7 +398,7 @@ bool Subarena<length, height>::isLocationEmpty(const Vector& loc) const
 }
 
 template <int length, int height>
-float Subarena<length, height>::mapZToSubarena(float z) const
+int Subarena<length, height>::mapZToSubarena(int z) const
 {
 	return z + (layers->size() - height);
 }
@@ -476,28 +490,6 @@ void Subarena<length, height>::addLayer(int layerNum)
 	layers->insert(layers->begin() + layerNum, new Layer<length, length>());
 }
 
-template <int length, int height>
-void Subarena<length, height>::addLayersToTop(int numLayers)
-{
-	int top = layers->back()->getPos().z;
-	
-	//Add numLayers layers to the vector of layers.
-	while(numLayers > 0) {
-		layers->push_back(new Layer<length, length>(Vector(0, 0, ++top)));
-		numLayers--;
-	}
-}
-
-template <int length, int height>
-void Subarena<length, height>::expandSubarena(int numLayers)
-{
-	addLayersToTop(numLayers);
-	//Add numLayers layers to the vector of layers.
-	// add layers
-	for (int i = 0; i < layers->size(); ++i) {
-		(*layers)[i]->updateRelaPos(Vector(0, 0, -numLayers));
-	}
-}
 
 template <int length, int height>
 void Subarena<length, height>::emptySubarena()
@@ -551,6 +543,54 @@ void Subarena<length, height>::reset()
 	// add layers
 	for (int i = 0; i < height; ++i) {
 		layers->push_back(new Layer<length, length>(Vector(0, 0, i)));
+	}
+}
+
+template <int length, int height>
+void Subarena<length, height>::addLayersToTop(int numLayers)
+{
+	int top = layers->back()->getPos().z;
+	
+	//Add numLayers layers to the vector of layers.
+	while(numLayers > 0) {
+		layers->push_back(new Layer<length, length>(Vector(0, 0, ++top)));
+		numLayers--;
+	}
+}
+
+
+template <int length, int height>
+void Subarena<length, height>::removeLayersFromTop(int numLayers)
+{
+	
+	//Add numLayers layers to the vector of layers.
+	while(numLayers > 0) {
+		removeLayer(layers->size() - 1);
+		numLayers--;
+	}
+}
+
+template <int length, int height>
+void Subarena<length, height>::expandSubarena(int numLayers)
+{
+	//Add numLayers layers to the vector of layers.
+	addLayersToTop(numLayers);
+
+	// Adjt layer height
+	for (int i = 0; i < layers->size(); ++i) {
+		(*layers)[i]->updateRelaPos(Vector(0, 0, -numLayers));
+	}
+}
+
+template <int length, int height>
+void Subarena<length, height>::shrinkSubarena(int numLayers)
+{
+	//Remove numLayers layers from the vector of layers.
+	removeLayersFromTop(numLayers);
+
+	// Adjt layer height
+	for (int i = 0; i < layers->size(); ++i) {
+		(*layers)[i]->updateRelaPos(Vector(0, 0, numLayers));
 	}
 }
 

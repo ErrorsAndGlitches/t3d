@@ -31,42 +31,72 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 
 		   //If the command was a drop block, check if we need to clear any layers
 		   if (command.getAction() == PlayerCommand::DROP_BLOCK) {
-				
-			   int layersCleared = clearFullLayers(subarena);
-
-				//Make a new block
-				subArenas[subarena].newSuperBlock();
-
-				//If the new super block cannot move, it's game over
-				if ( !subArenas[subarena].canMoveSuperBlockRelative(Vector(0, 0, 0))) {
-					endByPlayerFault(player->getID());
-				}
+				updateLayers(subarena);
+				checkEndCondition();
 		   }
-
-		   //TEST 
-		   if (command.getAction() == PlayerCommand::TEST_EXPAND) {
-				expandSubArena(subarena, 1);
-		   }
-	   }
+		}
 	}
 }
 
-void Arena::expandSubArena(SubArena expandingArena, int layers)
+void Arena::checkEndCondition()
 {
-	
-	SubArena shrinkingArena;
-	if (expandingArena == TOP_ARENA) {
-		shrinkingArena = BOTTOM_ARENA;
-		center -= layers;
+	std::map<SubArena, Player*>::iterator it;
+
+	//For each arena
+	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
+		if ( !subArenas[(*it).first].canMoveSuperBlockRelative(Vector(0, 0, 0))) {
+			endByPlayerFault((*it).second->getID());
+		}
 	}
-	else {
-		shrinkingArena = TOP_ARENA;
-		center += layers;
-	}
-	
-	subArenas[expandingArena].expandSubarena(layers);
-	//subArenas[shrinkingArena].shrinkSubarena(layers);
 }
+
+
+void Arena::endByPlayerFault(int playerID)
+{
+	std::cout << "PLAYER " << playerID << " LOSES!" << std::endl;
+	//resolveGameState
+}
+
+void Arena::updateLayers(SubArena subarena)
+{
+	//Get all the full layers
+	std::vector<int> filledLayers = subArenas[subarena].getFullLayers();
+	
+	//And clear them
+	if (filledLayers.size() != 0) {
+
+		//Remove the old layers
+		subArenas[subarena].removeLayers(filledLayers);
+
+		//Add in the new layers
+		subArenas[subarena].addLayersToTop(filledLayers.size());
+	}
+	
+	//Generate a new subarena block
+	subArenas[subarena].newSuperBlock();
+
+
+	//If there were filled layers, we need to do some platform moving
+	int layers = filledLayers.size();
+	if (layers) {
+		SubArena shrinkingArena;
+		if (subarena == TOP_ARENA) {
+			shrinkingArena = BOTTOM_ARENA;
+			center -= layers;
+		}
+		else {
+			shrinkingArena = TOP_ARENA;
+			center += layers;
+		}
+	
+		subArenas[subarena].expandSubarena(layers);
+		subArenas[shrinkingArena].shrinkSubarena(layers);
+
+		//An arena size change forces the shrinking side to get a new block
+		subArenas[shrinkingArena].newSuperBlock();
+	}
+}
+
 
 void Arena::reset()
 {
@@ -81,29 +111,6 @@ void Arena::reset()
 	}
 }
 
-void Arena::endByPlayerFault(int playerID)
-{
-	std::cout << "PLAYER " << playerID << " LOSES!" << std::endl;
-	//resolveGameState
-}
-
-
-int  Arena::clearFullLayers(SubArena subarena)
-{
-	//Get all the full layers
-	std::vector<int> filledLayers = subArenas[subarena].getFullLayers();
-	
-
-	if (filledLayers.size() != 0) {
-
-		//Remove the old layers
-		subArenas[subarena].removeLayers(filledLayers);
-
-		//Add in the new layers
-		subArenas[subarena].addLayersToTop(filledLayers.size());
-	}
-	return filledLayers.size();
-}
 
 void Arena::draw(const float *const color) const 
 {
