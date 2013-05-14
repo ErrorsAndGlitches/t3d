@@ -7,6 +7,7 @@
 
 Arena::Arena(void): GameObject()
 {	
+	center = 0;
 }
 
 
@@ -20,9 +21,11 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 {
 	std::map<SubArena, Player*>::iterator it;
 
+
 	//Execute the command on the correct subarena
 	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
 		if ((*it).second->getID() == player->getID()) {
+
 		   SubArena subarena = (*it).first;
 		   command.execute(&subArenas[subarena]);
 
@@ -30,7 +33,6 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 		   if (command.getAction() == PlayerCommand::DROP_BLOCK) {
 				
 			   int layersCleared = clearFullLayers(subarena);
-				player->addToScore(calculatePoints(layersCleared));
 
 				//Make a new block
 				subArenas[subarena].newSuperBlock();
@@ -40,21 +42,42 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 					endByPlayerFault(player->getID());
 				}
 		   }
+
+		   //TEST 
+		   if (command.getAction() == PlayerCommand::TEST_EXPAND) {
+				expandSubArena(subarena, 1);
+		   }
 	   }
 	}
-	std::cout << "PLAYER " << player->getID() << " HAS " <<  player->getScore() << " POINTS" << std::endl;
+}
+
+void Arena::expandSubArena(SubArena expandingArena, int layers)
+{
+	
+	SubArena shrinkingArena;
+	if (expandingArena == TOP_ARENA) {
+		shrinkingArena = BOTTOM_ARENA;
+		center -= layers;
+	}
+	else {
+		shrinkingArena = TOP_ARENA;
+		center += layers;
+	}
+	
+	subArenas[expandingArena].expandSubarena(layers);
+	//subArenas[shrinkingArena].shrinkSubarena(layers);
 }
 
 void Arena::reset()
 {
+	center = 0;
 	std::map<SubArena, Player*>::iterator it;
 
 	//Iterate through players and subarenas
 	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
-		subArenas[(*it).first].emptySubarena();
-		subArenas[(*it).first].newSuperBlock();
-		(*it).second->resetScore();
 
+		subArenas[(*it).first].reset();
+		subArenas[(*it).first].newSuperBlock();
 	}
 }
 
@@ -64,11 +87,6 @@ void Arena::endByPlayerFault(int playerID)
 	//resolveGameState
 }
 
-int Arena::calculatePoints(int layersCleared)
-{
-	//We a scaled summation to determine the points based on layers cleared
-	return ((layersCleared * (layersCleared + 1)) / 2) * 10;
-}
 
 int  Arena::clearFullLayers(SubArena subarena)
 {
@@ -134,6 +152,7 @@ void Arena::drawPlateform() const
 	float step = 1.0 / (dimension * dimension * 3);	//colloring pattern offsets
 
 	glPushMatrix();
+		glTranslatef(0, 0, center);
 		glScalef(1, 1, thinkness);
 
 		//Tile grid

@@ -111,6 +111,7 @@ int main(int argc, char **argv)
 		" - arrow keys: move the superblock in the x-y plane\n"
 		" - s: move the superblock down\n"
 		" - SPACE: insert superblock and switch to the next random tetris block\n"
+		" - R: Rest the game\n"
 		"-----------------------------------------------------------------------" << endl;
 	glutInit(&argc, argv); // initialize glut state
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);

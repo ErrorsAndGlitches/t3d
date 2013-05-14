@@ -48,25 +48,6 @@ public:
 	*/
 	int getID();
 
-	/**
-	* @brief Gets the player's score.
-	*
-	* @return The players score
-	*/
-	int getScore() {return score;}
-
-	/**
-	* @brief Reset the player's score.
-	*
-	*/
-	void resetScore() {score = 0;}
-
-	/**
-	* @brief Add the specified number of points to the player's score.
-	*
-	* @param The number of points to add
-	*/
-	void addToScore(int points) { score += points;}
 
 private:
 
@@ -77,9 +58,6 @@ private:
 	static int playerIDGenerator;
 	int playerID;
 	
-	//Player score
-	int score;
-
 };
 
 #endif

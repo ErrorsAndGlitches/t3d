@@ -89,11 +89,7 @@ public:
 
 private:
 
-	enum GameState {
-		PRESTART,
-		ACTIVE, 
-		FINISHED
-	};
+	int center;
 
 	//subarenas and the players assigned to it
 	Subarena<> subArenas[ARENA_COUNT];
@@ -111,18 +107,19 @@ private:
 	*/
 	void drawPlateform() const;
 
-	/**
-	* @brief Calculates how many points should be awarded based on how many layers were cleared
-	* @param layersCleared The number of layers cleared.
-	* @return the amount of points for clearing the specified number of layers
-	*/
-	int calculatePoints(int layersCleared);
 
 	/**
 	* @brief Ends the game due to a player hitting the top of the arena.
 	* @param playerID The id of the player that lost
 	*/
 	void endByPlayerFault(int playerID);
+
+	/**
+	* @brief Expands the specified subarena by the specified number of layers at the cost of the other arean
+	* @param expanding Arena The arena being expanded
+	* @param layers The number of layers of the expansion
+	*/
+	void expandSubArena(SubArena expandingArena, int layers);
 };
 
 #endif

@@ -40,6 +40,7 @@ void KeyMapping::setDefaultMapping(DefaultMapping mapping)
 		mappings[PlayerCommand::TEST_Z_NEG] = KeyWrapper((unsigned char)'2');
 		mappings[PlayerCommand::TEST_NEW_BLOCK] = KeyWrapper((unsigned char)'3');
 		mappings[PlayerCommand::TEST_COMMIT_BLOCK] = KeyWrapper((unsigned char)'4');
+		mappings[PlayerCommand::TEST_EXPAND] = KeyWrapper((unsigned char)'!');
 		
 		break;
 	case KeyMapping::MULTI_PLAYER_A:
@@ -56,6 +57,7 @@ void KeyMapping::setDefaultMapping(DefaultMapping mapping)
 		mappings[PlayerCommand::TEST_Z_NEG] = KeyWrapper((unsigned char)'2');
 		mappings[PlayerCommand::TEST_NEW_BLOCK] = KeyWrapper((unsigned char)'3');
 		mappings[PlayerCommand::TEST_COMMIT_BLOCK] = KeyWrapper((unsigned char)'4');
+		mappings[PlayerCommand::TEST_EXPAND] = KeyWrapper((unsigned char)'!');
 		break;
 	case KeyMapping::MULTI_PLAYER_B:
 		mappings[PlayerCommand::ROTATE_X] = KeyWrapper((unsigned char)','); 
@@ -71,6 +73,7 @@ void KeyMapping::setDefaultMapping(DefaultMapping mapping)
 		mappings[PlayerCommand::TEST_Z_NEG] = KeyWrapper((unsigned char)'8');
 		mappings[PlayerCommand::TEST_NEW_BLOCK] = KeyWrapper((unsigned char)'9');
 		mappings[PlayerCommand::TEST_COMMIT_BLOCK] = KeyWrapper((unsigned char)'10');
+		mappings[PlayerCommand::TEST_EXPAND] = KeyWrapper((unsigned char)'+');
 		break;
 	default:
 		break;

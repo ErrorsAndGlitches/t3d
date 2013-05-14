@@ -66,6 +66,10 @@ void PlayerCommand::execute(Subarena<> *subarena)
 		subarena->insertSuperBlockIntoLayers();
 		std::cout << i++ << ": TEST_COMMIT_BLOCK" << std::endl;
 		break;
+	case PlayerCommand::TEST_EXPAND:
+		subarena->getPos();
+		std::cout << i++ << ": TEST_EXPAND" << std::endl;
+		break;
 	default:
 		break;
 	}
