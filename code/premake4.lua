@@ -144,3 +144,25 @@ project "Test-Jukebox"
 	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
+
+project "Test-Server"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-test-server"
+	files { "bin/test-server.cpp" }
+	files { "src/*.cpp", "include/*.h" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)
+
+project "Test-Client"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-test-client"
+	files { "bin/test-client.cpp" }
+	files { "src/*.cpp", "include/*.h" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)
