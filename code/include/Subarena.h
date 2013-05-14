@@ -168,6 +168,13 @@ class Subarena: public GameObject {
 		 */
 		std::vector<int> getFullLayers() const;
 
+		
+		/**
+		 * @brief Empties all the layers of the subarena
+		 *
+		 */
+		void emptySubarena();
+
 		/**
 		 * @brief Query whether the given layer is filled. 
 		 *
@@ -444,6 +451,14 @@ void Subarena<length, height>::addLayersToTop(int numLayers)
 	while(numLayers > 0) {
 		layers->push_back(new Layer<length, length>(Vector(0, 0, layers->size())));
 		numLayers--;
+	}
+}
+
+template <int length, int height>
+void Subarena<length, height>::emptySubarena()
+{
+	for (int i = 0; i < layers->size(); ++i) {
+		(*layers)[i]->emptyLayer();
 	}
 }
 

@@ -25,6 +25,11 @@ World::World()
 
 
 	aspectRatio = 1; // default aspect ratio (will be changed)
+	init();
+}
+
+void World::init()
+{
 	xDragStart = 0;
 	yDragStart = 0;
 	isDragging = false;
@@ -34,8 +39,13 @@ World::World()
 	xRotationDelta = 0;
 	zRotationDelta = 0;
 	orientaion = 1;
+}
 
+void World::reset()
+{
 
+	arena->reset();
+	init();
 }
 
 void World::setArena(Arena* arena)

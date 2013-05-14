@@ -12,17 +12,17 @@ Arena::Arena(void): GameObject()
 
 void Arena::assignToArena(Player *player, SubArena subarena)
 {
-	playerArenaMap.insert ( std::pair<SubArena,int>(subarena, player->getID()));
+	playerArenaMap.insert ( std::pair<SubArena, Player*>(subarena, player));
 	player->setArena(this);
 }
 
 void Arena::submitCommand(Player *player, PlayerCommand command)
 {
-	std::map<SubArena, int>::iterator it;
+	std::map<SubArena, Player*>::iterator it;
 
 	//Execute the command on the correct subarena
 	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
-		if ((*it).second == player->getID()) {
+		if ((*it).second->getID() == player->getID()) {
 		   SubArena subarena = (*it).first;
 		   command.execute(&subArenas[subarena]);
 
@@ -37,15 +37,32 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 
 				//If the new super block cannot move, it's game over
 				if ( !subArenas[subarena].canMoveSuperBlockRelative(Vector(0, 0, 0))) {
-					std::cout << "GAME OVER PLAYER " << player->getID() << std::endl;
+					endByPlayerFault(player->getID());
 				}
 		   }
 	   }
 	}
-	std::cout << "PLAYER " << player->getID() << "HAS " <<  player->getScore() << " POINTS" << std::endl;
+	std::cout << "PLAYER " << player->getID() << " HAS " <<  player->getScore() << " POINTS" << std::endl;
 }
 
+void Arena::reset()
+{
+	std::map<SubArena, Player*>::iterator it;
 
+	//Iterate through players and subarenas
+	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
+		subArenas[(*it).first].emptySubarena();
+		subArenas[(*it).first].newSuperBlock();
+		(*it).second->resetScore();
+
+	}
+}
+
+void Arena::endByPlayerFault(int playerID)
+{
+	std::cout << "PLAYER " << playerID << " LOSES!" << std::endl;
+	//resolveGameState
+}
 
 int Arena::calculatePoints(int layersCleared)
 {

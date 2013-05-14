@@ -81,6 +81,11 @@ public:
 	*/
 	virtual void draw() const;
 
+	/**
+	* @brief Reset the arena.
+	*
+	*/
+	void reset();
 
 private:
 
@@ -92,7 +97,7 @@ private:
 
 	//subarenas and the players assigned to it
 	Subarena<> subArenas[ARENA_COUNT];
-	std::map<SubArena, int> playerArenaMap;
+	std::map<SubArena, Player*> playerArenaMap;
 
 	/**
 	* @brief Clears all the full layers of a particular sub arena, and updates the layers.
@@ -112,6 +117,12 @@ private:
 	* @return the amount of points for clearing the specified number of layers
 	*/
 	int calculatePoints(int layersCleared);
+
+	/**
+	* @brief Ends the game due to a player hitting the top of the arena.
+	* @param playerID The id of the player that lost
+	*/
+	void endByPlayerFault(int playerID);
 };
 
 #endif

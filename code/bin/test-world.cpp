@@ -85,7 +85,7 @@ void idleCallback()
 
 void processNormalKeysCallback(unsigned char key, int xx, int yy)
 {
-
+	if (key == 'R') world.reset();
 	ic1.processKeyboardInput(key);
 	ic2.processKeyboardInput(key);
 }

@@ -31,6 +31,19 @@ public:
 	*/
 	void setArena(Arena* arena);
 
+	
+	/**
+	* @brief Initalized the default values of the world
+	*
+	*/
+	void init();
+
+	/**
+	* @brief Resets the state of the game
+	*
+	*/
+	void reset();
+
 	/**
 	* @brief Draws everything in the game
 	*/
