@@ -166,3 +166,25 @@ project "Test-Client"
 	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
 	location (buildDir)
 	objdir (buildDir)
+
+project "Test-Host"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-network-host"
+	files { "bin/test-network-host.cpp" }
+	files { "src/*.cpp", "include/*.h" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)
+
+project "Test-Join"
+	kind "WindowedApp"
+	language "C++"
+	includedirs { "include" }
+	targetname "t3d-network-join"
+	files { "bin/test-network-join.cpp" }
+	files { "src/*.cpp", "include/*.h" }
+	links { "glut", "GLU", "GL", "SDL", "SDL_image", "SDL_mixer" }
+	location (buildDir)
+	objdir (buildDir)
