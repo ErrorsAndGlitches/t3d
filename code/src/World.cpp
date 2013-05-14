@@ -12,6 +12,7 @@
 
 #include "World.h"
 #include "Defs.h"
+#include "TextureService.h"
 
 
 
@@ -56,6 +57,20 @@ void World::setArena(Arena* arena)
 void World::draw(void)
 {
 	setUpCamera();
+			
+
+	glBindTexture(GL_TEXTURE_2D, TextureService::getTextureServiceInstance()->getTexture(TextureService::BACKGROUND));
+	glEnable(GL_TEXTURE_2D);
+	glPushMatrix();
+		glBegin(GL_QUADS);
+			
+		glTexCoord2i(0, 0); glVertex3f(-20, 70, -20);
+		glTexCoord2i(1, 0); glVertex3f(20,	70, -20);
+		glTexCoord2i(1, 1); glVertex3f(20,	70, 20);
+		glTexCoord2i(0, 1); glVertex3f(-20, 70, 20);
+		glEnd();
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
 
 	//Rotate the arena
 	glRotatef(xRotation + xRotationDelta, 1, 0, 0);

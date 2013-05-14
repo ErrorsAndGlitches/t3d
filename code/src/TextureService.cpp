@@ -7,6 +7,7 @@
 #define GREEN_SQUARE_FILENAME "data/greenSquareFace.png"
 #define PURPLE_SQUARE_FILENAME "data/purpleSquareFace.png"
 #define GREY_SQUARE_FILENAME "data/greySquareFace.png"
+#define BACKGROUND_FILENAME "data/background.png"
 
 TextureService *TextureService::serviceSingleton = 0;
 
@@ -17,7 +18,8 @@ TextureService::TextureService()
 	textures[GREEN_SQUARE_FACE] = TextureFactory::getTextureHandle(GREEN_SQUARE_FILENAME);
 	textures[PURPLE_SQUARE_FACE] = TextureFactory::getTextureHandle(PURPLE_SQUARE_FILENAME);
 	textures[YELLOW_SQUARE_FACE] = TextureFactory::getTextureHandle(YELLOW_SQUARE_FILENAME);	
-	textures[GREY_SQUARE_FACE] = TextureFactory::getTextureHandle(GREY_SQUARE_FILENAME);	
+	textures[GREY_SQUARE_FACE] = TextureFactory::getTextureHandle(GREY_SQUARE_FILENAME);
+	textures[BACKGROUND] = TextureFactory::getTextureHandle(BACKGROUND_FILENAME);	
 }
 
 TextureService* TextureService::getTextureServiceInstance() {

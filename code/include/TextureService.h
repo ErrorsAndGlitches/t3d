@@ -33,6 +33,7 @@ class TextureService {
 			BLUE_SQUARE_FACE, 
 			GREEN_SQUARE_FACE,
 			GREY_SQUARE_FACE,
+			BACKGROUND,
 			TEXTURE_COUNT
 		};
 

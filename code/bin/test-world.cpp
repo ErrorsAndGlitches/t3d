@@ -5,6 +5,7 @@
 #include "Arena.h"
 #include "InputComponent.h"
 #include "Player.h"
+#include "Defs.h"
 
 
 using std::cout;
@@ -50,7 +51,7 @@ void reshapeCallback(int w, int h)
 void drawCallback() 
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);               // clear the window
-	glClearColor(0.75, 0.5, 0.75, 1.0);           // background is gray
+	glClearColor(0, 0, 0, 1.0);           // background is gray
     
 	glLoadIdentity();
 	world.draw();
@@ -58,18 +59,10 @@ void drawCallback()
 
 		// draw some axis
 	glBegin(GL_LINES);
-		// x axis
-		glColor4f(1, 0, 0, 1);
-		glVertex3f(-100, 0, 0);
-		glVertex3f(100, 0, 0);
-		// y axis
-		glColor4f(0, 1, 0, 1);
-		glVertex3f(0, -100, 0);
-		glVertex3f(0, 100, 0);
 		// z axis
 		glColor4f(0, 0, 1, 1);
-		glVertex3f(0, 0, -100);
-		glVertex3f(0, 0, 100);
+		glVertex3f(0, 0, -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0, 0, DEFAULT_SUBARENA_HEIGHT);
 	glEnd();
 	glutSwapBuffers(); // make it all visible
 } 
@@ -111,7 +104,7 @@ int main(int argc, char **argv)
 		" - arrow keys: move the superblock in the x-y plane\n"
 		" - s: move the superblock down\n"
 		" - SPACE: insert superblock and switch to the next random tetris block\n"
-		" - R: Rest the game\n"
+		" - R: Reset the game\n"
 		"-----------------------------------------------------------------------" << endl;
 	glutInit(&argc, argv); // initialize glut state
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
