@@ -11,7 +11,10 @@
 
 Block* SuperBlock::block = new Block(); 
 
-
+SuperBlock::SuperBlockType SuperBlock::getSuperBlockType() const
+{
+	return sbType;
+}
 
 SuperBlock::~SuperBlock()
 {
@@ -24,6 +27,8 @@ SuperBlock::~SuperBlock()
 
 SuperBlock::SuperBlock(const SuperBlockType blockType): GameObject()
 {
+	sbType = blockType;
+
 	switch(blockType)
 	{
 		case LINE:
@@ -53,6 +58,8 @@ SuperBlock::SuperBlock(const SuperBlockType blockType): GameObject()
 
 SuperBlock::SuperBlock(const SuperBlock& other): GameObject()
 {
+	sbType = other.sbType;
+
 	for (Vector *blockLoc : other.blockLocs) {
 		blockLocs.push_back(new Vector(*blockLoc));
 	}
@@ -60,6 +67,8 @@ SuperBlock::SuperBlock(const SuperBlock& other): GameObject()
 
 const SuperBlock& SuperBlock::operator=(const SuperBlock& rhs)
 {
+	sbType = rhs.sbType;
+
 	for (Vector *blockLoc : blockLocs) {
 		delete(blockLoc);
 	}

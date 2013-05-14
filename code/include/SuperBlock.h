@@ -23,9 +23,16 @@
  * about the x-axis
  */
 class SuperBlock: public GameObject {
+	public:
+		/**
+		 * @brief Different types of super blocks
+		 */
+		enum SuperBlockType { LINE, CUBE, ELL, ESS, PYRAMID, NUM_SUPER_BLOCK_TYPES };
+
 	private:
 		static Block *block; // shared block for drawing
 
+		SuperBlockType sbType;
 
 		//The default texture for this block
 		GLuint defaultTexture;
@@ -72,11 +79,6 @@ class SuperBlock: public GameObject {
 
 	public:
 		/**
-		 * @brief Different types of super blocks
-		 */
-		enum SuperBlockType { LINE, CUBE, ELL, ESS, PYRAMID, NUM_SUPER_BLOCK_TYPES };
-
-		/**
 		 * @brief Default constructor, sets the position to the origin
 		 */
 		SuperBlock(const SuperBlockType blockType);
@@ -107,6 +109,13 @@ class SuperBlock: public GameObject {
 		 * @brief Cleans up the blocks that compose the SuperBlock
 		 */
 		~SuperBlock();
+
+		/**
+		 * @brief Get the type of the SuperBlock
+		 *
+		 * @return The SuperBlock's type
+		 */
+		SuperBlockType getSuperBlockType() const;
 
 		/**
 		 * @brief Perform the given rotation on the superblock
