@@ -14,17 +14,17 @@ MessageCommunicator::MessageCommunicator()
 
 int MessageCommunicator::sendMessage(int socket, const void *msg, size_t msgSize)
 {
-	msgSize = htons(msgSize); // convert to network format
+	size_t networkMsgSize = htons(msgSize); // convert to network format
 
 	// send the size of the message
-	if (send(socket, &msgSize, sizeof(uint16_t), 0) < 0) {
-		cout << "NETWORK: message size send failed" << endl;
+	if (send(socket, &networkMsgSize, sizeof(uint16_t), 0) < 0) {
+		perror("NETWORK: message size send failed");
 		exit(-1);
 	}
 
 	// send the message
 	if (send(socket, msg, msgSize, 0) < 0) {
-		cout << "NETWORK: message send failed" << endl;
+		perror("NETWORK: message send failed");
 		exit(-1);
 	}
 
@@ -35,14 +35,14 @@ int MessageCommunicator::recvMessage(int socket, void *msg, size_t msgSize)
 {
 	// receive the size of the message
 	if (recv(socket, &msgSize, sizeof(uint16_t), 0) < 0) {
-		cout << "NETWORK: message size receive failed" << endl;
+		perror("NETWORK: message size receive failed");
 		exit(-1);
 	}
 	msgSize = ntohs(msgSize);
 
 	// receive the message
 	if (recv(socket, msg, msgSize, 0) < 0) {
-		cout << "NETWORK: message receive failed" << endl;
+		perror("NETWORK: message received failed");
 		exit(-1);
 	}
 
