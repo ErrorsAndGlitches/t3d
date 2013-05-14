@@ -15,7 +15,6 @@
 #include "TextureService.h"
 
 
-
 const float NEAR_FIELD = 1;
 const float FAR_FIELD= 100; 
 
@@ -24,6 +23,17 @@ World::World(NetworkPlayerType npType)
 	length = DEFAULT_SUBARENA_LENGTH;
 	height = DEFAULT_SUBARENA_HEIGHT;
 	this->npType = npType;
+	jukebox = Jukebox::getJukeboxInstance();
+
+	// add to the playlist
+	jukebox->addToPlaylist("./data/music/beginningRemix.mp3");
+	jukebox->addToPlaylist("./data/music/centerExistance.mp3");
+	jukebox->addToPlaylist("./data/music/freedomTrance.mp3");
+	jukebox->addToPlaylist("./data/music/oscillators.mp3");
+
+	// start music
+	jukebox->setJukeboxMode(Jukebox::JukeboxMode::SHUFFLE);
+	jukebox->playMusic();
 
 	aspectRatio = 1; // default aspect ratio (will be changed)
 	init();
@@ -204,15 +214,15 @@ void World::updateNetworkPlayer()
 
 	if (PlayerCommand::Action::ACTION_COUNT != action) {
 		if (PlayerCommand::Action::TEST_NEW_BLOCK == action) {
-			// hide while we update the network player's SuperBlock
-			//   * this function may be atomic, but due to blocking procedures being called I'm not sure
-			arena->drawNetworkPlayerSuperBlock(false);
-				arena->submitNetworkPlayerCommand(PlayerCommand(action));
-				arena->setNetworkPlayerSuperBlockType(netInt.getNewSuperBlockType());
-			arena->drawNetworkPlayerSuperBlock(true);
+			arena->setNetworkPlayerSuperBlockType(netInt.getNewSuperBlockType());
 		}
 		else {
-			arena->submitNetworkPlayerCommand(PlayerCommand(action));
+			arena->executeNetworkPlayerCommand(PlayerCommand(action));
 		}
 	}
+}
+
+void World::toggleMusic()
+{
+	jukebox->toggleMusic();
 }

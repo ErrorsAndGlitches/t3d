@@ -9,6 +9,7 @@
 #include "Platform.h"
 #include "Arena.h"
 #include "NetworkInterface.h"
+#include "Jukebox.h"
 
 /**
  * @brief The world encompases the entire scene of the game.
@@ -93,6 +94,11 @@ public:
 	 */
 	void updateNetworkPlayer();
 
+	/**
+	 * @brief toggle the music
+	 */
+	void toggleMusic();
+
 private:
 	Arena* arena;		//The arena this world is fouced on
 	int length;			//The dimension of the arean
@@ -115,6 +121,8 @@ private:
 	// interface to perform networking operations
 	NetworkInterface netInt;
 	NetworkPlayerType npType;
+
+	Jukebox *jukebox;
 };
 
 #endif
