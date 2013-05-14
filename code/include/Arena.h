@@ -107,14 +107,7 @@ public:
 	 *
 	 * @param command The command received from the network player
 	 */
-	void submitNetworkPlayerCommand(PlayerCommand command);
-
-	/**
-	 * @brief Set whether the network player's SuperBlock should be drawn
-	 *
-	 * @param isDrawn If true, the other player's SuperBlock is drawn
-	 */
-	void drawNetworkPlayerSuperBlock(bool isDrawn);
+	void executeNetworkPlayerCommand(PlayerCommand command);
 
 	/**
 	 * @brief Set the SuperBlock type of the network player's SuperBlock
@@ -161,8 +154,9 @@ private:
 	* @brief Updates the layers of the subarena after a block drop. This involves potential platform moving, 
 	* layer clearing
 	* @param subarena The arena being that is having it's layers checked
+  * @return return true if the layers were changed
 	*/
-	void updateLayers(SubArena subarena);
+	bool updateLayers(SubArena subarena);
 };
 
 #endif

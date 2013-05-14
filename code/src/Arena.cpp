@@ -19,27 +19,26 @@ void Arena::assignToArena(Player *player, SubArena subarena)
 
 void Arena::submitCommand(Player *player, PlayerCommand command)
 {
-	std::map<SubArena, Player*>::iterator it;
+	command.execute(&subArenas[TOP_ARENA]);
 
-	//Execute the command on the correct subarena
-	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
-		if ((*it).second->getID() == player->getID()) {
+	//If the command was a drop block, check if we need to clear any layers
+	if (command.getAction() == PlayerCommand::DROP_BLOCK) {
+		updateLayers(TOP_ARENA); // this generates a new superblock
+		subArenas[TOP_ARENA].newSuperBlock();
+		checkEndCondition();
 
-		   SubArena subarena = (*it).first;
-		   command.execute(&subArenas[subarena]);
-
-		   //If the command was a drop block, check if we need to clear any layers
-		   if (command.getAction() == PlayerCommand::DROP_BLOCK) {
-				updateLayers(subarena);
-				checkEndCondition();
-		   }
-		}
+		// need to submit the command second because if it is a DROP_BLOCK or something
+		// that changes the SuperBlockType, then the Subarena will not have gotten
+		// the new SuperBlockType until after the above code
+		submitNetworkCommandFunc(command);
+		submitNetworkCommandFunc(PlayerCommand(PlayerCommand::Action::TEST_NEW_BLOCK));
 	}
-
-	// need to submit the command second because if it is a DROP_BLOCK or something
-	// that changes the SuperBlockType, then the Subarena will not have gotten
-	// the new SuperBlockType until after the above code
-	submitNetworkCommandFunc(command);
+	else if (PlayerCommand::Action::TEST_NEW_BLOCK == command.getAction()) {
+		submitNetworkCommandFunc(PlayerCommand(PlayerCommand::Action::TEST_NEW_BLOCK));
+	}
+	else {
+		submitNetworkCommandFunc(command);
+	}
 }
 
 SuperBlock::SuperBlockType Arena::getSuperBlockType() const
@@ -66,7 +65,7 @@ void Arena::endByPlayerFault(int playerID)
 	//resolveGameState
 }
 
-void Arena::updateLayers(SubArena subarena)
+bool Arena::updateLayers(SubArena subarena)
 {
 	//Get all the full layers
 	std::vector<int> filledLayers = subArenas[subarena].getFullLayers();
@@ -81,9 +80,6 @@ void Arena::updateLayers(SubArena subarena)
 		subArenas[subarena].addLayersToTop(filledLayers.size());
 	}
 	
-	//Generate a new subarena block
-	subArenas[subarena].newSuperBlock();
-
 	//If there were filled layers, we need to do some platform moving
 	int layers = filledLayers.size();
 	if (layers) {
@@ -99,9 +95,10 @@ void Arena::updateLayers(SubArena subarena)
 	
 		subArenas[subarena].expandSubarena(layers);
 		subArenas[shrinkingArena].shrinkSubarena(layers);
-
-		//An arena size change forces the shrinking side to get a new block
-		subArenas[shrinkingArena].newSuperBlock();
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
@@ -192,20 +189,21 @@ void Arena::setNetworkSubmitFunction(std::function<void (PlayerCommand)> submitN
 	this->submitNetworkCommandFunc = submitNetworkCommandFunc;
 }
 
-void Arena::submitNetworkPlayerCommand(PlayerCommand command)
+void Arena::executeNetworkPlayerCommand(PlayerCommand command)
 {
 	 command.execute(&subArenas[SubArena::BOTTOM_ARENA]);
 
 	 // If the command was a drop block, check if we need to clear any layers
 	 if (command.getAction() == PlayerCommand::DROP_BLOCK) {
-		updateLayers(SubArena::BOTTOM_ARENA);
+		if (updateLayers(SubArena::BOTTOM_ARENA)) {
+			// need to generate a new superblock
+			subArenas[TOP_ARENA].newSuperBlock();
+			// and send to the other player
+			submitNetworkCommandFunc(PlayerCommand::Action::TEST_NEW_BLOCK);
+		}
+
 		checkEndCondition();
 	 }
-}
-
-void Arena::drawNetworkPlayerSuperBlock(bool isDrawn)
-{
-	subArenas[SubArena::BOTTOM_ARENA].setDrawSuperBlock(isDrawn);
 }
 
 void Arena::setNetworkPlayerSuperBlockType(SuperBlock::SuperBlockType sbType)
