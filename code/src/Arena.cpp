@@ -21,7 +21,6 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 {
 	std::map<SubArena, Player*>::iterator it;
 
-
 	//Execute the command on the correct subarena
 	for (it = playerArenaMap.begin(); it != playerArenaMap.end(); it++) {
 		if ((*it).second->getID() == player->getID()) {
@@ -36,6 +35,16 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 		   }
 		}
 	}
+
+	// need to submit the command second because if it is a DROP_BLOCK or something
+	// that changes the SuperBlockType, then the Subarena will not have gotten
+	// the new SuperBlockType until after the above code
+	submitNetworkCommandFunc(command);
+}
+
+SuperBlock::SuperBlockType Arena::getSuperBlockType() const
+{
+	return subArenas[TOP_ARENA].getSuperBlockType();
 }
 
 void Arena::checkEndCondition()
@@ -74,7 +83,6 @@ void Arena::updateLayers(SubArena subarena)
 	
 	//Generate a new subarena block
 	subArenas[subarena].newSuperBlock();
-
 
 	//If there were filled layers, we need to do some platform moving
 	int layers = filledLayers.size();
@@ -177,4 +185,30 @@ void Arena::drawPlateform() const
 			}
 		}
 	glPopMatrix();
+}
+
+void Arena::setNetworkSubmitFunction(std::function<void (PlayerCommand)> submitNetworkCommandFunc)
+{
+	this->submitNetworkCommandFunc = submitNetworkCommandFunc;
+}
+
+void Arena::submitNetworkPlayerCommand(PlayerCommand command)
+{
+	 command.execute(&subArenas[SubArena::BOTTOM_ARENA]);
+
+	 // If the command was a drop block, check if we need to clear any layers
+	 if (command.getAction() == PlayerCommand::DROP_BLOCK) {
+		updateLayers(SubArena::BOTTOM_ARENA);
+		checkEndCondition();
+	 }
+}
+
+void Arena::drawNetworkPlayerSuperBlock(bool isDrawn)
+{
+	subArenas[SubArena::BOTTOM_ARENA].setDrawSuperBlock(isDrawn);
+}
+
+void Arena::setNetworkPlayerSuperBlockType(SuperBlock::SuperBlockType sbType)
+{
+	subArenas[SubArena::BOTTOM_ARENA].newSuperBlock(sbType);
 }

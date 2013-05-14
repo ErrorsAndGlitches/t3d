@@ -5,6 +5,7 @@
 #include "PlayerCommand.h"
 #include "Platform.h"
 #include <map>
+#include <functional>
 
 /**
  * @file
@@ -54,6 +55,13 @@ public:
 	* @param command The command to execute.
 	*/
 	void submitCommand(Player *player, PlayerCommand command);
+
+	/**
+	 * @brief Get the SuperBlock type in the local player's subarena
+	 *
+	 * @return The SuperBlock type
+	 */
+	SuperBlock::SuperBlockType getSuperBlockType() const;
 	
 	/**
 	* @brief Draws the arena and subareans with the given color
@@ -87,6 +95,34 @@ public:
 	*/
 	void reset();
 
+	/**
+	 * @brief Set the command to call when a command is submitted to the arena
+	 *
+	 * @param submitNetworkCommandFunc Command function
+	 */
+	void setNetworkSubmitFunction(std::function<void (PlayerCommand)> submitNetworkCommandFunc);
+
+	/**
+	 * @brief Submit a command received from a network player
+	 *
+	 * @param command The command received from the network player
+	 */
+	void submitNetworkPlayerCommand(PlayerCommand command);
+
+	/**
+	 * @brief Set whether the network player's SuperBlock should be drawn
+	 *
+	 * @param isDrawn If true, the other player's SuperBlock is drawn
+	 */
+	void drawNetworkPlayerSuperBlock(bool isDrawn);
+
+	/**
+	 * @brief Set the SuperBlock type of the network player's SuperBlock
+	 *
+	 * @param sbType SuperBlock type to set to
+	 */
+	void setNetworkPlayerSuperBlockType(SuperBlock::SuperBlockType sbType);
+
 private:
 
 	int center;
@@ -94,6 +130,8 @@ private:
 	//subarenas and the players assigned to it
 	Subarena<> subArenas[ARENA_COUNT];
 	std::map<SubArena, Player*> playerArenaMap;
+	// function used to submit PlayerCommands to the network
+	std::function<void (PlayerCommand)> submitNetworkCommandFunc;
 
 	/**
 	* @brief Clears all the full layers of a particular sub arena, and updates the layers.
