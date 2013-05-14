@@ -26,8 +26,29 @@ class NetworkInterface {
 		struct sockaddr_in oppAddr; // network address of other player
 		MessageTranslator::TetrisNetworkMessage msgBuffer; // buffer for message sending/receiving
 
+		/**
+		 * @brief Sets up a TCP server socket for the given service (port number)
+		 *
+		 * The server socket has some filters to make sure that the socket is
+		 * connected to an actual interface as opposed to a loop or dhcp interface.
+		 *
+		 * The server socket returned can be used for clients to connect and the
+		 * server can call accept() to handle the clients i.e. the server socket is
+		 * both bound and listening when returned.
+		 *
+		 * @param service Port number for the TCP server socket
+		 *
+		 * @return A valid TCP server socket or < 0 if an error occurs
+		 */
 		int setupTCPServerSocket(const char *service);
 
+		/**
+		 * @brief Checks the given socket if there is data available to be read
+		 *
+		 * @param socketNum Socket number to check for data to read
+		 *
+		 * @return True if there is data in the socket's buffer to read
+		 */
 		bool dataAvailable(int socketNum);
 
 	public:
@@ -83,7 +104,7 @@ class NetworkInterface {
 		 *
 		 * @return The action received from the other player
 		 *
-		 * If the Action is TEST_NEW_SUPERBLOCK, a call to getNewSuperBlock will
+		 * If the Action is TEST_NEW_SUPERBLOCK, a call to getNewSuperBlockType will
 		 * return the SuperBlock type send by the other player.
 		 */
 		PlayerCommand::Action getPlayerAction();
@@ -93,7 +114,7 @@ class NetworkInterface {
 		 *
 		 * @return The SuperBlock type of the other player's new SuperBlock
 		 */
-		SuperBlock::SuperBlockType getNewSuperBlock() const;
+		SuperBlock::SuperBlockType getNewSuperBlockType() const;
 };
 
 #endif

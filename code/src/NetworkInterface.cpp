@@ -5,10 +5,12 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <cstring>
-
-#include "NetworkInterface.h"
 #include <iostream>
 #include <cstdlib>
+#include <ifaddrs.h>
+#include <net/if.h>
+
+#include "NetworkInterface.h"
 
 #define MAGIC 0x743364 // t3d in hex
 #define MULTICAST_GROUP "225.0.0.32"
@@ -18,6 +20,13 @@
 #define MAXPENDING 5
 
 #define FAILURE_TEST(x, msg) if((x)) { perror(msg); exit(-1); }
+
+//#define Debug
+#ifdef Debug
+#  define LOGGER(x) cerr << x << endl;
+#else
+#  define LOGGER(x)
+#endif
 
 using namespace std;
 
@@ -30,7 +39,7 @@ void NetworkInterface::hostGame()
 {
 	// create a TCP socket for the client to connect to
 	int serverSock = setupTCPServerSocket(GAME_PORT);	
-	FAILURE_TEST(serverSock < 0, "setupTCPServerSocket() failed");
+	FAILURE_TEST(serverSock < 0, "setupTCPServerSocket() failed: don't read next thing");
 
 	// get the information associated with the socket to provide the client
 	struct sockaddr_in tcpAddr = { 0 };
@@ -41,7 +50,10 @@ void NetworkInterface::hostGame()
 	msgBuffer.msgInfo.msgType = MessageTranslator::HOST;
 	msgBuffer.ipAddr = tcpAddr.sin_addr.s_addr;
 	msgBuffer.portNum = tcpAddr.sin_port;
-	MessageTranslator::encode(&msgBuffer);
+
+	// only encode the message type because the rest (ip and port) are already in
+	// network byte order
+	msgBuffer.msgInfo.msgType = htons(msgBuffer.msgInfo.msgType);
 
 	// send out messages on the multicasting channel
 	int multiCastSocket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -58,7 +70,11 @@ void NetworkInterface::hostGame()
 	multiAddr.sin_port = htons(MULTICAST_PORT);
 	
 	// repeatedly send out host message until a client accepts on our listening port
+	char printAddr[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &msgBuffer.ipAddr, printAddr, INET_ADDRSTRLEN);
 	while (1) {
+		LOGGER("Sending address: " << printAddr );
+		LOGGER("Sending port: " << ntohs(msgBuffer.portNum));
 		sendto(multiCastSocket, &msgBuffer, sizeof(msgBuffer), 0, 
 					 (struct sockaddr *) &multiAddr, sizeof(multiAddr));
 		sleep(1);
@@ -68,10 +84,12 @@ void NetworkInterface::hostGame()
 		}
 	}
 	close(multiCastSocket);
+	LOGGER("Recieved a multicast message from a clien");
 
 	// accept the client connection
 	socklen_t oppAddrLen = sizeof(oppAddr);
 	FAILURE_TEST((sock = accept(serverSock, (struct sockaddr *) &oppAddr, &oppAddrLen)) < 0, "accept() failed");
+	LOGGER("Accepted the connection from the client");
 
 	// initiate start of game handshake
 	msgBuffer.msgInfo.msgType = MessageTranslator::MessageType::START_GAME;
@@ -116,11 +134,14 @@ void NetworkInterface::joinGame()
 	// get a message from a server: recvfrom blocks
 	struct sockaddr_in hostAddr = { 0 };
 	socklen_t hostAddrLen = sizeof(hostAddr);
+	LOGGER("Waiting for a host packet...");
 	recvfrom(multiCastSocket, (struct sockaddr *) &msgBuffer, sizeof(msgBuffer), 0, 
 					 (struct sockaddr *) &hostAddr, &hostAddrLen);
+	LOGGER("Received a host packet");
 
-	// decode the message
-	MessageTranslator::decode(&msgBuffer);
+	// only decode the message type because we want the ip address and port in
+	// network byte order
+	msgBuffer.msgInfo.msgType = ntohs(msgBuffer.msgInfo.msgType);
 
 	// check to make sure the message is a host message
 	FAILURE_TEST(MessageTranslator::MessageType::HOST != msgBuffer.msgInfo.msgType,
@@ -131,6 +152,11 @@ void NetworkInterface::joinGame()
 	hostTcpAddr.sin_family = AF_INET;
 	hostTcpAddr.sin_addr.s_addr = msgBuffer.ipAddr;
 	hostTcpAddr.sin_port = msgBuffer.portNum;
+
+	char printAddr[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &msgBuffer.ipAddr, printAddr, INET_ADDRSTRLEN);
+	LOGGER("Trying to connect to address: " << printAddr);
+	LOGGER("Trying to connect to port: " << ntohs(msgBuffer.portNum));
 
 	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	FAILURE_TEST(connect(sock, (struct sockaddr *) &hostTcpAddr, sizeof(hostTcpAddr)) < 0, 
@@ -172,8 +198,9 @@ void NetworkInterface::sendPlayerAction(const PlayerCommand::Action action)
 
 void NetworkInterface::sendNewSuperBlock(const SuperBlock::SuperBlockType sbType)
 {
-	msgBuffer.msgInfo.msgType = MessageTranslator::MessageType::NEW_SUPER_BLOCK;
+	msgBuffer.msgInfo.msgType = MessageTranslator::MessageType::ACTION;
 	msgBuffer.action = PlayerCommand::Action::TEST_NEW_BLOCK;
+	msgBuffer.sbType = sbType;
 
 	MessageTranslator::encode(&msgBuffer);
 	MessageCommunicator::sendMessage(sock, &msgBuffer, sizeof(msgBuffer));
@@ -191,49 +218,54 @@ PlayerCommand::Action NetworkInterface::getPlayerAction()
 	}
 }
 
-SuperBlock::SuperBlockType NetworkInterface::getNewSuperBlock() const
+SuperBlock::SuperBlockType NetworkInterface::getNewSuperBlockType() const
 {
 	return SuperBlock::SuperBlockType(msgBuffer.sbType);
 }
 
 int NetworkInterface::setupTCPServerSocket(const char *service) 
 {
-	// construct the server address structure
-	struct addrinfo addrCriteria;
-	memset(&addrCriteria, 0, sizeof(addrCriteria));
-	addrCriteria.ai_family = AF_INET;
-	addrCriteria.ai_flags = AI_PASSIVE;
-	addrCriteria.ai_socktype = SOCK_STREAM;
-	addrCriteria.ai_protocol = IPPROTO_TCP;
+	// get a list of interface addresses
+	struct ifaddrs *myaddrs, *ifa;
+	FAILURE_TEST(getifaddrs(&myaddrs) != 0, "getifaddrs() failed");
 
-	// get list of addresses
-	struct addrinfo *servAddr;
-	int rtnVal = getaddrinfo(NULL, service, &addrCriteria, &servAddr);
-	FAILURE_TEST(rtnVal < 0, "getaddrinfo() failed");
+	int servSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+	FAILURE_TEST(servSock < 0, "socket() failed");
 
-	int servSock = -1;
-	for (struct addrinfo *addr = servAddr; addr != NULL; addr = addr->ai_next) {
-		// create TCP socket
-		if (addr->ai_family == AF_INET)
-			servSock = socket(PF_INET, addr->ai_socktype, addr->ai_protocol);
-		else
-			servSock = socket(PF_INET6, addr->ai_socktype, addr->ai_protocol);
-		if (servSock < 0)
-			continue;
+	for (ifa = myaddrs; ifa != NULL; ifa = ifa->ifa_next) {
+		if (!ifa->ifa_addr) { continue; }
+		if (!(ifa->ifa_flags & IFF_UP)) { continue; }
+		if (AF_INET != ifa->ifa_addr->sa_family) { continue; }
 
-		// bind to local address and set socket to listen
-		if ((bind(servSock, servAddr->ai_addr, servAddr->ai_addrlen) == 0) && 
-				 (listen(servSock, MAXPENDING) == 0)) {
-			break; // bind and listen successful
+		struct sockaddr_in *ifaAddr = (struct sockaddr_in *) ifa->ifa_addr;
+
+		char printAddr[INET_ADDRSTRLEN];
+		if (inet_ntop(AF_INET, &ifaAddr->sin_addr.s_addr, printAddr, INET_ADDRSTRLEN)) {
+			LOGGER("inet_ntop was successful");
+			LOGGER("Address: " << printAddr);
+			LOGGER("Port: " << ntohs(ifaAddr->sin_port));
+
+			// don't want loop back address
+			if (strncmp(printAddr, "127", 3) != 0) {
+				// try to bind and listen on the interface
+				if ((bind(servSock, ifa->ifa_addr, sizeof(struct sockaddr_in)) == 0)  && 
+						 (listen(servSock, MAXPENDING) == 0)) {
+					LOGGER("Successfully listening for client connections");
+					break; // bind and listen successful
+				}
+
+				close(servSock);
+				servSock = -1; // try next address
+			}
 		}
-
-		close(servSock);
-		servSock = -1; // try next address
+		else {
+			LOGGER("inet_ntop was not successful");
+			perror("inet() failed");
+		}
 	}
 
-	freeaddrinfo(servAddr);
+	freeifaddrs(myaddrs);
 	return servSock;
-
 }
 
 bool NetworkInterface::dataAvailable(int socketNum)
