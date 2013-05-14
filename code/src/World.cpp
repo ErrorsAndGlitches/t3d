@@ -19,11 +19,11 @@
 const float NEAR_FIELD = 1;
 const float FAR_FIELD= 100; 
 
-World::World()
+World::World(NetworkPlayerType npType)
 {
 	length = DEFAULT_SUBARENA_LENGTH;
 	height = DEFAULT_SUBARENA_HEIGHT;
-
+	this->npType = npType;
 
 	aspectRatio = 1; // default aspect ratio (will be changed)
 	init();
@@ -42,9 +42,26 @@ void World::init()
 	orientaion = 1;
 }
 
+void World::startNetworkGame()
+{
+	// start the networking
+	switch (npType) {
+		case HOST:
+			netInt.hostGame();
+			break;
+		case CLIENT:
+			netInt.joinGame();
+			break;
+	}
+
+	// send the current superblock
+	SuperBlock::SuperBlockType sbtype = arena->getSuperBlockType();
+	netInt.sendNewSuperBlock(sbtype);
+}
+
 void World::reset()
 {
-
+	netInt.endGame();
 	arena->reset();
 	init();
 }
@@ -52,13 +69,27 @@ void World::reset()
 void World::setArena(Arena* arena)
 {
 	this->arena = arena;
+
+	// what a hack. I hope no one ever has to figure this out. LOLZZZZ
+	this->arena->setNetworkSubmitFunction(
+			[this] (PlayerCommand command) {
+				if (PlayerCommand::Action::TEST_NEW_BLOCK == command.getAction()) {
+					this->netInt.sendNewSuperBlock(this->arena->getSuperBlockType());
+				}
+				else if (PlayerCommand::Action::DROP_BLOCK == command.getAction()) {
+					this->netInt.sendPlayerAction(command.getAction());
+					this->netInt.sendNewSuperBlock(this->arena->getSuperBlockType());
+				}
+				else {
+					this->netInt.sendPlayerAction(command.getAction());
+				}
+			});
 }
 
 void World::draw(void)
 {
 	setUpCamera();
 			
-
 	glBindTexture(GL_TEXTURE_2D, TextureService::getTextureServiceInstance()->getTexture(TextureService::BACKGROUND));
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
@@ -162,6 +193,26 @@ void World::mouseButton(int button, int state, int xx, int yy)
 			zRotation = zRotation + zRotationDelta;
 			xRotationDelta = 0;
 			zRotationDelta = 0;
+		}
+	}
+}
+
+void World::updateNetworkPlayer()
+{
+	// process any actions that we receive from the network
+	PlayerCommand::Action action = netInt.getPlayerAction();
+
+	if (PlayerCommand::Action::ACTION_COUNT != action) {
+		if (PlayerCommand::Action::TEST_NEW_BLOCK == action) {
+			// hide while we update the network player's SuperBlock
+			//   * this function may be atomic, but due to blocking procedures being called I'm not sure
+			arena->drawNetworkPlayerSuperBlock(false);
+				arena->submitNetworkPlayerCommand(PlayerCommand(action));
+				arena->setNetworkPlayerSuperBlockType(netInt.getNewSuperBlockType());
+			arena->drawNetworkPlayerSuperBlock(true);
+		}
+		else {
+			arena->submitNetworkPlayerCommand(PlayerCommand(action));
 		}
 	}
 }

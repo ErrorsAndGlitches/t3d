@@ -8,6 +8,7 @@
 
 #include "Platform.h"
 #include "Arena.h"
+#include "NetworkInterface.h"
 
 /**
  * @brief The world encompases the entire scene of the game.
@@ -16,12 +17,17 @@
 class World
 {
 public:
+	typedef enum {
+		HOST,
+		CLIENT,
+		NUMBER_NETWORK_PLAYER_TYPES
+	} NetworkPlayerType;
 
 	/**
 	* @brief Default constructor
 	*
 	*/
-	World();
+	World(NetworkPlayerType npType);
 	~World(void) {}
 
 	/**
@@ -37,6 +43,12 @@ public:
 	*
 	*/
 	void init();
+
+	/**
+	 * @brief Start a network game by initiating communication with another
+	 * network player
+	 */
+	void startNetworkGame();
 
 	/**
 	* @brief Resets the state of the game
@@ -76,6 +88,11 @@ public:
 	*/
 	void setUpCamera();
 
+	/**
+	 * @brief Updates the state of the network player if we receive input from them
+	 */
+	void updateNetworkPlayer();
+
 private:
 	Arena* arena;		//The arena this world is fouced on
 	int length;			//The dimension of the arean
@@ -95,7 +112,9 @@ private:
 	
 	int orientaion;	//Whether the world is upsidedown;
 
-
+	// interface to perform networking operations
+	NetworkInterface netInt;
+	NetworkPlayerType npType;
 };
 
 #endif
