@@ -47,7 +47,6 @@ void PlayerCommand::execute(Subarena<> *subarena)
 		break;
 	case PlayerCommand::DROP_BLOCK:
 		dropAndCommitBlock(subarena);
-		subarena->dropSuperBlock();
 		std::cout << i++ << ": DROP_BLOCK" << std::endl;
 		break;
 	case PlayerCommand::TEST_Z_POS:
