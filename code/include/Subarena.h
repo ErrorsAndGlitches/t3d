@@ -100,7 +100,6 @@ public:
 
 	/**
 	* @brief Default subarena draw method
-	*
 	*/
 	virtual void draw() const;
 
@@ -117,6 +116,13 @@ public:
 	* @param blockType SuperBlock type to create
 	*/
 	void newSuperBlock(SuperBlock::SuperBlockType blockType);
+
+	/**
+	 * @brief Get the current SuperBlock type
+	 *
+	 * @return The SuperBlock's type
+	 */
+	SuperBlock::SuperBlockType getSuperBlockType() const;
 
 	/**
 	* @brief Sets whether the SuperBlock should be drawn when the subarena is drawn
@@ -278,7 +284,6 @@ public:
 	*/
 	void rotateSuperBlock(const SimpleRotation::RotationType& rotType);
 
-
 	/**
 	* @brief Reset the subarena
 	*/
@@ -377,6 +382,12 @@ void Subarena<length, height>::newSuperBlock(SuperBlock::SuperBlockType blockTyp
 	delete(superBlock);
 	superBlock = sbFactory->getSuperBlock(blockType);
 	moveSuperBlockToStartPosition();
+}
+
+template <int length, int height>
+SuperBlock::SuperBlockType Subarena<length, height>::getSuperBlockType() const
+{
+	return superBlock->getSuperBlockType();
 }
 
 template <int length, int height>
