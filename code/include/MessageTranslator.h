@@ -27,7 +27,6 @@ class MessageTranslator {
 		typedef enum {
 			HOST,
 			START_GAME,
-			NEW_SUPER_BLOCK,
 			ACTION,
 			NUMBER_MESSAGE_TYPES
 		} MessageType;
