@@ -442,7 +442,7 @@ void Subarena<length, height>::addLayersToTop(int numLayers)
 {
 	//Add numLayers layers to the vector of layers.
 	while(numLayers > 0) {
-		layers->push_back(new Layer<length, length>());
+		layers->push_back(new Layer<length, length>(Vector(0, 0, layers->size())));
 		numLayers--;
 	}
 }

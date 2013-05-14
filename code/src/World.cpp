@@ -35,7 +35,6 @@ World::World()
 	zRotationDelta = 0;
 	orientaion = 1;
 
-	plateform = Platform();
 
 }
 

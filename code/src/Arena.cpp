@@ -29,6 +29,13 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 		   //If the command was a drop block, check if we need to clear any layers
 		   if (command.getAction() == PlayerCommand::DROP_BLOCK) {
 				clearFullLayers(subarena);
+				//Make a new block
+				subArenas[subarena].newSuperBlock();
+
+				//If the new super block cannot move, it's game over
+				if ( !subArenas[subarena].canMoveSuperBlockRelative(Vector(0, 0, 0))) {
+					std::cout << "GAME OVER PLAYER " << player->getID() << std::endl;
+				}
 		   }
 	   }
 	}
@@ -48,8 +55,6 @@ void  Arena::clearFullLayers(SubArena subarena)
 		//Add in the new layers
 		subArenas[subarena].addLayersToTop(filledLayers.size());
 	}
-	//Make a new block
-	subArenas[subarena].newSuperBlock();
 }
 
 void Arena::draw(const float *const color) const 
