@@ -75,6 +75,9 @@ void idleCallback()
 void processNormalKeysCallback(unsigned char key, int xx, int yy)
 {
 	if (key == 'R') world.reset();
+	if (key == 'p' || key == 'P') {
+		world.toggleMusic();
+	}
 	ic1.processKeyboardInput(key);
 }
 
