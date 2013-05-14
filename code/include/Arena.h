@@ -84,6 +84,12 @@ public:
 
 private:
 
+	enum GameState {
+		PRESTART,
+		ACTIVE, 
+		FINISHED
+	};
+
 	//subarenas and the players assigned to it
 	Subarena<> subArenas[ARENA_COUNT];
 	std::map<SubArena, int> playerArenaMap;
@@ -91,13 +97,21 @@ private:
 	/**
 	* @brief Clears all the full layers of a particular sub arena, and updates the layers.
 	* @param subarena The subarena that is to have its layers cleared.
+	* @return the number of layers cleared
 	*/
-	void  clearFullLayers(SubArena subarena);
+	int clearFullLayers(SubArena subarena);
 
 	/**
 	* @brief Draws a plateform in the arena between the two subarenas
 	*/
 	void drawPlateform() const;
+
+	/**
+	* @brief Calculates how many points should be awarded based on how many layers were cleared
+	* @param layersCleared The number of layers cleared.
+	* @return the amount of points for clearing the specified number of layers
+	*/
+	int calculatePoints(int layersCleared);
 };
 
 #endif

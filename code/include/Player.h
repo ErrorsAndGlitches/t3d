@@ -23,7 +23,7 @@ public:
 	* @brief Default Player constructor. Players subscribe to
 	*		arena's and and send commands to that arena
 	*/
-	Player(void){playerID = playerIDGenerator++;}
+	Player(void);
 	~Player(void){}
 	
 
@@ -48,6 +48,26 @@ public:
 	*/
 	int getID();
 
+	/**
+	* @brief Gets the player's score.
+	*
+	* @return The players score
+	*/
+	int getScore() {return score;}
+
+	/**
+	* @brief Reset the player's score.
+	*
+	*/
+	void resetScore() {score = 0;}
+
+	/**
+	* @brief Add the specified number of points to the player's score.
+	*
+	* @param The number of points to add
+	*/
+	void addToScore(int points) { score += points;}
+
 private:
 
 	//The arena that this player submits commands to
@@ -56,6 +76,9 @@ private:
 	//We generate a unique ID for each player
 	static int playerIDGenerator;
 	int playerID;
+	
+	//Player score
+	int score;
 
 };
 

@@ -28,7 +28,10 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 
 		   //If the command was a drop block, check if we need to clear any layers
 		   if (command.getAction() == PlayerCommand::DROP_BLOCK) {
-				clearFullLayers(subarena);
+				
+			   int layersCleared = clearFullLayers(subarena);
+				player->addToScore(calculatePoints(layersCleared));
+
 				//Make a new block
 				subArenas[subarena].newSuperBlock();
 
@@ -39,9 +42,18 @@ void Arena::submitCommand(Player *player, PlayerCommand command)
 		   }
 	   }
 	}
+	std::cout << "PLAYER " << player->getID() << "HAS " <<  player->getScore() << " POINTS" << std::endl;
 }
 
-void  Arena::clearFullLayers(SubArena subarena)
+
+
+int Arena::calculatePoints(int layersCleared)
+{
+	//We a scaled summation to determine the points based on layers cleared
+	return ((layersCleared * (layersCleared + 1)) / 2) * 10;
+}
+
+int  Arena::clearFullLayers(SubArena subarena)
 {
 	//Get all the full layers
 	std::vector<int> filledLayers = subArenas[subarena].getFullLayers();
@@ -55,6 +67,7 @@ void  Arena::clearFullLayers(SubArena subarena)
 		//Add in the new layers
 		subArenas[subarena].addLayersToTop(filledLayers.size());
 	}
+	return filledLayers.size();
 }
 
 void Arena::draw(const float *const color) const 

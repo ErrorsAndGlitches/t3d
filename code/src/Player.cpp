@@ -3,6 +3,12 @@
 
 int Player::playerIDGenerator = 1;
 
+Player::Player()
+{
+	playerID = playerIDGenerator++;
+	score = 0;
+}
+
 void Player::setArena(Arena *arena)
 {
 	this->arena = arena;
