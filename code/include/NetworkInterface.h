@@ -6,6 +6,9 @@
  * @author Benjamyn
  */
 
+#include <sys/socket.h>
+#include <netinet/ip.h> 
+
 #include "PlayerCommand.h"
 #include "SuperBlock.h"
 #include "MessageTranslator.h"
@@ -25,7 +28,7 @@ class NetworkInterface {
 
 		int setupTCPServerSocket(const char *service);
 
-		bool dataAvailable();
+		bool dataAvailable(int socketNum);
 
 	public:
 		/**

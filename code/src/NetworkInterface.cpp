@@ -17,7 +17,7 @@
 
 #define MAXPENDING 5
 
-#define FAILURE_TEST(x, msg) if((x)) { cout << msg << endl; exit(-1); }
+#define FAILURE_TEST(x, msg) if((x)) { perror(msg); exit(-1); }
 
 using namespace std;
 
@@ -29,13 +29,13 @@ NetworkInterface::NetworkInterface()
 void NetworkInterface::hostGame()
 {
 	// create a TCP socket for the client to connect to
-	sock = setupTCPServerSocket(GAME_PORT);	
-	FAILURE_TEST(sock < 0, "setupTCPServerSocket() failed");
+	int serverSock = setupTCPServerSocket(GAME_PORT);	
+	FAILURE_TEST(serverSock < 0, "setupTCPServerSocket() failed");
 
 	// get the information associated with the socket to provide the client
 	struct sockaddr_in tcpAddr = { 0 };
 	socklen_t addrLen = sizeof(tcpAddr);
-	FAILURE_TEST(getsockname(sock, (struct sockaddr *) &tcpAddr, &addrLen) < 0, "getsockname() failed");
+	FAILURE_TEST(getsockname(serverSock, (struct sockaddr *) &tcpAddr, &addrLen) < 0, "getsockname() failed");
 
 	// create a host message
 	msgBuffer.msgInfo.msgType = MessageTranslator::HOST;
@@ -56,11 +56,6 @@ void NetworkInterface::hostGame()
 	multiAddr.sin_family = AF_INET;
 	multiAddr.sin_addr = *((struct in_addr *) buf);
 	multiAddr.sin_port = htons(MULTICAST_PORT);
-
-	// set up socket lists for listening
-	fd_set sockset;
-	FD_ZERO(&sockset);
-	FD_SET(sock, &sockset);
 	
 	// repeatedly send out host message until a client accepts on our listening port
 	while (1) {
@@ -68,7 +63,7 @@ void NetworkInterface::hostGame()
 					 (struct sockaddr *) &multiAddr, sizeof(multiAddr));
 		sleep(1);
 
-		if (dataAvailable()) {
+		if (dataAvailable(serverSock)) {
 			break; 
 		}
 	}
@@ -76,22 +71,12 @@ void NetworkInterface::hostGame()
 
 	// accept the client connection
 	socklen_t oppAddrLen = sizeof(oppAddr);
-	FAILURE_TEST(accept(sock, (struct sockaddr *) &oppAddr, &oppAddrLen) < 0, "accept() failed");
+	FAILURE_TEST((sock = accept(serverSock, (struct sockaddr *) &oppAddr, &oppAddrLen)) < 0, "accept() failed");
 
 	// initiate start of game handshake
 	msgBuffer.msgInfo.msgType = MessageTranslator::MessageType::START_GAME;
 	MessageTranslator::encode(&msgBuffer);
 	MessageCommunicator::sendMessage(sock, &msgBuffer, sizeof(msgBuffer));
-
-	FD_ZERO(&sockset);
-	FD_SET(sock, &sockset);
-
-	while (1) {
-		usleep(50);
-		if (dataAvailable()) {
-			break; 
-		}
-	}
 
 	// get the message and make sure that the message is start
 	MessageCommunicator::recvMessage(sock, &msgBuffer, sizeof(msgBuffer));
@@ -100,6 +85,7 @@ void NetworkInterface::hostGame()
 							 "Expected a START_GAME message");
 
 	// now the game may begin sending action commands back and forth
+	cout << "Starting game" << endl;
 }
 
 void NetworkInterface::joinGame()
@@ -143,8 +129,8 @@ void NetworkInterface::joinGame()
 	// create a TCP socket and connect to the address sent by the host
 	struct sockaddr_in hostTcpAddr = { 0 };
 	hostTcpAddr.sin_family = AF_INET;
-	hostTcpAddr.sin_addr.s_addr = htonl(msgBuffer.ipAddr);
-	hostTcpAddr.sin_port = htons(msgBuffer.portNum);
+	hostTcpAddr.sin_addr.s_addr = msgBuffer.ipAddr;
+	hostTcpAddr.sin_port = msgBuffer.portNum;
 
 	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	FAILURE_TEST(connect(sock, (struct sockaddr *) &hostTcpAddr, sizeof(hostTcpAddr)) < 0, 
@@ -154,13 +140,6 @@ void NetworkInterface::joinGame()
 	fd_set sockset;	
 	FD_ZERO(&sockset);
 	FD_SET(sock, &sockset);
-
-	while (1) {
-		usleep(50);
-		if (dataAvailable()) {
-			break;
-		}
-	}
 
 	// get the message and make sure that the message is start
 	MessageCommunicator::recvMessage(sock, &msgBuffer, sizeof(msgBuffer));
@@ -174,6 +153,7 @@ void NetworkInterface::joinGame()
 	MessageCommunicator::sendMessage(sock, &msgBuffer, sizeof(msgBuffer));
 
 	// now the game may begin sending action commands back and forth
+	cout << "Starting game" << endl;
 }
 
 void NetworkInterface::endGame()
@@ -201,7 +181,7 @@ void NetworkInterface::sendNewSuperBlock(const SuperBlock::SuperBlockType sbType
 
 PlayerCommand::Action NetworkInterface::getPlayerAction()
 {
-	if (dataAvailable()) {
+	if (dataAvailable(sock)) {
 		MessageCommunicator::recvMessage(sock, &msgBuffer, sizeof(msgBuffer));
 		MessageTranslator::decode(&msgBuffer);
 		return PlayerCommand::Action(msgBuffer.action);
@@ -256,15 +236,16 @@ int NetworkInterface::setupTCPServerSocket(const char *service)
 
 }
 
-bool NetworkInterface::dataAvailable()
+bool NetworkInterface::dataAvailable(int socketNum)
 {
 	static fd_set sockset;
+	static timeval noBlockTimeVal = { 0 , 0 };
 	FD_ZERO(&sockset);
-	FD_SET(sock, &sockset);
+	FD_SET(socketNum, &sockset);
 
-	int result = select(sock + 1, &sockset, NULL, NULL, NULL);
+	int result = select(socketNum + 1, &sockset, NULL, NULL, &noBlockTimeVal);
 	FAILURE_TEST(result < 0, "select() failed");
-	if (1 == result && FD_ISSET(sock, &sockset)) {
+	if (1 == result && FD_ISSET(socketNum, &sockset)) {
 		return true;
 	}
 	else {
