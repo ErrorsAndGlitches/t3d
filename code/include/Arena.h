@@ -90,6 +90,17 @@ public:
 	virtual void draw() const;
 
 	/**
+	 * @brief Draw a Z axis, which is used as a reference point for the players
+	 */
+	void drawZAxis() const;
+
+	/**
+	 * @brief Draw a bounding box around the arena so players now where the
+	 * ceiling is
+	 */
+	void drawBoundingBox() const;
+
+	/**
 	* @brief Reset the arena.
 	*
 	*/

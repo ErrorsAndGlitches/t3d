@@ -37,7 +37,6 @@ public:
 	* @param *arena The arena the world is focused 
 	*/
 	void setArena(Arena* arena);
-
 	
 	/**
 	* @brief Initalized the default values of the world
@@ -111,6 +110,11 @@ private:
 	 * @brief Draw the world for a running game
 	 */
 	void drawRunningState();
+
+	/**
+	 * @brief Draw the background
+	 */
+	void drawBackground();
 
 	/**
 	 * @brief Draw a screen indicating the player lost

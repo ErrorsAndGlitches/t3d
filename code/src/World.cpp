@@ -154,7 +154,21 @@ void World::draw(void)
 void World::drawRunningState()
 {
 	setUpCamera();
+
+	drawBackground();
 			
+	//Rotate the arena
+	glRotatef(xRotation + xRotationDelta, 1, 0, 0);
+	glRotatef(zRotation + zRotationDelta, 0, 0, 1);
+	glPushMatrix();
+		//Move to center
+		glTranslatef((-length / 2.0) , (-length / 2.0), 0);
+		arena->draw();
+	glPopMatrix();
+}
+
+void World::drawBackground()
+{
 	glBindTexture(GL_TEXTURE_2D, TextureService::getTextureServiceInstance()->getTexture(TextureService::BACKGROUND));
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
@@ -167,24 +181,6 @@ void World::drawRunningState()
 		glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
-
-	//Rotate the arena
-	glRotatef(xRotation + xRotationDelta, 1, 0, 0);
-	glRotatef(zRotation + zRotationDelta, 0, 0, 1);
-	glPushMatrix();
-		//Move to center
-		glTranslatef((-length / 2.0) , (-length / 2.0), 0);
-		arena->draw();
-	glPopMatrix();
-	//plateform.draw();
-	
-	// draw some axis
-	glBegin(GL_LINES);
-		// z axis
-		glColor4f(0, 0, 1, 1);
-		glVertex3f(0, 0, -DEFAULT_SUBARENA_HEIGHT);
-		glVertex3f(0, 0, DEFAULT_SUBARENA_HEIGHT);
-	glEnd();
 }
 
 void World::drawLostState()

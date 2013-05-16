@@ -154,8 +154,90 @@ void Arena::draw() const
 			glScalef(1, 1, -1);
 			subArenas[1].draw();
 		glPopMatrix();
+
 		drawPlateform();
+
+		glPushMatrix();
+			glTranslatef(DEFAULT_SUBARENA_LENGTH / 2.0f, DEFAULT_SUBARENA_LENGTH / 2.0f, 0.0f);
+			drawZAxis();
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(DEFAULT_SUBARENA_LENGTH, DEFAULT_SUBARENA_LENGTH, 0.0f);
+			drawBoundingBox();
+		glPopMatrix();
 	glPopMatrix();
+}
+
+void Arena::drawZAxis() const
+{
+	// draw some axis
+	glBegin(GL_LINES);
+		// z axis
+		glColor4f(0, 0, 1, 1);
+		glVertex3f(0, 0, -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0, 0, DEFAULT_SUBARENA_HEIGHT);
+	glEnd();
+}
+
+void Arena::drawBoundingBox() const
+{
+	glBegin(GL_LINE_STRIP);
+		// four corner vertical lines
+		glColor4f(0, 0, 1, 1);
+		glVertex3f(0.0f, 
+							 0.0f, 
+							 DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0.0f, 
+							 0.0f, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0.0f, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0.0f, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0.0f, 
+							 0.0f, 
+							 DEFAULT_SUBARENA_HEIGHT);
+
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 0.0f, 
+							 DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 0.0f, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 0.0f, 
+							 DEFAULT_SUBARENA_HEIGHT);
+	glEnd();
+
+	glBegin(GL_LINES);
+		glVertex3f(0.0f, 
+							 0.0f, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 0.0f, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0.0f, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0.0f, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(-DEFAULT_SUBARENA_LENGTH, 
+							 -DEFAULT_SUBARENA_LENGTH, 
+							 DEFAULT_SUBARENA_HEIGHT);
+	glEnd();
 }
 
 void Arena::drawPlateform() const
