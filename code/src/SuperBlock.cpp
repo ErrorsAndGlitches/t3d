@@ -137,8 +137,6 @@ void SuperBlock::createPyramidSuperBlock()
 	blockLocs.push_back(new Vector(0, 0, 0));
 	blockLocs.push_back(new Vector(1, 0, 0));
 	blockLocs.push_back(new Vector(-1, 0, 0));
-	blockLocs.push_back(new Vector(0, 1, 0));
-	blockLocs.push_back(new Vector(0, -1, 0));
 	blockLocs.push_back(new Vector(0, 0, 1));
 
 	defaultTexture = TextureService::getTextureServiceInstance()
