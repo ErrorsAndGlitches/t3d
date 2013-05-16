@@ -52,14 +52,6 @@ void drawCallback()
 	glLoadIdentity();
 	world.draw();
 
-
-		// draw some axis
-	glBegin(GL_LINES);
-		// z axis
-		glColor4f(0, 0, 1, 1);
-		glVertex3f(0, 0, -DEFAULT_SUBARENA_HEIGHT);
-		glVertex3f(0, 0, DEFAULT_SUBARENA_HEIGHT);
-	glEnd();
 	glutSwapBuffers(); // make it all visible
 } 
 

@@ -14,11 +14,10 @@
 #include "Defs.h"
 #include "TextureService.h"
 
-
 const float NEAR_FIELD = 1;
 const float FAR_FIELD= 100; 
 
-World::World(NetworkPlayerType npType)
+World::World(NetworkPlayerType npType): worldState(RUNNING), screenText(NULL)
 {
 	length = DEFAULT_SUBARENA_LENGTH;
 	height = DEFAULT_SUBARENA_HEIGHT;
@@ -94,9 +93,65 @@ void World::setArena(Arena* arena)
 					this->netInt.sendPlayerAction(command.getAction());
 				}
 			});
+
+	this->arena->setEndGameFunction(
+			[this] (GameState newGameState) {
+					this->setWorldState(newGameState);
+				}
+			);
+}
+
+void World::setWorldState(GameState newState)
+{
+	worldState = newState;
+
+	// set the buffer string if we need to
+	switch (worldState) {
+		case GameState::LOST:
+			{
+				// delete old
+				if (screenText) {
+					delete[](screenText);
+					screenText = NULL;
+				}
+
+				char loseText[] = LOSING_TEXT;
+				screenText = new char[strlen(loseText) + 1]; // +1 for null byte
+				strcpy(screenText, loseText);
+				break;
+			}
+		case GameState::WON:
+			{
+				// delete old
+				if (screenText) {
+					delete[](screenText);
+					screenText = NULL;
+				}
+
+				char winText[] = WINNING_TEXT;
+				screenText = new char[strlen(winText) + 1]; // +1 for null byte
+				strcpy(screenText, winText);
+				break;
+			}
+	}
 }
 
 void World::draw(void)
+{
+	switch (worldState) {
+		case RUNNING:
+			drawRunningState();
+			break;
+		case LOST:
+			drawLostState();
+			break;
+		case WON:
+			drawWonState();
+			break;
+	}
+}
+
+void World::drawRunningState()
 {
 	setUpCamera();
 			
@@ -122,7 +177,37 @@ void World::draw(void)
 		arena->draw();
 	glPopMatrix();
 	//plateform.draw();
-  
+	
+	// draw some axis
+	glBegin(GL_LINES);
+		// z axis
+		glColor4f(0, 0, 1, 1);
+		glVertex3f(0, 0, -DEFAULT_SUBARENA_HEIGHT);
+		glVertex3f(0, 0, DEFAULT_SUBARENA_HEIGHT);
+	glEnd();
+}
+
+void World::drawLostState()
+{
+	drawScreenText();
+}
+
+void World::drawWonState()
+{
+	drawScreenText();
+}
+
+void World::drawScreenText()
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // black
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear buffers
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, Drawable::WHITE);
+	glColor3f(1.0f, 1.0f, 1.0f); // white 
+
+	const unsigned char *uString = (const unsigned char *)(screenText);
+	gluLookAt(20, 0, 0, 0, 4, 0, 0, 0, 1);
+	glRasterPos3i(0, 0, 0);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, uString);
 }
 
 void World::setAspectRatio(float ratio)

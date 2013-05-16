@@ -33,6 +33,7 @@ public:
 		TEST_NEW_BLOCK, 
 		TEST_COMMIT_BLOCK,
 		TEST_EXPAND,
+		I_LOST,
 		ACTION_COUNT			//Enum hack to give us access to enum cardinality. Must be last and no gaps allowed.
 	};
 

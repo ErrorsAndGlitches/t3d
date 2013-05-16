@@ -116,6 +116,13 @@ public:
 	 */
 	void setNetworkPlayerSuperBlockType(SuperBlock::SuperBlockType sbType);
 
+	/**
+	 * @brief Set the function to be called to update the world state
+	 *
+	 * @param updateWorldStateFunc The function to call when the world state should change
+	 */
+	void setEndGameFunction(std::function<void (GameState)> updateWorldStateFunc);
+
 private:
 
 	int center;
@@ -125,6 +132,7 @@ private:
 	std::map<SubArena, Player*> playerArenaMap;
 	// function used to submit PlayerCommands to the network
 	std::function<void (PlayerCommand)> submitNetworkCommandFunc;
+	std::function<void (GameState)> updateWorldStateFunc;
 
 	/**
 	* @brief Clears all the full layers of a particular sub arena, and updates the layers.

@@ -63,6 +63,8 @@ void Arena::endByPlayerFault(int playerID)
 {
 	std::cout << "PLAYER " << playerID << " LOSES!" << std::endl;
 	//resolveGameState
+	updateWorldStateFunc(GameState::LOST);
+	submitNetworkCommandFunc(PlayerCommand::Action::I_LOST);
 }
 
 bool Arena::updateLayers(SubArena subarena)
@@ -204,9 +206,18 @@ void Arena::executeNetworkPlayerCommand(PlayerCommand command)
 
 		checkEndCondition();
 	 }
+
+	 if (PlayerCommand::Action::I_LOST == command.getAction()) {
+		updateWorldStateFunc(GameState::WON);
+	 }
 }
 
 void Arena::setNetworkPlayerSuperBlockType(SuperBlock::SuperBlockType sbType)
 {
 	subArenas[SubArena::BOTTOM_ARENA].newSuperBlock(sbType);
+}
+
+void Arena::setEndGameFunction(std::function<void (GameState)> updateWorldStateFunc) 
+{
+	this->updateWorldStateFunc = updateWorldStateFunc;
 }

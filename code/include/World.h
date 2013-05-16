@@ -99,7 +99,38 @@ public:
 	 */
 	void toggleMusic();
 
+	/**
+	 * @brief Set the state of the world
+	 *
+	 * @param newState The new state of the world
+	 */
+	void setWorldState(GameState newState);
+
+private: 
+	/**
+	 * @brief Draw the world for a running game
+	 */
+	void drawRunningState();
+
+	/**
+	 * @brief Draw a screen indicating the player lost
+	 */
+	void drawLostState();
+
+	/**
+	 * @brief Draw a screen indicating the player won
+	 */
+	void drawWonState();
+
+	/**
+	 * @brief Draw text on the screen
+	 */
+	void drawScreenText();
+
 private:
+	GameState worldState;
+	char *screenText;
+
 	Arena* arena;		//The arena this world is fouced on
 	int length;			//The dimension of the arean
 	int height;			//Theheight of the arena
